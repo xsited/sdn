@@ -154,20 +154,24 @@ class Menu(object):
 
     def print_menu(self):
         print (30 * '-')
-        print ("   MENU             ")
+        print ("   MENU               ")
         print (30 * '-')
-        print ("1.  Add Flow 1      ")
-        print ("2.  Add Flow 2      ")
-        print ("3.  Add Several Flows")
-        print ("4.  Remove Flow 1   ")
-        print ("5.  Remove Flow 2   ")
-        print ("6.  Remove All Flows")
-        print ("7.  Toggle Flow     ")
-        print ("8.  List Flow Stats ")
-        print ("9.  List Topology   ")
-        print ("10. List Flows      ")
-        print ("11. List Ports      ")
-        print ("q. Quit             ")
+        print ("1.  Add Flow 1        ")
+        print ("2.  Add Flow 2        ")
+        print ("3.  Add Several Flows ")
+        print ("4.  Remove Flow 1     ")
+        print ("5.  Remove Flow 2     ")
+        print ("6.  Remove All Flows  ")
+        print ("7.  Toggle Flow       ")
+        print ("8.  List Flow Stats   ")
+        print ("9.  List Topology     ")
+        print ("10. List Flows        ")
+        print ("11. List Ports        ")
+        print ("12. Add PCMM Flow 1   ")
+        print ("13. Remove PCMM Flow 1")
+        print ("14. Add PCMM Flow 2   ")
+        print ("15. Remove PCMM Flow 2")
+        print ("q. Quit               ")
 #        print (30 * '-')
 
 
@@ -187,6 +191,10 @@ class Menu(object):
 	"9": topology_list,
 	"10":flow_list,
 	"11":port_list,
+	"12":flow_add_pc_1,
+	"13":flow_remove_pc_1,
+	"14":flow_add_pc_2,
+	"15":flow_remove_pc_2,
 	"q": exit_app,
         }
         while True:
@@ -203,12 +211,8 @@ class ODL(object):
         pass
 
     def topology(self):
-#statuscode, statusmessage, header = ws.get()
-#print "Response: ", statuscode, statusmessage
-#print "Headers: ", header
         ws.set_path('/controller/nb/v2/topology/default')
         content = ws.get()
-        #ws.show(content[2])
         j=json.loads(content[2])
         ws.show(j)
 
@@ -415,6 +419,60 @@ flow4={
     "vlanId": "1", 
     "vlanPriority": "1"
 }
+
+
+flow_pcmm_1 = {
+     "actions": [
+        "DROP"
+     ], 
+     "etherType": "0x800", 
+     "installInHw": "false", 
+     "name": "flowpcmm", 
+     "node": {
+           "id": "51966", 
+           "type": "PC"
+     }, 
+     "tpDst":"8081",
+     "nwDst": "10.0.0.2", 
+     "nwSrc": "10.0.0.1", 
+     "priority": "500", 
+} 
+
+flow_pcmm_2 = {
+     "actions": [
+        "DROP"
+     ], 
+     "etherType": "0x800", 
+     "installInHw": "false", 
+     "name": "flowpcmmlow", 
+     "node": {
+           "id": "51966", 
+           "type": "PC"
+     }, 
+     "tpDst":"1369",
+     "nwDst": "10.0.0.2", 
+     "nwSrc": "10.0.0.1", 
+     "priority": "500", 
+} 
+
+
+def flow_add_pc_1():
+    print "Test PCMM Flow 1     "
+    odl.flowprogrammer_add(flow_pcmm_1)
+
+def flow_remove_pc_1():
+    print "Remove PCMM Flow 1  "
+    odl.flowprogrammer_remove(flow_pcmm_1)
+
+
+def flow_add_pc_2():
+    print "Test PCMM Flow 2     "
+    odl.flowprogrammer_add(flow_pcmm_2)
+
+def flow_remove_pc_2():
+    print "Remove PCMM Flow 2  "
+    odl.flowprogrammer_remove(flow_pcmm_2)
+
 
 def flow_add_1():
     print "Add Flow 1     "
