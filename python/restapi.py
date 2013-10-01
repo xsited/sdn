@@ -5,6 +5,7 @@ import base64
 import string
 
 toggle = 1
+toggle_pcmm = 1
 # consider refectoring with request http://docs.python-requests.org/en/latest/index.html
 
 class Error:
@@ -171,6 +172,7 @@ class Menu(object):
         print ("13. Remove PCMM Flow 1")
         print ("14. Add PCMM Flow 2   ")
         print ("15. Remove PCMM Flow 2")
+        print ("16. Toggle PCCM Flows")
         print ("q. Quit               ")
 #        print (30 * '-')
 
@@ -195,6 +197,7 @@ class Menu(object):
 	"13":flow_remove_pc_1,
 	"14":flow_add_pc_2,
 	"15":flow_remove_pc_2,
+	"16":flow_toggle_pcmm,
 	"q": exit_app,
         }
         while True:
@@ -426,7 +429,7 @@ flow_pcmm_1 = {
         "DROP"
      ], 
      "etherType": "0x800", 
-     "installInHw": "false", 
+     "installInHw": "true", 
      "name": "flowpcmm", 
      "node": {
            "id": "51966", 
@@ -443,7 +446,7 @@ flow_pcmm_2 = {
         "DROP"
      ], 
      "etherType": "0x800", 
-     "installInHw": "false", 
+     "installInHw": "true", 
      "name": "flowpcmmlow", 
      "node": {
            "id": "51966", 
@@ -473,6 +476,16 @@ def flow_remove_pc_2():
     print "Remove PCMM Flow 2  "
     odl.flowprogrammer_remove(flow_pcmm_2)
 
+def flow_toggle_pcmm():
+    print "Toggle Flow    "
+    global toggle_pcmm
+    toggle_pcmm = 3 - toggle_pcmm
+    if toggle_pcmm == 1:
+	flow_remove_pc_2()
+	flow_add_pc_1()
+    else:
+	flow_remove_pc_1()
+	flow_add_pc_2()
 
 def flow_add_1():
     print "Add Flow 1     "
@@ -502,6 +515,7 @@ def flow_toggle():
     else:
 	flow_remove_1()
 	flow_add_2()
+
 
 def flow_remove_1():
     print "Remove Flow 1  "
