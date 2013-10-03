@@ -40,9 +40,9 @@ my $be2_traffic_rate=500000;
 my $be1_sourceport = 8081;
 my $be2_sourceport = 1369;
 my $cmts_ip = "10.32.4.3";
-my $subscriber = "10.32.104.190";
-my $destip = "10.32.0.208";
-my $sourceip = "10.32.204.142";
+my $subscriber = "10.32.104.2";
+my $destip = "10.32.4.208";
+my $sourceip = "10.32.154.2";
 my $sourceport = "8081";
 my $radius = "192.168.50.2";
 my $global_debug = 0;  # 0 = off 1-10 = verbose
