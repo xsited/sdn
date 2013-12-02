@@ -423,39 +423,79 @@ flow4={
     "vlanPriority": "1"
 }
 
+''' Demo Kit  Layout
 
 flow_pcmm_1 = {
      "actions": [
-        "DROP"
+        "FLOOD"
      ], 
      "etherType": "0x800", 
      "installInHw": "true", 
-     "name": "flowpcmm", 
+     "name": "flowpcmmHighBW", 
      "node": {
            "id": "51966", 
            "type": "PC"
      }, 
      "tpDst":"8081",
-     "nwDst": "10.0.0.2", 
-     "nwSrc": "10.0.0.1", 
-     "priority": "500", 
+     "nwDst": "10.32.4.208", 
+     "nwSrc": "10.32.154.2", 
+     "priority": "100", 
 } 
 
 flow_pcmm_2 = {
      "actions": [
-        "DROP"
+        "FLOOD"
      ], 
      "etherType": "0x800", 
      "installInHw": "true", 
-     "name": "flowpcmmlow", 
+     "name": "flowpcmmLowBW", 
      "node": {
            "id": "51966", 
            "type": "PC"
      }, 
-     "tpDst":"1369",
-     "nwDst": "10.0.0.2", 
-     "nwSrc": "10.0.0.1", 
-     "priority": "500", 
+     "tpDst":"8081",
+     "nwDst": "10.32.4.208", 
+     "nwSrc": "10.32.154.2", 
+     "priority": "64", 
+} 
+'''
+
+
+''' LAB Workbench Layout 
+'''
+
+flow_pcmm_1 = {
+     "actions": [
+        "FLOOD"
+     ], 
+     "etherType": "0x800", 
+     "installInHw": "true", 
+     "name": "flowpcmmHighBW", 
+     "node": {
+           "id": "51966", 
+           "type": "PC"
+     }, 
+     "tpDst":"8081",
+     "nwDst": "10.32.0.228", 
+     "nwSrc": "10.32.215.113", 
+     "priority": "100", 
+} 
+
+flow_pcmm_2 = {
+     "actions": [
+        "FLOOD"
+     ], 
+     "etherType": "0x800", 
+     "installInHw": "true", 
+     "name": "flowpcmmLowBW", 
+     "node": {
+           "id": "51966", 
+           "type": "PC"
+     }, 
+     "tpDst":"8081",
+     "nwDst": "10.32.0.228", 
+     "nwSrc": "10.32.215.113", 
+     "priority": "64", 
 } 
 
 
@@ -497,7 +537,7 @@ def flow_add_2():
     odl.flowprogrammer_add(flow2)
 
 def flow_add_several():
-    print "Add Flow Sereral     "
+    print "Add Flow Several     "
     odl.flowprogrammer_add(flow1)
     odl.flowprogrammer_add(flow2)
     odl.flowprogrammer_add(flow3)
