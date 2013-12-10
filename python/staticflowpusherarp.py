@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+__author__ = 'xisted'
 import httplib
 import json
 class StaticFlowPusher(object):

@@ -1,4 +1,6 @@
-__author__ = 'keecode'
+#!/usr/bin/env python
+
+__author__ = 'xisted'
 import httplib
 import json
 import base64

@@ -1,5 +1,6 @@
+#!/usr/bin/env python
 
-__author__ = 'keecode'
+__author__ = 'xsited'
 import httplib
 import json
 
