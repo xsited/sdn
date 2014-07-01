@@ -1,0 +1,28 @@
+module yang-ext {
+
+    namespace "urn:opendaylight:yang:extentions";
+    prefix ext;
+
+    import ietf-inet-types {prefix inet;revision-date 2010-09-24;}
+	
+    revision "2013-07-09" {
+        description "Make pyang happy by defining some ODL yang extensions.";
+    }        
+
+    extension context-reference {
+        description "";
+	argument "name";
+    }
+   
+    extension context-instance {
+        description "";
+	argument "name";
+    }
+
+    extension augment-identifier {
+        description "";
+	argument "name";
+    }
+   
+}
+

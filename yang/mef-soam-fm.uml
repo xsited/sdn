@@ -1,0 +1,298 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/mef-soam-fm.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title mef-soam-fm 
+package "cfm:mef-cfm" as cfm_mef_cfm 
+end package 
+package "yang:ietf-yang-types" as yang_ietf_yang_types 
+end package 
+note top of mef_soam_fm_mef_soam_fm : <b>Namespace: </b> http://metroethernetforum.org/ns/yang/mef-soam-fm \n<b>Prefix: </b> mef-soam-fm \n<b>Organization : </b>\nMetro Ethernet Forum \n<b>Contact : </b>\nWeb URL: http://metroethernetforum.org/ \nE-mail:  mibs@metroethernetforum.org \nPostal:  Metro Ethernet Forum \n6033 W. Century Boulevard, Suite 830 \nLos Angeles, CA 90045 \nU.S.A. \nPhone:                                                                          +1 310-642-2800 \nFax:                                                                            +1 310-642-2808 \n<b>Revision : </b> 2012-04-16 \n
+package "mef-soam-fm:mef-soam-fm" as mef_soam_fm_mef_soam_fm 
+cfm_mef_cfm +-- mef_soam_fm_mef_soam_fm
+yang_ietf_yang_types +-- mef_soam_fm_mef_soam_fm
+class "mef-soam-fm" as mef_soam_fm << (M, #33CCFF) module>> 
+enum "interval-type-ais-lck-type" as mef_soam_fm_I_interval_type_ais_lck_type
+mef_soam_fm_I_interval_type_ais_lck_type : one-second 
+mef_soam_fm_I_interval_type_ais_lck_type : one-minute 
+enum "operational-state-type" as mef_soam_fm_I_operational_state_type
+mef_soam_fm_I_operational_state_type : enabled 
+mef_soam_fm_I_operational_state_type : disabled 
+mef_soam_fm_I_operational_state_type : testing 
+mef_soam_fm_I_operational_state_type : ... 
+enum "test-pattern-type" as mef_soam_fm_I_test_pattern_type
+mef_soam_fm_I_test_pattern_type : null-signal-without-crc-32 
+mef_soam_fm_I_test_pattern_type : null-signal-with-crc-32 
+mef_soam_fm_I_test_pattern_type : prbs-2311-without-crc-32 
+mef_soam_fm_I_test_pattern_type : ... 
+class "locked-signal-parameters-group" as mef_soam_fm_I_locked_signal_parameters_group_grouping <<(G,Lime) grouping>> 
+mef_soam_fm_I_locked_signal_parameters_group_grouping : state : enumeration : {lock,unlock,}  
+mef_soam_fm_I_locked_signal_parameters_group_grouping : interval : interval-type-ais-lck-type   = one-second 
+mef_soam_fm_I_locked_signal_parameters_group_grouping : priority : cfm:priority-type  
+mef_soam_fm_I_locked_signal_parameters_group_grouping : client-meg-level : cfm:md-level-type  
+class "test-signal-parameters-group" as mef_soam_fm_I_test_signal_parameters_group_grouping <<(G,Lime) grouping>> 
+mef_soam_fm_I_test_signal_parameters_group_grouping : is-receiver : boolean   = true 
+mef_soam_fm_I_test_signal_parameters_group_grouping : is-generator : boolean   = false 
+mef_soam_fm_I_test_signal_parameters_group_grouping : test-type : enumeration : {in-service,out-of-service,}   = in-service 
+note bottom of mef_soam_fm_I_test_signal_parameters_group_grouping
+<b>Must</b> (test-type):
+../is-generator = true
+
+end note 
+class "target-address" as  mef_soam_fm_I_test_signal_parameters_group_I_target_address <<container>> 
+mef_soam_fm_I_test_signal_parameters_group_grouping *-- "1" mef_soam_fm_I_test_signal_parameters_group_I_target_address 
+mef_soam_fm_I_test_signal_parameters_group_I_target_address : cfm:target-address-group {uses} 
+note bottom of mef_soam_fm_I_test_signal_parameters_group_I_target_address
+<b>Must:</b>
+../is-generator = true
+end note 
+mef_soam_fm_I_test_signal_parameters_group_grouping : interval : uint32 [0..60000000]   = 1000000  {microseconds}
+note bottom of mef_soam_fm_I_test_signal_parameters_group_grouping
+<b>Must</b> (interval):
+../is-generator = true
+
+end note 
+mef_soam_fm_I_test_signal_parameters_group_grouping : priority : cfm:priority-type  
+note bottom of mef_soam_fm_I_test_signal_parameters_group_grouping
+<b>Must</b> (priority):
+../is-generator = true
+
+end note 
+class "measurement-timing" as  mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing <<container>> 
+mef_soam_fm_I_test_signal_parameters_group_grouping *-- "1" mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing 
+class "measurement-timing" as mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing <<choice>> 
+mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing .. mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing : choice 
+class "absolute-time" as mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_absolute_time_case <<case>>
+mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing .. mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_absolute_time_case  : choice measurement-timing
+mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_absolute_time_case : start-time : yang:date-and-time  
+mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_absolute_time_case : stop-time : yang:date-and-time  
+class "relative-time" as mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_case <<case>>
+mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing .. mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_case  : choice measurement-timing
+class "start-time-type" as mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_I_start_time_type <<choice>> 
+mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_case .. mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_I_start_time_type : choice 
+class "relative-start-time" as mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_I_start_time_type_I_relative_start_time_case <<case>>
+mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_I_start_time_type .. mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_I_start_time_type_I_relative_start_time_case  : choice start-time-type
+mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_I_start_time_type_I_relative_start_time_case : relative-start-time : uint32   {mandatory} {minutes}
+class "absolute-start-time" as mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_I_start_time_type_I_absolute_start_time_case <<case>>
+mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_I_start_time_type .. mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_I_start_time_type_I_absolute_start_time_case  : choice start-time-type
+mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_I_start_time_type_I_absolute_start_time_case : absolute-start-time : yang:date-and-time  
+mef_soam_fm_I_test_signal_parameters_group_I_measurement_timing_I_measurement_timing_I_relative_time_case : duration : uint32   {mandatory} {minutes}
+mef_soam_fm_I_test_signal_parameters_group_grouping : drop-eligible : boolean   = false 
+note bottom of mef_soam_fm_I_test_signal_parameters_group_grouping
+<b>Must</b> (drop-eligible):
+../is-generator = true
+
+end note 
+mef_soam_fm_I_test_signal_parameters_group_grouping : frame-size : uint32 [64..9600]   = 64  {bytes}
+note bottom of mef_soam_fm_I_test_signal_parameters_group_grouping
+<b>Must</b> (frame-size):
+../is-generator = true
+
+end note 
+mef_soam_fm_I_test_signal_parameters_group_grouping : test-pattern : test-pattern-type  
+class "test-signal-stats-in-group" as mef_soam_fm_I_test_signal_stats_in_group_grouping <<(G,Lime) grouping>> 
+mef_soam_fm_I_test_signal_stats_in_group_grouping : number-test-in : yang:zero-based-counter64  
+mef_soam_fm_I_test_signal_stats_in_group_grouping : number-test-in-out-of-order : yang:zero-based-counter64  
+mef_soam_fm_I_test_signal_stats_in_group_grouping : number-test-in-crc-errors : yang:zero-based-counter64  
+mef_soam_fm_I_test_signal_stats_in_group_grouping : number-test-in-ber-errors : yang:zero-based-counter64  
+class "test-signal-stats-out-group" as mef_soam_fm_I_test_signal_stats_out_group_grouping <<(G,Lime) grouping>> 
+mef_soam_fm_I_test_signal_stats_out_group_grouping : number-test-out : yang:zero-based-counter64  
+class "/cfm:maintenance-domain/cfm:maintenance-association" as cfm_maintenance_domain_cfm_maintenance_association << (A,CadetBlue) augment>>
+mef_soam_fm *--  cfm_maintenance_domain_cfm_maintenance_association 
+cfm_maintenance_domain_cfm_maintenance_association : y1731-compliant : boolean  
+cfm_maintenance_domain_cfm_maintenance_association : meg-id-format : enumeration : {primary-vid,char-string,unsigned-int16,...}  
+note bottom of cfm_maintenance_domain_cfm_maintenance_association
+<b>Must</b> (meg-id-format):
+../y1731-compliant = true
+
+end note 
+cfm_maintenance_domain_cfm_maintenance_association : icc-name-value : string {length = 13}  
+note bottom of cfm_maintenance_domain_cfm_maintenance_association
+<b>Must</b> (icc-name-value):
+../meg-id-format = icc-based
+
+end note 
+cfm_maintenance_domain_cfm_maintenance_association : meg-level : cfm:md-level-type  
+note bottom of cfm_maintenance_domain_cfm_maintenance_association
+<b>Must</b> (meg-level):
+../y1731-compliant = true
+
+end note 
+class "/cfm:maintenance-domain/cfm:maintenance-association/cfm:component-list" as cfm_maintenance_domain_cfm_maintenance_association_cfm_component_list << (A,CadetBlue) augment>>
+mef_soam_fm *--  cfm_maintenance_domain_cfm_maintenance_association_cfm_component_list 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_component_list : connectivity-status-interval : yang:gauge32 [1..2100000]   {milliseconds}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_component_list : peer-mep-info-aging-time : uint32 [0..86400]   = 0  {seconds}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_component_list : mep-port-status-tlv-included : boolean   = true 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_component_list : mep-interface-status-tlv-included : boolean   = true 
+class "/cfm:maintenance-domain/cfm:maintenance-association/cfm:maintenance-association-end-point" as cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point << (A,CadetBlue) augment>>
+mef_soam_fm *--  cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point : operational-state : operational-state-type   {Config : false}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point : connectivity-status : enumeration : {active,partially-active,inactive,}   {Config : false}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point : port-status : cfm:port-status-type   {Config : false}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point : interface-status : cfm:interface-status-type   {Config : false}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point : last-defect-sent : cfm:fault-alarm-defect-bits-type   {Config : false}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point : rdi-transmit-status : boolean   {Config : false}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point : oam-frames-discarded : yang:counter32   {Config : false}
+class "/cfm:maintenance-domain/cfm:maintenance-association/cfm:maintenance-association-end-point/cfm:continuity-check" as cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_continuity_check << (A,CadetBlue) augment>>
+mef_soam_fm *--  cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_continuity_check 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_continuity_check : drop-eligible : boolean   = false 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_continuity_check : total-ccm-in : yang:counter32   {Config : false}
+class "/cfm:maintenance-domain/cfm:maintenance-association/cfm:maintenance-association-end-point/cfm:loopback" as cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback << (A,CadetBlue) augment>>
+mef_soam_fm *--  cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback : multicast-enabled : boolean   = false 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback : interval : uint32 [0..60000]   = 1000  {milliseconds}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback : frame-size : uint32 [64..9600]   {bytes}
+note bottom of cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback
+<b>Must</b> (frame-size):
+not(../data-tlv)
+
+end note 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback : data-pattern : enumeration : {zeroes,ones,}   = zeroes 
+note bottom of cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback
+<b>Must</b> (data-pattern):
+not(../data-tlv)
+
+end note 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback : test-tlv-included : boolean   = false 
+note bottom of cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback
+<b>Must</b> (test-tlv-included):
+not(../data-tlv)
+
+end note 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback : test-tlv-pattern : test-pattern-type   = null-signal-without-crc-32 
+note bottom of cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback
+<b>Must</b> (test-tlv-pattern):
+not(../data-tlv)
+
+end note 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback : crc-errors-in : yang:counter32   {Config : false}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback : timeout : yang:gauge32 [1..10000]   = 5000 
+class "responses" as mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback_I_responses << (L, #FF7700) list>> 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_loopback *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback_I_responses 
+note bottom of mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback_I_responses
+<b>Config = </b>false
+end note 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback_I_responses : +transaction-id : cfm:lbm-transaction-id-type  {unique} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback_I_responses : +receive-order : uint32 [0..2147483647]  {unique} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback_I_responses : multicast-reply-mac : yang:mac-address  
+class "/cfm:maintenance-domain/cfm:maintenance-association/cfm:maintenance-association-end-point/cfm:linktrace" as cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_linktrace << (A,CadetBlue) augment>>
+mef_soam_fm *--  cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_linktrace 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_linktrace : ltm-msgs-transmitted : yang:zero-based-counter32   {Config : false}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_linktrace : ltr-msgs-received : yang:zero-based-counter32   {Config : false}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_linktrace : ltm-msgs-received : yang:zero-based-counter32   {Config : false}
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point_cfm_linktrace : ltr-msgs-transmitted : yang:zero-based-counter32   {Config : false}
+class "/cfm:maintenance-domain/cfm:maintenance-association/cfm:maintenance-association-end-point" as cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point << (A,CadetBlue) augment>>
+class "alarm-indication-signal" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal <<container>> 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal : enabled : boolean   = false 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal : interval : interval-type-ais-lck-type   = one-second 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal : priority : cfm:priority-type  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal : client-meg-level : cfm:md-level-type   = 0 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal : drop-eligible : boolean   = false 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal : transmit-status : boolean   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal : receive-status : boolean   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal : transmit-counter : yang:zero-based-counter32   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal : receive-counter : yang:counter32   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_alarm_indication_signal : last-received-mac-address : yang:mac-address   {Config : false}
+class "/cfm:maintenance-domain/cfm:maintenance-association/cfm:maintenance-association-end-point" as cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point << (A,CadetBlue) augment>>
+class "locked-signal" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_locked_signal <<container>> 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_locked_signal 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_locked_signal : locked-signal-parameters-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_locked_signal : receive-status : boolean   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_locked_signal : messages-received : yang:zero-based-counter32   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_locked_signal : transmit-status : boolean   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_locked_signal : messages-transmitted : yang:zero-based-counter32   {Config : false}
+class "/cfm:maintenance-domain/cfm:maintenance-association/cfm:maintenance-association-end-point" as cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point << (A,CadetBlue) augment>>
+class "test-signal" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal <<container>> 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal : transmit-enabled : boolean   = false 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal : test-signal-parameters-group {uses} 
+class "test-signal-stats-in" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_in <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_in 
+note bottom of mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_in
+<b>Config = </b>false
+end note 
+note bottom of mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_in
+<b>Must:</b>
+../is-receiver = true
+end note 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_in : test-signal-stats-in-group {uses} 
+class "test-signal-stats-out" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_out <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_out 
+note bottom of mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_out
+<b>Config = </b>false
+end note 
+note bottom of mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_out
+<b>Must:</b>
+../is-generator = true
+end note 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_out : test-signal-stats-out-group {uses} 
+class "notification-configuration" as  mef_soam_fm_I_notification_configuration <<container>> 
+mef_soam_fm *-- "1" mef_soam_fm_I_notification_configuration 
+mef_soam_fm_I_notification_configuration : alarm-interval : uint32 [0..60]   = 5  {seconds}
+mef_soam_fm : create-test-signal( in: maintenance_domain_id in: maintenance_association_id in: mep_id in: test_signal_parameters_group)
+mef_soam_fm : abort-test-signal( in: maintenance_domain_id in: maintenance_association_id in: mep_id)
+class "mep-defect-alarm" as mef_soam_fm_I_mep_defect_alarm << (N,#00D1B2) notification>> 
+mef_soam_fm -- mef_soam_fm_I_mep_defect_alarm : notification 
+mef_soam_fm_I_mep_defect_alarm : maintenance-domain-id : string  
+mef_soam_fm_I_mep_defect_alarm : maintenance-association-id : string  
+mef_soam_fm_I_mep_defect_alarm : mep-id : cfm:mep-id-type  
+mef_soam_fm_I_mep_defect_alarm : last-defect-sent : cfm:fault-alarm-defect-bits-type  
+mef_soam_fm_I_mep_defect_alarm : active-defects : cfm:fault-alarm-defect-bits-type  
+mef_soam_fm_I_mep_defect_alarm : remote-mep-state : cfm:remote-mep-state-type  
+class "configuration-error-assert" as mef_soam_fm_I_configuration_error_assert << (N,#00D1B2) notification>> 
+mef_soam_fm -- mef_soam_fm_I_configuration_error_assert : notification 
+mef_soam_fm_I_configuration_error_assert : vlan-identifier : leafref : /cfm:configuration-error-list/cfm:vlan-identifier  
+mef_soam_fm_I_configuration_error_assert : interface : leafref : /cfm:configuration-error-list/cfm:interface  
+class "configuration-error-clear" as mef_soam_fm_I_configuration_error_clear << (N,#00D1B2) notification>> 
+mef_soam_fm -- mef_soam_fm_I_configuration_error_clear : notification 
+mef_soam_fm_I_configuration_error_clear : vlan-identifier : leafref : /cfm:configuration-error-list/cfm:vlan-identifier  
+mef_soam_fm_I_configuration_error_clear : interface : leafref : /cfm:configuration-error-list/cfm:interface  
+class "mep-operational-state-changed" as mef_soam_fm_I_mep_operational_state_changed << (N,#00D1B2) notification>> 
+mef_soam_fm -- mef_soam_fm_I_mep_operational_state_changed : notification 
+mef_soam_fm_I_mep_operational_state_changed : maintenance-domain-id : string  
+mef_soam_fm_I_mep_operational_state_changed : maintenance-association-id : string  
+mef_soam_fm_I_mep_operational_state_changed : mep-id : cfm:mep-id-type  
+mef_soam_fm_I_mep_operational_state_changed : operational-state : operational-state-type  
+class "lock-alarm" as mef_soam_fm_I_lock_alarm << (N,#00D1B2) notification>> 
+mef_soam_fm -- mef_soam_fm_I_lock_alarm : notification 
+mef_soam_fm_I_lock_alarm : maintenance-domain-id : string  
+mef_soam_fm_I_lock_alarm : maintenance-association-id : string  
+mef_soam_fm_I_lock_alarm : mep-id : cfm:mep-id-type  
+mef_soam_fm_I_lock_alarm : receive-status : boolean  
+mef_soam_fm_I_lock_alarm : transmit-status : boolean  
+class "ais-alarm" as mef_soam_fm_I_ais_alarm << (N,#00D1B2) notification>> 
+mef_soam_fm -- mef_soam_fm_I_ais_alarm : notification 
+mef_soam_fm_I_ais_alarm : maintenance-domain-id : string  
+mef_soam_fm_I_ais_alarm : maintenance-association-id : string  
+mef_soam_fm_I_ais_alarm : mep-id : cfm:mep-id-type  
+mef_soam_fm_I_ais_alarm : receive-status : boolean  
+mef_soam_fm_I_ais_alarm : transmit-status : boolean  
+class "/cfm:configuration-error-list" as mef_cfm_I_configuration_error_list <<leafref>> 
+class "/cfm:configuration-error-list" as mef_cfm_I_configuration_error_list <<leafref>> 
+class "/cfm:configuration-error-list" as mef_cfm_I_configuration_error_list <<leafref>> 
+class "/cfm:configuration-error-list" as mef_cfm_I_configuration_error_list <<leafref>> 
+end package
+
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_locked_signal --> mef_soam_fm_I_locked_signal_parameters_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal --> mef_soam_fm_I_test_signal_parameters_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_in --> mef_soam_fm_I_test_signal_stats_in_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_test_signal_I_test_signal_stats_out --> mef_soam_fm_I_test_signal_stats_out_group_grouping : uses 
+mef_soam_fm --> mef_soam_fm_I_test_signal_parameters_group_grouping : uses 
+mef_soam_fm_I_configuration_error_assert-->"cfm:vlan-identifier"mef_cfm_I_configuration_error_list: vlan-identifier
+mef_soam_fm_I_configuration_error_assert-->"cfm:interface"mef_cfm_I_configuration_error_list: interface
+mef_soam_fm_I_configuration_error_clear-->"cfm:vlan-identifier"mef_cfm_I_configuration_error_list: vlan-identifier
+mef_soam_fm_I_configuration_error_clear-->"cfm:interface"mef_cfm_I_configuration_error_list: interface
+center footer
+ <size:20> UML Generated : 2014-06-19 17:40 </size>
+ endfooter 
+@enduml 

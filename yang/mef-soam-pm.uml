@@ -1,0 +1,413 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/mef-soam-pm.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title mef-soam-pm 
+package "cfm:mef-cfm" as cfm_mef_cfm 
+end package 
+package "yang:ietf-yang-types" as yang_ietf_yang_types 
+end package 
+note top of mef_soam_pm_mef_soam_pm : <b>Namespace: </b> http://metroethernetforum.org/ns/yang/mef-soam-pm \n<b>Prefix: </b> mef-soam-pm \n<b>Organization : </b>\nMetro Ethernet Forum \n<b>Contact : </b>\nWeb URL: http://metroethernetforum.org/ \nE-mail:  mibs@metroethernetforum.org \nPostal:  Metro Ethernet Forum \n6033 W. Century Boulevard, Suite 830 \nLos Angeles, CA 90045 \nU.S.A. \nPhone:                                                                   +1 310-642-2800 \nFax:                                                                     +1 310-642-2808 \n<b>Revision : </b> 2012-04-16 \n
+package "mef-soam-pm:mef-soam-pm" as mef_soam_pm_mef_soam_pm 
+cfm_mef_cfm +-- mef_soam_pm_mef_soam_pm
+yang_ietf_yang_types +-- mef_soam_pm_mef_soam_pm
+class "mef-soam-pm" as mef_soam_pm << (M, #33CCFF) module>> 
+class "suspect-status-type" as suspect_status_type << (T, YellowGreen) typedef>>
+suspect_status_type : boolean
+class "performance-monitoring-interval-type" as performance_monitoring_interval_type << (T, YellowGreen) typedef>>
+performance_monitoring_interval_type : uint32 [3..3600000]
+enum "test-pattern-type" as mef_soam_pm_I_test_pattern_type
+mef_soam_pm_I_test_pattern_type : null-signal-without-crc-32 
+mef_soam_pm_I_test_pattern_type : null-signal-with-crc-32 
+mef_soam_pm_I_test_pattern_type : prbs-2311-without-crc-32 
+mef_soam_pm_I_test_pattern_type : ... 
+enum "session-status-type" as mef_soam_pm_I_session_status_type
+mef_soam_pm_I_session_status_type : active 
+mef_soam_pm_I_session_status_type : not-active 
+enum "availability-type" as mef_soam_pm_I_availability_type
+mef_soam_pm_I_availability_type : available 
+mef_soam_pm_I_availability_type : unavailable 
+mef_soam_pm_I_availability_type : unknown 
+enum "measurement-bin-type" as mef_soam_pm_I_measurement_bin_type
+mef_soam_pm_I_measurement_bin_type : two-way-frame-delay 
+mef_soam_pm_I_measurement_bin_type : forward-frame-delay 
+mef_soam_pm_I_measurement_bin_type : backward-frame-delay 
+mef_soam_pm_I_measurement_bin_type : ... 
+class "remote-mep-group" as mef_soam_pm_I_remote_mep_group_grouping <<(G,Lime) grouping>> 
+class "remote-mep" as mef_soam_pm_I_remote_mep_group_I_remote_mep <<choice>> 
+mef_soam_pm_I_remote_mep_group_grouping .. mef_soam_pm_I_remote_mep_group_I_remote_mep : choice 
+class "mac-address" as mef_soam_pm_I_remote_mep_group_I_remote_mep_I_mac_address_case <<case>>
+mef_soam_pm_I_remote_mep_group_I_remote_mep .. mef_soam_pm_I_remote_mep_group_I_remote_mep_I_mac_address_case  : choice remote-mep
+mef_soam_pm_I_remote_mep_group_I_remote_mep_I_mac_address_case : mac-address : yang:mac-address  
+class "mep-id" as mef_soam_pm_I_remote_mep_group_I_remote_mep_I_mep_id_case <<case>>
+mef_soam_pm_I_remote_mep_group_I_remote_mep .. mef_soam_pm_I_remote_mep_group_I_remote_mep_I_mep_id_case  : choice remote-mep
+mef_soam_pm_I_remote_mep_group_I_remote_mep_I_mep_id_case : mep-id : string  
+class "measurement-timing-group" as mef_soam_pm_I_measurement_timing_group_grouping <<(G,Lime) grouping>> 
+class "start-time" as  mef_soam_pm_I_measurement_timing_group_I_start_time <<container>> 
+mef_soam_pm_I_measurement_timing_group_grouping *-- "1" mef_soam_pm_I_measurement_timing_group_I_start_time 
+class "start-time" as mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time <<choice>> 
+mef_soam_pm_I_measurement_timing_group_I_start_time .. mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time : choice 
+class "immediate" as mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_immediate_case <<case>> 
+mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time .. mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_immediate_case : choice start-time
+class "immediate" as  mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_immediate <<container>> 
+mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_immediate_case *-- "0..1" mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_immediate 
+note bottom of mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_immediate
+<b>Presence: </b>Start the measurement session immediately.
+end note 
+class "relative" as mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_relative_case <<case>> 
+mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time .. mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_relative_case : choice start-time
+mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_relative_case : relative : yang:timeticks  
+class "absolute" as mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_absolute_case <<case>> 
+mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time .. mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_absolute_case : choice start-time
+mef_soam_pm_I_measurement_timing_group_I_start_time_I_start_time_I_absolute_case : absolute : yang:date-and-time  
+class "stop-time" as  mef_soam_pm_I_measurement_timing_group_I_stop_time <<container>> 
+mef_soam_pm_I_measurement_timing_group_grouping *-- "1" mef_soam_pm_I_measurement_timing_group_I_stop_time 
+class "stop-time" as mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time <<choice>> 
+mef_soam_pm_I_measurement_timing_group_I_stop_time .. mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time : choice 
+class "none" as mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_none_case <<case>> 
+mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time .. mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_none_case : choice stop-time
+class "none" as  mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_none <<container>> 
+mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_none_case *-- "0..1" mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_none 
+note bottom of mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_none
+<b>Presence: </b>Never end the measurement session.
+end note 
+class "relative" as mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_relative_case <<case>> 
+mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time .. mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_relative_case : choice stop-time
+mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_relative_case : relative : yang:timeticks   {mandatory}
+class "absolute" as mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_absolute_case <<case>> 
+mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time .. mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_absolute_case : choice stop-time
+mef_soam_pm_I_measurement_timing_group_I_stop_time_I_stop_time_I_absolute_case : absolute : yang:date-and-time  
+mef_soam_pm_I_measurement_timing_group_grouping : repetition-period : yang:timeticks   = 0 
+class "loss-measurement-configuration-group" as mef_soam_pm_I_loss_measurement_configuration_group_grouping <<(G,Lime) grouping>> 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : measurement-type : enumeration : {lmm,slm,ccm,}   = slm 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : version : enumeration : {Y.1731-2008,Y.1731-2011,}   = Y.1731-2008 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : enabled-counters : bits   =   
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : message-period : performance-monitoring-interval-type   = 1000  {ms}
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : priority : cfm:priority-type   {mandatory}
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : frame-size : uint32 [64 .. 9600]   = 64  {bytes}
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : data-pattern : enumeration : {zeroes,ones,}   = zeroes 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : test-tlv-included : boolean   = false 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : test-tlv-pattern : test-pattern-type   = null-signal-without-crc-32 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : measurement-interval : uint32 [1..525600]   = 15  {minutes}
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : number-intervals-stored : uint32 [2..1000]   = 32 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : align-measurement-intervals : boolean   = true 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : align-measurement-offset : uint32 [0..525600]   = 0  {minutes}
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : availability-measurement-interval : uint32 [1..525600]   = 15  {minutes}
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : availability-number-consecutive-flr-measurements : uint32 [1..1000000]   = 10 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : availability-flr-threshold : uint32 [0..100000]   = 50000  {milli-percent}
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : availability-number-consecutive-intervals : uint32 [1..1000]   = 10 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : availability-number-consecutive-high-flr : uint32 [1..1000]   = 5 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping : session-type : enumeration : {proactive,on-demand,}  
+class "thresholds" as mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds << (L, #FF7700) list>> 
+mef_soam_pm_I_loss_measurement_configuration_group_grouping *-- "0..N" mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds 
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : +id : uint32  {key} 
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : enabled-thresholds : bits   =   
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : measured-flr-forward : uint32 [0..100000]   = 100000  {milli-percent}
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : max-flr-forward : uint32 [0..100000]   = 100000  {milli-percent}
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : average-flr-forward : uint32 [0..100000]   = 100000  {milli-percent}
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : measured-flr-backward : uint32 [0..100000]   = 100000  {milli-percent}
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : max-flr-backward : uint32 [0..100000]   = 100000  {milli-percent}
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : average-flr-backward : uint32 [0..100000]   = 100000  {milli-percent}
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : forward-high-loss : uint32   = 2147483647 
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : forward-consecutive-high-loss : uint32   = 2147483647 
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : backward-high-loss : uint32   = 2147483647 
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : backward-consecutive-high-loss : uint32   = 2147483647 
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : forward-unavailable-count : uint32   = 2147483647 
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : forward-available-ratio : uint32 [0..100000]   = 0  {milli-percent}
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : backward-unavailable-count : uint32   = 2147483647 
+mef_soam_pm_I_loss_measurement_configuration_group_I_thresholds : backward-available-ratio : uint32 [0..100000]   = 0  {milli-percent}
+class "loss-availability-stats-group" as mef_soam_pm_I_loss_availability_stats_group_grouping <<(G,Lime) grouping>> 
+mef_soam_pm_I_loss_availability_stats_group_grouping : suspect-status : suspect-status-type  
+mef_soam_pm_I_loss_availability_stats_group_grouping : forward-high-loss : yang:gauge32  
+mef_soam_pm_I_loss_availability_stats_group_grouping : backward-high-loss : yang:gauge32  
+mef_soam_pm_I_loss_availability_stats_group_grouping : forward-consecutive-high-loss : yang:gauge32  
+mef_soam_pm_I_loss_availability_stats_group_grouping : backward-consecutive-high-loss : yang:gauge32  
+mef_soam_pm_I_loss_availability_stats_group_grouping : forward-available : yang:gauge32  
+mef_soam_pm_I_loss_availability_stats_group_grouping : backward-available : yang:gauge32  
+mef_soam_pm_I_loss_availability_stats_group_grouping : forward-unavailable : yang:gauge32  
+mef_soam_pm_I_loss_availability_stats_group_grouping : backward-unavailable : yang:gauge32  
+mef_soam_pm_I_loss_availability_stats_group_grouping : forward-min-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+mef_soam_pm_I_loss_availability_stats_group_grouping : forward-max-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+mef_soam_pm_I_loss_availability_stats_group_grouping : forward-average-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+mef_soam_pm_I_loss_availability_stats_group_grouping : backward-min-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+mef_soam_pm_I_loss_availability_stats_group_grouping : backward-max-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+mef_soam_pm_I_loss_availability_stats_group_grouping : backward-average-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+class "loss-measurement-stats-group" as mef_soam_pm_I_loss_measurement_stats_group_grouping <<(G,Lime) grouping>> 
+mef_soam_pm_I_loss_measurement_stats_group_grouping : suspect-status : suspect-status-type  
+mef_soam_pm_I_loss_measurement_stats_group_grouping : forward-transmitted-frames : yang:gauge32   {mandatory}
+mef_soam_pm_I_loss_measurement_stats_group_grouping : forward-received-frames : yang:gauge32   {mandatory}
+mef_soam_pm_I_loss_measurement_stats_group_grouping : forward-min-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+mef_soam_pm_I_loss_measurement_stats_group_grouping : forward-max-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+mef_soam_pm_I_loss_measurement_stats_group_grouping : forward-average-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+mef_soam_pm_I_loss_measurement_stats_group_grouping : backward-transmitted-frames : yang:gauge32   {mandatory}
+mef_soam_pm_I_loss_measurement_stats_group_grouping : backward-received-frames : yang:gauge32   {mandatory}
+mef_soam_pm_I_loss_measurement_stats_group_grouping : backward-min-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+mef_soam_pm_I_loss_measurement_stats_group_grouping : backward-max-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+mef_soam_pm_I_loss_measurement_stats_group_grouping : backward-average-frame-loss-ratio : uint32 [0..100000]   {milli-percent}
+mef_soam_pm_I_loss_measurement_stats_group_grouping : soam-pdus-sent : yang:gauge32  
+mef_soam_pm_I_loss_measurement_stats_group_grouping : soam-pdus-received : yang:gauge32  
+class "delay-measurement-configuration-group" as mef_soam_pm_I_delay_measurement_configuration_group_grouping <<(G,Lime) grouping>> 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : measurement-type : enumeration : {dmm,dm1-transmitted,dm1-received,}   {mandatory}
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : version : enumeration : {Y.1731-2008,Y.1731-2011,}   = Y.1731-2008 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : measurement-enable : bits   =   
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : message-period : performance-monitoring-interval-type   = 100 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : priority : cfm:priority-type   {mandatory}
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : frame-size : uint32 [64 .. 9600]   = 64 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : data-pattern : enumeration : {zeroes,ones,}   = zeroes 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : test-tlv-included : boolean   = false 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : test-tlv-pattern : test-pattern-type   = null-signal-without-crc-32 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : measurement-interval : uint32 [1..1440]   = 15  {minutes}
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : number-intervals-stored : uint32 [2..1000]   = 32 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : align-measurement-intervals : boolean   = true 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : align-measurement-offset : uint32 [0..525600]   = 0  {minutes}
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : bins-per-fd-interval : uint32 [2..100]   = 3 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : bins-per-ifdv-interval : uint32 [2..100]   = 2 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : ifdv-selection-offset : yang:gauge32 [1..100]   = 1 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : bins-per-fdr-interval : uint32   = 2 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping : session-type : enumeration : {proactive,on-demand,}   {mandatory}
+class "thresholds" as mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds << (L, #FF7700) list>> 
+mef_soam_pm_I_delay_measurement_configuration_group_grouping *-- "0..N" mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds 
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : +id : uint32 [1..2147483647]  {key} 
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : enabled-thresholds : bits   =   
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : measured-frame-delay-two-way : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : max-frame-delay-two-way : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : average-frame-delay-two-way : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : measured-inter-frame-delay-variation-two-way : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : max-inter-frame-delay-variation-two-way : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : average-inter-frame-delay-variation-two-way : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : max-frame-delay-range-two-way : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : average-frame-delay-range-two-way : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : measured-frame-delay-forward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : max-frame-delay-forward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : average-frame-delay-forward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : measured-inter-frame-delay-variation-forward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : max-inter-frame-delay-variation-forward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : average-inter-frame-delay-variation-forward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : max-frame-delay-range-forward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : average-frame-delay-range-forward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : measured-frame-delay-backward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : max-frame-delay-backward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : average-frame-delay-backward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : measured-inter-frame-delay-variation-backward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : max-inter-frame-delay-variation-backward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : average-inter-frame-delay-variation-backward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : max-frame-delay-range-backward : yang:gauge32   = 2147483647  {microseconds}
+mef_soam_pm_I_delay_measurement_configuration_group_I_thresholds : average-frame-delay-range-backward : yang:gauge32   = 2147483647  {microseconds}
+class "delay-measurement-stats-group" as mef_soam_pm_I_delay_measurement_stats_group_grouping <<(G,Lime) grouping>> 
+mef_soam_pm_I_delay_measurement_stats_group_grouping : suspect-status : suspect-status-type  
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-two-way-min : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-two-way-max : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-two-way-average : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-forward-min : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-forward-max : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-forward-average : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-backward-min : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-backward-max : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-backward-average : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : inter-frame-delay-variation-forward-min : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : inter-frame-delay-variation-forward-max : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : inter-frame-delay-variation-forward-average : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : inter-frame-delay-variation-backward-min : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : inter-frame-delay-variation-backward-max : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : inter-frame-delay-variation-backward-average : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : inter-frame-delay-variation-two-way-min : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : inter-frame-delay-variation-two-way-max : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : inter-frame-delay-variation-two-way-average : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-range-forward-max : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-range-forward-average : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-range-backward-max : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-range-backward-average : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-range-two-way-max : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : frame-delay-range-two-way-average : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_stats_group_grouping : soam-pdus-sent : yang:gauge32  
+mef_soam_pm_I_delay_measurement_stats_group_grouping : soam-pdus-received : yang:gauge32  
+class "delay-measurement-bins-content-group" as mef_soam_pm_I_delay_measurement_bins_content_group_grouping <<(G,Lime) grouping>> 
+mef_soam_pm_I_delay_measurement_bins_content_group_grouping : type : measurement-bin-type  
+mef_soam_pm_I_delay_measurement_bins_content_group_grouping : number : uint32  
+mef_soam_pm_I_delay_measurement_bins_content_group_grouping : lower-bound : yang:gauge32   {microseconds}
+mef_soam_pm_I_delay_measurement_bins_content_group_grouping : counter : yang:gauge32   {Config : false}
+class "delay-measurement-bins-group" as mef_soam_pm_I_delay_measurement_bins_group_grouping <<(G,Lime) grouping>> 
+class "bins" as  mef_soam_pm_I_delay_measurement_bins_group_I_bins <<container>> 
+mef_soam_pm_I_delay_measurement_bins_group_grouping *-- "1" mef_soam_pm_I_delay_measurement_bins_group_I_bins 
+class "frame-delay" as mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_frame_delay << (L, #FF7700) list>> 
+mef_soam_pm_I_delay_measurement_bins_group_I_bins *-- "0..N" mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_frame_delay 
+mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_frame_delay : delay-measurement-bins-content-group {uses} 
+class "inter-frame-delay-variation" as mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_inter_frame_delay_variation << (L, #FF7700) list>> 
+mef_soam_pm_I_delay_measurement_bins_group_I_bins *-- "0..N" mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_inter_frame_delay_variation 
+mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_inter_frame_delay_variation : delay-measurement-bins-content-group {uses} 
+class "frame-delay-range" as mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_frame_delay_range << (L, #FF7700) list>> 
+mef_soam_pm_I_delay_measurement_bins_group_I_bins *-- "0..N" mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_frame_delay_range 
+mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_frame_delay_range : delay-measurement-bins-content-group {uses} 
+class "/cfm:maintenance-domain/cfm:maintenance-association/cfm:maintenance-association-end-point" as cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point << (A,CadetBlue) augment>>
+mef_soam_pm *--  cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point : loss-single-ended-responder : boolean   = true 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point : synthetic-loss-single-ended-responder : boolean   = true 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point : delay-single-ended-responder : boolean   = true 
+class "/cfm:maintenance-domain/cfm:maintenance-association/cfm:maintenance-association-end-point" as cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point << (A,CadetBlue) augment>>
+class "loss-measurements" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements <<container>> 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements 
+class "loss-measurement" as mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement << (L, #FF7700) list>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement 
+note bottom of mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement
+<b>Config = </b>false
+end note 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement : +session-id : uint32  {key} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement : session-status : session-status-type   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement : loss-measurement-configuration-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement : remote-mep-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement : measurement-timing-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement : measured-forward-flr : yang:gauge32 [0..100000]   {milli-percent}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement : measured-backward-flr : yang:gauge32 [0..100000]   {milli-percent}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement : measured-availability-forward-status : availability-type  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement : measured-availability-backward-status : availability-type  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement : measured-forward-last-transition-time : yang:date-and-time  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement : measured-backward-last-transition-time : yang:date-and-time  
+class "current-availability-stats" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_availability_stats <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_availability_stats 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_availability_stats : id : uint32  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_availability_stats : start-time : yang:date-and-time   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_availability_stats : elapsed-time : uint32 [0..2147483647]   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_availability_stats : loss-availability-stats-group {uses} 
+class "current-measurement-stats" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_measurement_stats <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_measurement_stats 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_measurement_stats : id : uint32  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_measurement_stats : start-time : yang:date-and-time   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_measurement_stats : elapsed-time : uint32 [0..2147483647]   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_measurement_stats : loss-measurement-stats-group {uses} 
+class "history-availability-stats" as mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_availability_stats << (L, #FF7700) list>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_availability_stats 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_availability_stats : +id : uint32  {key} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_availability_stats : end-time : yang:date-and-time   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_availability_stats : elapsed-time : uint32 [0..2147483647]   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_availability_stats : loss-availability-stats-group {uses} 
+class "history-measurement-stats" as mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_measurement_stats << (L, #FF7700) list>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_measurement_stats 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_measurement_stats : +id : uint32  {key} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_measurement_stats : end-time : yang:date-and-time   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_measurement_stats : elapsed-time : uint32 [0..2147483647]   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_measurement_stats : loss-measurement-stats-group {uses} 
+class "/cfm:maintenance-domain/cfm:maintenance-association/cfm:maintenance-association-end-point" as cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point << (A,CadetBlue) augment>>
+class "delay-measurements" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements <<container>> 
+cfm_maintenance_domain_cfm_maintenance_association_cfm_maintenance_association_end_point *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements 
+class "delay-measurement" as mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement << (L, #FF7700) list>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement 
+note bottom of mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement
+<b>Config = </b>false
+end note 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : +id : string  {key} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : session-status : session-status-type   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : delay-measurement-configuration-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : remote-mep-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : measurement-timing-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : source-mac-address : yang:mac-address  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : frame-delay-two-way : yang:gauge32   {microseconds}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : frame-delay-forward : yang:gauge32   {microseconds}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : frame-delay-backward : yang:gauge32   {microseconds}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : inter-frame-delay-variation-two-way : yang:gauge32   {microseconds}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : inter-frame-delay-variation-forward : yang:gauge32   {microseconds}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement : inter-frame-delay-variation-backward : yang:gauge32   {microseconds}
+class "current-stats" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_current_stats <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_current_stats 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_current_stats : start-time : yang:date-and-time   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_current_stats : elapsed-time : uint32 [0..2147483647]   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_current_stats : delay-measurement-stats-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_current_stats : delay-measurement-bins-group {uses} 
+class "history-stats" as mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_history_stats << (L, #FF7700) list>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_history_stats 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_history_stats : +id : uint32  {key} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_history_stats : end-time : yang:date-and-time   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_history_stats : elapsed-time : uint32 [0..2147483647]   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_history_stats : delay-measurement-stats-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_history_stats : delay-measurement-bins-group {uses} 
+mef_soam_pm : create-loss-measurement( in: loss_measurement_configuration_group in: remote_mep_group in: measurement_timing_group out: session_id)
+mef_soam_pm : abort-loss-measurement( in: maintenance_domain_id in: maintenance_association_id in: mep_id in: session_id)
+mef_soam_pm : clear-loss-history-stats( in: maintenance_domain_id in: maintenance_association_id in: mep_id in: session_id)
+mef_soam_pm : create-delay-measurement( in: delay_measurement_configuration_group in: remote_mep_group in: measurement_timing_group out: session_id)
+mef_soam_pm : abort-delay-measurement( in: maintenance_domain_id in: maintenance_association_id in: mep_id in: session_id)
+mef_soam_pm : clear-delay-history-stats( in: maintenance_domain_id in: maintenance_association_id in: mep_id in: session_id)
+class "availability-change-alarm" as mef_soam_pm_I_availability_change_alarm << (N,#00D1B2) notification>> 
+mef_soam_pm -- mef_soam_pm_I_availability_change_alarm : notification 
+mef_soam_pm_I_availability_change_alarm : maintenance-domain-id : string  
+mef_soam_pm_I_availability_change_alarm : maintenance-association-id : string  
+mef_soam_pm_I_availability_change_alarm : mep-id : cfm:mep-id-type   {mandatory}
+mef_soam_pm_I_availability_change_alarm : session-id : uint32   {mandatory}
+mef_soam_pm_I_availability_change_alarm : measured-availability-forward-status : availability-type  
+mef_soam_pm_I_availability_change_alarm : measured-availability-backward-status : availability-type  
+mef_soam_pm_I_availability_change_alarm : measured-forward-last-transition-time : yang:date-and-time  
+mef_soam_pm_I_availability_change_alarm : measured-backward-last-transition-time : yang:date-and-time  
+mef_soam_pm_I_availability_change_alarm : forward-available : yang:gauge32  
+mef_soam_pm_I_availability_change_alarm : backward-available : yang:gauge32  
+mef_soam_pm_I_availability_change_alarm : forward-unavailable : yang:gauge32  
+mef_soam_pm_I_availability_change_alarm : backward-unavailable : yang:gauge32  
+class "loss-session-start-stop-alarm" as mef_soam_pm_I_loss_session_start_stop_alarm << (N,#00D1B2) notification>> 
+mef_soam_pm -- mef_soam_pm_I_loss_session_start_stop_alarm : notification 
+mef_soam_pm_I_loss_session_start_stop_alarm : maintenance-domain-id : string  
+mef_soam_pm_I_loss_session_start_stop_alarm : maintenance-association-id : string  
+mef_soam_pm_I_loss_session_start_stop_alarm : mep-id : cfm:mep-id-type   {mandatory}
+mef_soam_pm_I_loss_session_start_stop_alarm : session-id : uint32   {mandatory}
+mef_soam_pm_I_loss_session_start_stop_alarm : session-status : session-status-type  
+class "delay-session-start-stop-alarm" as mef_soam_pm_I_delay_session_start_stop_alarm << (N,#00D1B2) notification>> 
+mef_soam_pm -- mef_soam_pm_I_delay_session_start_stop_alarm : notification 
+mef_soam_pm_I_delay_session_start_stop_alarm : maintenance-domain-id : string  
+mef_soam_pm_I_delay_session_start_stop_alarm : maintenance-association-id : string  
+mef_soam_pm_I_delay_session_start_stop_alarm : mep-id : cfm:mep-id-type   {mandatory}
+mef_soam_pm_I_delay_session_start_stop_alarm : session-id : uint32   {mandatory}
+mef_soam_pm_I_delay_session_start_stop_alarm : session-status : session-status-type  
+class "threshold-crossing-alarm" as mef_soam_pm_I_threshold_crossing_alarm << (N,#00D1B2) notification>> 
+mef_soam_pm -- mef_soam_pm_I_threshold_crossing_alarm : notification 
+mef_soam_pm_I_threshold_crossing_alarm : maintenance-domain-id : string  
+mef_soam_pm_I_threshold_crossing_alarm : maintenance-association-id : string  
+mef_soam_pm_I_threshold_crossing_alarm : mep-id : cfm:mep-id-type   {mandatory}
+class "measurement-id" as  mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id <<container>> 
+mef_soam_pm_I_threshold_crossing_alarm *-- "1" mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id 
+class "measurement-id" as mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id_I_measurement_id <<choice>> 
+mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id .. mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id_I_measurement_id : choice 
+class "loss-measurement-session-id" as mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id_I_measurement_id_I_loss_measurement_session_id_case <<case>> 
+mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id_I_measurement_id .. mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id_I_measurement_id_I_loss_measurement_session_id_case : choice measurement-id
+mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id_I_measurement_id_I_loss_measurement_session_id_case : loss-measurement-session-id : uint32  
+class "delay-measurement-session-id" as mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id_I_measurement_id_I_delay_measurement_session_id_case <<case>> 
+mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id_I_measurement_id .. mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id_I_measurement_id_I_delay_measurement_session_id_case : choice measurement-id
+mef_soam_pm_I_threshold_crossing_alarm_I_measurement_id_I_measurement_id_I_delay_measurement_session_id_case : delay-measurement-session-id : uint32  
+mef_soam_pm_I_threshold_crossing_alarm : notification-crossing-type : enumeration : {above-alarm,set-alarm,clear-alarm,}  
+mef_soam_pm_I_threshold_crossing_alarm : threshold-id : enumeration : {measured-flr-forward,max-flr-forward,average-flr-forward,...}  
+mef_soam_pm_I_threshold_crossing_alarm : threshold-config-value : uint32  
+mef_soam_pm_I_threshold_crossing_alarm : measured-value : uint32  
+mef_soam_pm_I_threshold_crossing_alarm : suspect : suspect-status-type  
+end package
+
+mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_frame_delay --> mef_soam_pm_I_delay_measurement_bins_content_group_grouping : uses 
+mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_inter_frame_delay_variation --> mef_soam_pm_I_delay_measurement_bins_content_group_grouping : uses 
+mef_soam_pm_I_delay_measurement_bins_group_I_bins_I_frame_delay_range --> mef_soam_pm_I_delay_measurement_bins_content_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement --> mef_soam_pm_I_loss_measurement_configuration_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement --> mef_soam_pm_I_remote_mep_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement --> mef_soam_pm_I_measurement_timing_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_availability_stats --> mef_soam_pm_I_loss_availability_stats_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_current_measurement_stats --> mef_soam_pm_I_loss_measurement_stats_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_availability_stats --> mef_soam_pm_I_loss_availability_stats_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loss_measurements_I_loss_measurement_I_history_measurement_stats --> mef_soam_pm_I_loss_measurement_stats_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement --> mef_soam_pm_I_delay_measurement_configuration_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement --> mef_soam_pm_I_remote_mep_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement --> mef_soam_pm_I_measurement_timing_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_current_stats --> mef_soam_pm_I_delay_measurement_stats_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_current_stats --> mef_soam_pm_I_delay_measurement_bins_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_history_stats --> mef_soam_pm_I_delay_measurement_stats_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_delay_measurements_I_delay_measurement_I_history_stats --> mef_soam_pm_I_delay_measurement_bins_group_grouping : uses 
+mef_soam_pm --> mef_soam_pm_I_loss_measurement_configuration_group_grouping : uses 
+mef_soam_pm --> mef_soam_pm_I_remote_mep_group_grouping : uses 
+mef_soam_pm --> mef_soam_pm_I_measurement_timing_group_grouping : uses 
+mef_soam_pm --> mef_soam_pm_I_delay_measurement_configuration_group_grouping : uses 
+mef_soam_pm --> mef_soam_pm_I_remote_mep_group_grouping : uses 
+mef_soam_pm --> mef_soam_pm_I_measurement_timing_group_grouping : uses 
+center footer
+ <size:20> UML Generated : 2014-06-19 17:40 </size>
+ endfooter 
+@enduml 

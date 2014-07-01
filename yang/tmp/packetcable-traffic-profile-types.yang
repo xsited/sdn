@@ -1,0 +1,26 @@
+module packetcable-traffic-profile-types
+{
+    namespace "urn:opendaylight:flow:traffic:types";
+    prefix serviceflow;
+
+    import ietf-yang-types 		{prefix yang; }
+
+    leaf traffic-profile-types
+    {
+        type enumeration
+        {
+            enum "Flow Spec";
+            enum "Service Class Name";
+            enum "Best Effort";
+            enum "Non-Real-Time Polling Service";
+            enum "Real-Time Polling Service";
+            enum "Unsolicited Grant Service";
+            enum "Unsolicited Grant Service with Activity Detection";
+            enum "Downstream Service";
+            enum "Upstream Drop";
+        }
+    default "Best Effort";
+    }
+
+
+}

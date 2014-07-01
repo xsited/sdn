@@ -1,0 +1,22 @@
+module packetcable-link
+{
+    namespace "urn:plcm:ucic:xml:ns:link:2011-10-09";
+    prefix "link";
+
+    grouping link
+    {
+        description "The atom link provided in the body of user resource";
+        leaf relationship
+        {
+            type string;
+        }
+        leaf href
+        {
+            type string;
+        }
+        leaf type
+        {
+            type string;
+        }
+    }
+}

@@ -1,0 +1,190 @@
+module packetcable-qos
+{
+    namespace "urn:opendaylight:flow:qos";
+    prefix qos;
+    import ietf-inet-types { prefix inet; }
+    import ietf-interfaces { prefix if; }
+
+    organization "OpenDaylight Project";
+    contact "TBD";
+    description
+         "This module contains a collection of groupings and
+         data definition statements related to the configuration
+         of Quality of Service (QoS).";
+
+typedef bit-rate-type {
+    type uint32;
+    units bps;
+    description "An unsigned integer (32-bit) representation of bits-per-second.";
+}
+
+typedef priority-type {
+    type uint8 {
+        range "0..7";
+    }
+    description "A 3-bit priority value.  Higher integer values represent higher priorities.";
+    reference "IEEE 802.1q";
+}
+
+typedef flow-scheduling-type {
+    description
+    "This attribute configures the version of the RIP protocol being used for this prefix. ";
+
+    type enumeration {
+        enum reserved { value 0; }
+        enum undefined { value 1; }
+        enum best-effort { value 2; }
+        enum non-real-time-polling { value 3; }
+        enum real-time-polling { value 4; }
+    }
+}
+
+container qos-config {
+    list qos-param-set {
+        key service-flow-id;
+        leaf service-flow-id {
+            type uint32;
+            mandatory true;
+            description
+            "This key attribute contains the Service Flow Identifier.";
+        }
+        leaf traffic-priority {
+            type uint8;
+            description
+            "This attribute contains the traffic priority.";
+            default 0;
+        }
+        leaf max-sustained-us-traffic-rate {
+            type bit-rate-type;
+            description
+            "This attribute contains the rate parameter R of a token-bucket-based
+            rate limit for packets. R is expressed in bps.  The number of bytes forwarded
+            (in bytes) is limited during any time interval T by Max(T), as described
+            in the expression: Max(T) = T * (R / 8) + B
+            where the parameter B (in bytes) is the max-traffic-burst leaf.
+            Note: This attribute does not limit the instantaneous rate of the flow.";
+        }
+        leaf max-sustained-ds-traffic-rate {
+            type bit-rate-type;
+            description
+            "This attribute contains the rate parameter R of a token-bucket-based
+            rate limit for packets. R is expressed in bps.  The number of bytes forwarded
+            (in bytes) is limited during any time interval T by Max(T), as described
+            in the expression: Max(T) = T * (R / 8) + B
+            where the parameter B (in bytes) is the max-traffic-burst leaf.
+            Note: This attribute does not limit the instantaneous rate of the flow.";
+        }
+        leaf max-traffic-burst {
+            type uint32;
+            units bytes;
+            description "This attribute contains the token bucket size B (in bytes)
+            for this flow as described in the expression in max-sustained-us-traffic-rate
+            and max-sustained-ds-traffic-rate.";
+        }
+        leaf min-reserved-traffic-rate {
+            type bit-rate-type;
+        default 0;
+            description "This attribute contains the minimum rate reserved for this flow.";
+        }
+        leaf active-qos-params-timeout {
+            type uint16;
+            units seconds;
+            description "This attribute contains the maximum duration resources remain unused on an active flow.
+            If there is no activity on the flow within this time interval, the flow is set to null.";
+        }
+        leaf admitted-qos-params-timeout {
+            type uint16;
+            units seconds;
+            description "This attribute contains the duration in which resources hold a flow
+            while that flow is in excess of it's active-qos-params-timeout.";
+        }
+        leaf peak-us-traffic-rate {
+            type bit-rate-type;
+            description "This attribute contains the rate parameter P of a token-bucket-based
+            peak rate limiter for packets of a flow.  Configuring this attribute permits an
+            operator to define a maximum traffic burst value for the max-sustained-traffic-rate
+            much larger than a maximum packet size, but still limit the burst of packets
+            consecutively transmitted for a flow. The parameter P is expressed in bps.
+            The number of bytes forwarded is limited during any time interval T by
+            Peak(T), as described in the expression:
+            Peak(T) <= T * (P / 8) + 1522";
+        }
+        leaf peak-ds-traffic-rate {
+            type bit-rate-type;
+            description "This attribute contains the rate parameter P of a token-bucket-based
+            peak rate limiter for packets of a flow.  Configuring this attribute permits an
+            operator to define a maximum traffic burst value for the max-sustained-traffic-rate
+            much larger than a maximum packet size, but still limit the burst of packets
+            consecutively transmitted for a flow. The parameter P is expressed in bps.
+            The number of bytes forwarded is limited during any time interval T by
+            Peak(T), as described in the expression:
+            Peak(T) <= T * (P / 8) + 1522";
+        }
+        leaf subscriber-id {
+            type inet:ip-address;
+            mandatory true;
+            description "This attribute contains the IPv4 or IPv6 address of the Subscriber
+            for the service request (i.e., CPE of Subscriber)";
+        }
+        list ds-qos-param-set {
+            key interface-identifier;
+            leaf interface-identifier {
+		type if:interface-ref;
+                description "This key attribute contains the interface identifier of the
+                downstream interface for this flow.";
+            }
+            leaf max-ds-latency {
+                type uint32;
+                units microseconds;
+                description "This attribute contains the desired maximum latency across the
+                network.";
+            }
+            leaf ds-resequencing {
+                type boolean;
+                description "This attribute contains control information for resequencing on
+                the downstream interface.";
+            }
+        }
+        list us-qos-param-set {
+            key interface-identifier;
+            leaf interface-identifier {
+		type if:interface-ref;
+                description "This key attribute contains the interface identifier of the
+                upstream interface for this flow.";
+            }
+            leaf service-flow-scheduling-type {
+                type flow-scheduling-type;
+            default best-effort;
+                description "This attribute contains the type of upstream flow scheduling type.";
+            }
+            leaf nominal-polling-interval {
+                type uint32;
+                units microseconds;
+                description "This attribute contains the nominal interval between successive
+                unicast request opportunities for this flow on the upstream interface.  This
+                attribute is typically suited for the real-time-polling and
+                non-real-time-polling service scheduling types.";
+            }
+            leaf tolerated-poll-jitter {
+                type uint32;
+                units microseconds;
+                description "This attribute contains the maximum amount of time the unicast
+                request interval may be delayed from the nominal periodic schedule for this flow.";
+            }
+            leaf nominal-grant-interval {
+                type uint32;
+                units microseconds;
+                description "This attribute contains the nominal interval between successive
+                data grant opportunities for this flow.";
+            }
+            leaf tolerated-grant-jitter {
+                type uint32;
+                units microseconds;
+                description "This attribute contains the maximum amount of time that the
+                transmission opportunities may be delayed from the nominal periodic schedule
+                for this flow.";
+            }
+        }
+    }
+}
+}

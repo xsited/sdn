@@ -1,0 +1,8 @@
+module packetcable-subscriber
+{
+    namespace "urn:opendaylight:cmts:subscriber";
+    prefix "user";
+
+    import packetcable-link { prefix link; }
+    import packetcable-cmts { prefix cmts; }
+}

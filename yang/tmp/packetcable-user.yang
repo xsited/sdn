@@ -1,0 +1,156 @@
+module packetcable-user
+{
+    namespace "urn:opendaylight:host:user";
+    prefix "user";
+
+    import packetcable-link { prefix link; }
+    container packetcable-user
+    {
+        description
+        "A system user account.  Two types of users are supported.
+        Local user accounts may be viewed, created, updated, and deleted using this API.
+        Enterprise user accounts are imported from an enterprise directory.
+        They may be viewed using this API, but only by other enterprise users.";
+
+        leaf username
+        {
+            description
+            "The user's login name.  Modification of this field is not allowed.
+            A domain and username combination uniquely identifies a user.";
+            type string
+            {
+                length "1..128";
+                pattern "[^^/\\\\\[\]:;\|=\+\*\?@<>\"]*";
+            }
+            mandatory true;
+        }
+
+        leaf uuid
+        {
+            description "A UUID that uniquely identifies the user.  Modification of this field is not allowed.";
+            type binary
+            {
+                length 16;
+            }
+            mandatory false;
+        }
+
+        leaf first-name
+        {
+            description "The user's first name.  Mandatory for local users, but optional for enterprise users.";
+            type string
+            {
+                length "1..64";
+            }
+            mandatory false;
+        }
+
+        leaf last-name
+        {
+            description "The user's last name.  Mandatory for local users, but optional for enterprise users.";
+            type string
+            {
+                length "1..64";
+            }
+            mandatory false;
+        }
+
+        leaf domain
+        {
+            description "The domain associated with the user. All users added manually to the system are in the LOCAL domain.  Modification of this field is not allowed.";
+            type string
+            {
+                length "1..max";
+            }
+            mandatory true;
+        }
+
+        leaf email-address
+        {
+            description "The email address of the user.";
+            type string
+            {
+                length "1..128";
+            }
+            mandatory false;
+        }
+
+        leaf tenant
+        {
+            description "";
+            type uint32;
+            //maps to DMA::userDataA
+        }
+
+        leaf password
+        {
+            description
+            "The local user’s system login password (not conference or chairperson passcode).
+            The password must satisfy the local password rules specified for the system.";
+            type string
+            {
+                length "1..128";
+            }
+            mandatory false;
+        }
+
+        leaf disabled
+        {
+            description "Disabled users do not have conferencing privileges and can’t log into the system management interface.";
+            type boolean;
+        }
+
+        leaf locked
+        {
+            description
+            "Locked users have been locked out by the system due to failed login attempts.
+            An administrator can unlock the account by setting this field, but can’t lock it. ";
+            type boolean;
+        }
+
+        list system-roles
+        {
+            key "system-role";
+            description "The system roles granted this user";
+            min-elements 1;
+
+            leaf system-role
+            {
+                type enumeration
+                {
+                    enum "Administrator";
+                    enum "Auditor";
+                    enum "Provisioner";
+                    enum "Device Administrator";
+                    enum "Scheduler";
+                    enum "Advanced Scheduler";
+                    enum "View-only Scheduler";
+                    enum "Operator";
+                }
+            }
+        }
+
+
+        leaf passback1
+        {
+            description "";
+            type string;
+            //maps to DMA:userDataB
+        }
+
+        leaf passback2
+        {
+            description "";
+            type string;
+            //maps to DMA:userDataC
+        }
+
+        list links
+        {
+            description "The atom links provided in the body of user resource";
+            uses link:link;
+        }
+
+    }
+}
+

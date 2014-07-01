@@ -1,0 +1,66 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/packetcable-qos.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title packetcable-qos 
+package "inet:ietf-inet-types" as inet_ietf_inet_types 
+end package 
+package "if:ietf-interfaces" as if_ietf_interfaces 
+end package 
+note top of qos_packetcable_qos : <b>Namespace: </b> urn:opendaylight:flow:qos \n<b>Prefix: </b> qos \n<b>Organization : </b>\nOpenDaylight Project \n<b>Contact : </b>\nTBD \n
+package "qos:packetcable-qos" as qos_packetcable_qos 
+inet_ietf_inet_types +-- qos_packetcable_qos
+if_ietf_interfaces +-- qos_packetcable_qos
+class "packetcable-qos" as packetcable_qos << (M, #33CCFF) module>> 
+class "bit-rate-type" as bit_rate_type << (T, YellowGreen) typedef>>
+bit_rate_type : uint32
+class "priority-type" as priority_type << (T, YellowGreen) typedef>>
+priority_type : uint8 [0..7]
+enum "flow-scheduling-type" as packetcable_qos_I_flow_scheduling_type
+packetcable_qos_I_flow_scheduling_type : reserved 
+packetcable_qos_I_flow_scheduling_type : undefined 
+packetcable_qos_I_flow_scheduling_type : best-effort 
+packetcable_qos_I_flow_scheduling_type : ... 
+class "qos-config" as  packetcable_qos_I_qos_config <<container>> 
+packetcable_qos *-- "1" packetcable_qos_I_qos_config 
+class "qos-param-set" as packetcable_qos_I_qos_config_I_qos_param_set << (L, #FF7700) list>> 
+packetcable_qos_I_qos_config *-- "0..N" packetcable_qos_I_qos_config_I_qos_param_set 
+packetcable_qos_I_qos_config_I_qos_param_set : +service-flow-id : uint32  {key}  {mandatory}
+packetcable_qos_I_qos_config_I_qos_param_set : traffic-priority : uint8   = 0 
+packetcable_qos_I_qos_config_I_qos_param_set : max-sustained-us-traffic-rate : bit-rate-type  
+packetcable_qos_I_qos_config_I_qos_param_set : max-sustained-ds-traffic-rate : bit-rate-type  
+packetcable_qos_I_qos_config_I_qos_param_set : max-traffic-burst : uint32   {bytes}
+packetcable_qos_I_qos_config_I_qos_param_set : min-reserved-traffic-rate : bit-rate-type   = 0 
+packetcable_qos_I_qos_config_I_qos_param_set : active-qos-params-timeout : uint16   {seconds}
+packetcable_qos_I_qos_config_I_qos_param_set : admitted-qos-params-timeout : uint16   {seconds}
+packetcable_qos_I_qos_config_I_qos_param_set : peak-us-traffic-rate : bit-rate-type  
+packetcable_qos_I_qos_config_I_qos_param_set : peak-ds-traffic-rate : bit-rate-type  
+packetcable_qos_I_qos_config_I_qos_param_set : subscriber-id : inet:ip-address   {mandatory}
+class "ds-qos-param-set" as packetcable_qos_I_qos_config_I_qos_param_set_I_ds_qos_param_set << (L, #FF7700) list>> 
+packetcable_qos_I_qos_config_I_qos_param_set *-- "0..N" packetcable_qos_I_qos_config_I_qos_param_set_I_ds_qos_param_set 
+packetcable_qos_I_qos_config_I_qos_param_set_I_ds_qos_param_set : +interface-identifier : if:interface-ref  {key} 
+packetcable_qos_I_qos_config_I_qos_param_set_I_ds_qos_param_set : max-ds-latency : uint32   {microseconds}
+packetcable_qos_I_qos_config_I_qos_param_set_I_ds_qos_param_set : ds-resequencing : boolean  
+class "us-qos-param-set" as packetcable_qos_I_qos_config_I_qos_param_set_I_us_qos_param_set << (L, #FF7700) list>> 
+packetcable_qos_I_qos_config_I_qos_param_set *-- "0..N" packetcable_qos_I_qos_config_I_qos_param_set_I_us_qos_param_set 
+packetcable_qos_I_qos_config_I_qos_param_set_I_us_qos_param_set : +interface-identifier : if:interface-ref  {key} 
+packetcable_qos_I_qos_config_I_qos_param_set_I_us_qos_param_set : service-flow-scheduling-type : flow-scheduling-type   = best-effort 
+packetcable_qos_I_qos_config_I_qos_param_set_I_us_qos_param_set : nominal-polling-interval : uint32   {microseconds}
+packetcable_qos_I_qos_config_I_qos_param_set_I_us_qos_param_set : tolerated-poll-jitter : uint32   {microseconds}
+packetcable_qos_I_qos_config_I_qos_param_set_I_us_qos_param_set : nominal-grant-interval : uint32   {microseconds}
+packetcable_qos_I_qos_config_I_qos_param_set_I_us_qos_param_set : tolerated-grant-jitter : uint32   {microseconds}
+end package
+
+center footer
+ <size:20> UML Generated : 2014-01-14 18:19 </size>
+ endfooter 
+@enduml 

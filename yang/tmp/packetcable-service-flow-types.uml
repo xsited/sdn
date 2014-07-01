@@ -1,0 +1,77 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/packetcable-service-flow-types.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title packetcable-service-flow-types 
+package "yang:ietf-yang-types" as yang_ietf_yang_types 
+end package 
+package "match:packetcable-match-types" as match_packetcable_match_types 
+end package 
+note top of serviceflow_packetcable_service_flow_types : <b>Namespace: </b> urn:opendaylight:flow:types \n<b>Prefix: </b> serviceflow \n
+package "serviceflow:packetcable-service-flow-types" as serviceflow_packetcable_service_flow_types 
+yang_ietf_yang_types +-- serviceflow_packetcable_service_flow_types
+match_packetcable_match_types +-- serviceflow_packetcable_service_flow_types
+class "packetcable-service-flow-types" as packetcable_service_flow_types << (M, #33CCFF) module>> 
+class "flow-mod-flags" as flow_mod_flags << (T, YellowGreen) typedef>>
+flow_mod_flags : bits
+class "removed_reason_flags" as removed_reason_flags << (T, YellowGreen) typedef>>
+removed_reason_flags : bits
+class "generic_flow_attributes" as packetcable_service_flow_types_I_generic_flow_attributes_grouping <<(G,Lime) grouping>> 
+packetcable_service_flow_types_I_generic_flow_attributes_grouping : priority : uint16  
+packetcable_service_flow_types_I_generic_flow_attributes_grouping : idle-timeout : uint16  
+packetcable_service_flow_types_I_generic_flow_attributes_grouping : hard-timeout : uint16  
+packetcable_service_flow_types_I_generic_flow_attributes_grouping : cookie : uint64  
+packetcable_service_flow_types_I_generic_flow_attributes_grouping : table_id : uint8  
+class "flow" as packetcable_service_flow_types_I_flow_grouping <<(G,Lime) grouping>> 
+class "match" as  packetcable_service_flow_types_I_flow_I_match <<container>> 
+packetcable_service_flow_types_I_flow_grouping *-- "1" packetcable_service_flow_types_I_flow_I_match 
+packetcable_service_flow_types_I_flow_I_match : match:match {uses} 
+packetcable_service_flow_types_I_flow_grouping : generic_flow_attributes {uses} 
+packetcable_service_flow_types_I_flow_grouping : container-name : string  
+packetcable_service_flow_types_I_flow_grouping : cookie_mask : uint64  
+packetcable_service_flow_types_I_flow_grouping : buffer_id : uint32  
+packetcable_service_flow_types_I_flow_grouping : out_port : uint64  
+packetcable_service_flow_types_I_flow_grouping : out_group : uint32  
+packetcable_service_flow_types_I_flow_grouping : flags : flow-mod-flags  
+packetcable_service_flow_types_I_flow_grouping : flow-name : string  
+packetcable_service_flow_types_I_flow_grouping : installHw : boolean  
+packetcable_service_flow_types_I_flow_grouping : barrier : boolean  
+packetcable_service_flow_types_I_flow_grouping : strict : boolean   = false 
+class "flow-statistics" as packetcable_service_flow_types_I_flow_statistics_grouping <<(G,Lime) grouping>> 
+packetcable_service_flow_types_I_flow_statistics_grouping : packet-count : yang:counter64  
+packetcable_service_flow_types_I_flow_statistics_grouping : byte-count : yang:counter64  
+class "duration" as  packetcable_service_flow_types_I_flow_statistics_I_duration <<container>> 
+packetcable_service_flow_types_I_flow_statistics_grouping *-- "1" packetcable_service_flow_types_I_flow_statistics_I_duration 
+packetcable_service_flow_types_I_flow_statistics_I_duration : second : yang:counter64  
+packetcable_service_flow_types_I_flow_statistics_I_duration : nanosecond : yang:counter64  
+class "flow-table-statistics" as packetcable_service_flow_types_I_flow_table_statistics_grouping <<(G,Lime) grouping>> 
+packetcable_service_flow_types_I_flow_table_statistics_grouping : active : yang:counter64  
+packetcable_service_flow_types_I_flow_table_statistics_grouping : lookup : yang:counter64  
+packetcable_service_flow_types_I_flow_table_statistics_grouping : matched : yang:counter64  
+class "flow-mod-removed" as packetcable_service_flow_types_I_flow_mod_removed_grouping <<(G,Lime) grouping>> 
+packetcable_service_flow_types_I_flow_mod_removed_grouping : generic_flow_attributes {uses} 
+packetcable_service_flow_types_I_flow_mod_removed_grouping : removed_reason : removed_reason_flags  
+packetcable_service_flow_types_I_flow_mod_removed_grouping : duration_nsec : uint32  
+packetcable_service_flow_types_I_flow_mod_removed_grouping : duration_sec : uint32  
+packetcable_service_flow_types_I_flow_mod_removed_grouping : packet_count : uint64  
+packetcable_service_flow_types_I_flow_mod_removed_grouping : byte_count : uint64  
+class "match" as  packetcable_service_flow_types_I_flow_mod_removed_I_match <<container>> 
+packetcable_service_flow_types_I_flow_mod_removed_grouping *-- "1" packetcable_service_flow_types_I_flow_mod_removed_I_match 
+packetcable_service_flow_types_I_flow_mod_removed_I_match : match:match {uses} 
+end package
+
+packetcable_service_flow_types_I_flow_grouping --> packetcable_service_flow_types_I_generic_flow_attributes_grouping : uses 
+packetcable_service_flow_types_I_flow_mod_removed_grouping --> packetcable_service_flow_types_I_generic_flow_attributes_grouping : uses 
+center footer
+ <size:20> UML Generated : 2014-01-14 18:19 </size>
+ endfooter 
+@enduml 

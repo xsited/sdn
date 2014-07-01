@@ -1,0 +1,163 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/packetcable-service.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title packetcable-service 
+package "ext:yang-ext" as ext_yang_ext 
+end package 
+package "inv:opendaylight-inventory" as inv_opendaylight_inventory 
+end package 
+package "inet:ietf-inet-types" as inet_ietf_inet_types 
+end package 
+package "cmts:packetcable-cmts" as cmts_packetcable_cmts 
+end package 
+package "tp:packetcable-traffic-profile" as tp_packetcable_traffic_profile 
+end package 
+package "tr:flow-capable-transaction" as tr_flow_capable_transaction 
+end package 
+note top of pcmm_packetcable_service : <b>Namespace: </b> urn:opendaylight:packetcable:service \n<b>Prefix: </b> pcmm \n<b>Revision : </b> 2014-01-20 \n
+package "pcmm:packetcable-service" as pcmm_packetcable_service 
+ext_yang_ext +-- pcmm_packetcable_service
+inv_opendaylight_inventory +-- pcmm_packetcable_service
+inet_ietf_inet_types +-- pcmm_packetcable_service
+cmts_packetcable_cmts +-- pcmm_packetcable_service
+tp_packetcable_traffic_profile +-- pcmm_packetcable_service
+tr_flow_capable_transaction +-- pcmm_packetcable_service
+class "packetcable-service" as packetcable_service << (M, #33CCFF) module>> 
+class "node-cmts" as packetcable_service_I_node_cmts_grouping <<(G,Lime) grouping>> 
+packetcable_service_I_node_cmts_grouping : inv:node-context-ref {uses} 
+packetcable_service_I_node_cmts_grouping : cmts:cmts-instance {uses} 
+class "update-cmts" as packetcable_service_I_update_cmts_grouping <<(G,Lime) grouping>> 
+packetcable_service_I_update_cmts_grouping : inv:node-context-ref {uses} 
+class "original-cmts" as  packetcable_service_I_update_cmts_I_original_cmts <<container>> 
+packetcable_service_I_update_cmts_grouping *-- "1" packetcable_service_I_update_cmts_I_original_cmts 
+packetcable_service_I_update_cmts_I_original_cmts : cmts:cmts-instance {uses} 
+class "updated-cmts" as  packetcable_service_I_update_cmts_I_updated_cmts <<container>> 
+packetcable_service_I_update_cmts_grouping *-- "1" packetcable_service_I_update_cmts_I_updated_cmts 
+packetcable_service_I_update_cmts_I_updated_cmts : cmts:cmts-instance {uses} 
+packetcable_service : cmts-add( in: cmts_ref in: tr_transaction_metadata in: node_cmts out: tr_transaction_aware)
+packetcable_service : cmts-remove( in: cmts_ref in: tr_transaction_metadata in: node_cmts out: tr_transaction_aware)
+packetcable_service : cmts-update( in: cmts_ref in: tr_transaction_metadata in: update_cmts out: tr_transaction_aware)
+class "cmts-added" as packetcable_service_I_cmts_added << (N,#00D1B2) notification>> 
+packetcable_service -- packetcable_service_I_cmts_added : notification 
+packetcable_service_I_cmts_added : tr:transaction-metadata {uses} 
+packetcable_service_I_cmts_added : cmts-ref : cmts:cmts-reference  
+packetcable_service_I_cmts_added : node-cmts {uses} 
+packetcable_service_I_cmts_added : tr:transaction-aware {uses} 
+class "cmts-updated" as packetcable_service_I_cmts_updated << (N,#00D1B2) notification>> 
+packetcable_service -- packetcable_service_I_cmts_updated : notification 
+packetcable_service_I_cmts_updated : tr:transaction-metadata {uses} 
+packetcable_service_I_cmts_updated : cmts-ref : cmts:cmts-reference  
+packetcable_service_I_cmts_updated : node-cmts {uses} 
+packetcable_service_I_cmts_updated : tr:transaction-aware {uses} 
+class "cmts-removed" as packetcable_service_I_cmts_removed << (N,#00D1B2) notification>> 
+packetcable_service -- packetcable_service_I_cmts_removed : notification 
+packetcable_service_I_cmts_removed : tr:transaction-metadata {uses} 
+packetcable_service_I_cmts_removed : cmts-ref : cmts:cmts-reference  
+packetcable_service_I_cmts_removed : node-cmts {uses} 
+packetcable_service_I_cmts_removed : tr:transaction-aware {uses} 
+class "update-tp-defaults-flowspec" as packetcable_service_I_update_tp_defaults_flowspec_grouping <<(G,Lime) grouping>> 
+class "original-tp" as  packetcable_service_I_update_tp_defaults_flowspec_I_original_tp <<container>> 
+packetcable_service_I_update_tp_defaults_flowspec_grouping *-- "1" packetcable_service_I_update_tp_defaults_flowspec_I_original_tp 
+packetcable_service_I_update_tp_defaults_flowspec_I_original_tp : tp:flowspec-envelope {uses} 
+class "update-tp" as  packetcable_service_I_update_tp_defaults_flowspec_I_update_tp <<container>> 
+packetcable_service_I_update_tp_defaults_flowspec_grouping *-- "1" packetcable_service_I_update_tp_defaults_flowspec_I_update_tp 
+packetcable_service_I_update_tp_defaults_flowspec_I_update_tp : tp:flowspec-envelope {uses} 
+packetcable_service : traffic-profile-get-defaults-flowspec( in: tp_ref in: tr_transaction_metadata out: update_tp_defaults_flowspec out: tr_transaction_aware)
+packetcable_service : traffic-profile-update-defaults-flowspec( in: tp_ref in: tr_transaction_metadata in: update_tp_defaults_flowspec out: tr_transaction_aware)
+class "update-tp-defaults-docsis-service-class-name" as packetcable_service_I_update_tp_defaults_docsis_service_class_name_grouping <<(G,Lime) grouping>> 
+class "original-tp" as  packetcable_service_I_update_tp_defaults_docsis_service_class_name_I_original_tp <<container>> 
+packetcable_service_I_update_tp_defaults_docsis_service_class_name_grouping *-- "1" packetcable_service_I_update_tp_defaults_docsis_service_class_name_I_original_tp 
+packetcable_service_I_update_tp_defaults_docsis_service_class_name_I_original_tp : tp:flowspec-envelope {uses} 
+class "update-tp" as  packetcable_service_I_update_tp_defaults_docsis_service_class_name_I_update_tp <<container>> 
+packetcable_service_I_update_tp_defaults_docsis_service_class_name_grouping *-- "1" packetcable_service_I_update_tp_defaults_docsis_service_class_name_I_update_tp 
+packetcable_service_I_update_tp_defaults_docsis_service_class_name_I_update_tp : tp:flowspec-envelope {uses} 
+class "update-tp-defaults-best-effort" as packetcable_service_I_update_tp_defaults_best_effort_grouping <<(G,Lime) grouping>> 
+class "original-tp" as  packetcable_service_I_update_tp_defaults_best_effort_I_original_tp <<container>> 
+packetcable_service_I_update_tp_defaults_best_effort_grouping *-- "1" packetcable_service_I_update_tp_defaults_best_effort_I_original_tp 
+packetcable_service_I_update_tp_defaults_best_effort_I_original_tp : tp:default-envelope {uses} 
+class "update-tp" as  packetcable_service_I_update_tp_defaults_best_effort_I_update_tp <<container>> 
+packetcable_service_I_update_tp_defaults_best_effort_grouping *-- "1" packetcable_service_I_update_tp_defaults_best_effort_I_update_tp 
+packetcable_service_I_update_tp_defaults_best_effort_I_update_tp : tp:default-envelope {uses} 
+packetcable_service : traffic-profile-get-defaults-best-effort( in: tp_ref in: tr_transaction_metadata out: update_tp_defaults_best_effort out: tr_transaction_aware)
+packetcable_service : traffic-profile-update-defaults-best-effort( in: tp_ref in: tr_transaction_metadata in: update_tp_defaults_best_effort out: tr_transaction_aware)
+class "update-tp-defaults-non-real-time-polling-service" as packetcable_service_I_update_tp_defaults_non_real_time_polling_service_grouping <<(G,Lime) grouping>> 
+class "original-tp" as  packetcable_service_I_update_tp_defaults_non_real_time_polling_service_I_original_tp <<container>> 
+packetcable_service_I_update_tp_defaults_non_real_time_polling_service_grouping *-- "1" packetcable_service_I_update_tp_defaults_non_real_time_polling_service_I_original_tp 
+packetcable_service_I_update_tp_defaults_non_real_time_polling_service_I_original_tp : tp:default-envelope {uses} 
+class "update-tp" as  packetcable_service_I_update_tp_defaults_non_real_time_polling_service_I_update_tp <<container>> 
+packetcable_service_I_update_tp_defaults_non_real_time_polling_service_grouping *-- "1" packetcable_service_I_update_tp_defaults_non_real_time_polling_service_I_update_tp 
+packetcable_service_I_update_tp_defaults_non_real_time_polling_service_I_update_tp : tp:default-envelope {uses} 
+packetcable_service : traffic-profile-get-defaults-non-real-time-polling-service( in: tp_ref in: tr_transaction_metadata out: update_tp_defaults_non_real_time_polling_service out: tr_transaction_aware)
+packetcable_service : traffic-profile-update-defaults-non-real-time-polling-service( in: tp_ref in: tr_transaction_metadata in: update_tp_defaults_non_real_time_polling_service out: tr_transaction_aware)
+class "update-tp-defaults-real-time-polling-service" as packetcable_service_I_update_tp_defaults_real_time_polling_service_grouping <<(G,Lime) grouping>> 
+class "original-tp" as  packetcable_service_I_update_tp_defaults_real_time_polling_service_I_original_tp <<container>> 
+packetcable_service_I_update_tp_defaults_real_time_polling_service_grouping *-- "1" packetcable_service_I_update_tp_defaults_real_time_polling_service_I_original_tp 
+packetcable_service_I_update_tp_defaults_real_time_polling_service_I_original_tp : tp:default-envelope {uses} 
+class "update-tp" as  packetcable_service_I_update_tp_defaults_real_time_polling_service_I_update_tp <<container>> 
+packetcable_service_I_update_tp_defaults_real_time_polling_service_grouping *-- "1" packetcable_service_I_update_tp_defaults_real_time_polling_service_I_update_tp 
+packetcable_service_I_update_tp_defaults_real_time_polling_service_I_update_tp : tp:default-envelope {uses} 
+packetcable_service : traffic-profile-get-defaults-real-time-polling-service( in: tp_ref in: tr_transaction_metadata out: update_tp_defaults_real_time_polling_service out: tr_transaction_aware)
+packetcable_service : traffic-profile-update-defaults-real-time-polling-service( in: tp_ref in: tr_transaction_metadata in: update_tp_defaults_real_time_polling_service out: tr_transaction_aware)
+class "update-tp-defaults-unsolicited-grant-service" as packetcable_service_I_update_tp_defaults_unsolicited_grant_service_grouping <<(G,Lime) grouping>> 
+class "original-tp" as  packetcable_service_I_update_tp_defaults_unsolicited_grant_service_I_original_tp <<container>> 
+packetcable_service_I_update_tp_defaults_unsolicited_grant_service_grouping *-- "1" packetcable_service_I_update_tp_defaults_unsolicited_grant_service_I_original_tp 
+packetcable_service_I_update_tp_defaults_unsolicited_grant_service_I_original_tp : tp:ugs-envelope {uses} 
+class "update-tp" as  packetcable_service_I_update_tp_defaults_unsolicited_grant_service_I_update_tp <<container>> 
+packetcable_service_I_update_tp_defaults_unsolicited_grant_service_grouping *-- "1" packetcable_service_I_update_tp_defaults_unsolicited_grant_service_I_update_tp 
+packetcable_service_I_update_tp_defaults_unsolicited_grant_service_I_update_tp : tp:ugs-envelope {uses} 
+packetcable_service : traffic-profile-get-defaults-unsolicited-grant-service( in: tp_ref in: tr_transaction_metadata out: update_tp_defaults_unsolicited_grant_service out: tr_transaction_aware)
+packetcable_service : traffic-profile-update-defaults-unsolicited-grant-service( in: tp_ref in: tr_transaction_metadata in: update_tp_defaults_unsolicited_grant_service out: tr_transaction_aware)
+class "update-tp-defaults-unsolicited-grant-service-with-actvity-detection" as packetcable_service_I_update_tp_defaults_unsolicited_grant_service_with_actvity_detection_grouping <<(G,Lime) grouping>> 
+class "original-tp" as  packetcable_service_I_update_tp_defaults_unsolicited_grant_service_with_actvity_detection_I_original_tp <<container>> 
+packetcable_service_I_update_tp_defaults_unsolicited_grant_service_with_actvity_detection_grouping *-- "1" packetcable_service_I_update_tp_defaults_unsolicited_grant_service_with_actvity_detection_I_original_tp 
+packetcable_service_I_update_tp_defaults_unsolicited_grant_service_with_actvity_detection_I_original_tp : tp:ugs-envelope {uses} 
+class "update-tp" as  packetcable_service_I_update_tp_defaults_unsolicited_grant_service_with_actvity_detection_I_update_tp <<container>> 
+packetcable_service_I_update_tp_defaults_unsolicited_grant_service_with_actvity_detection_grouping *-- "1" packetcable_service_I_update_tp_defaults_unsolicited_grant_service_with_actvity_detection_I_update_tp 
+packetcable_service_I_update_tp_defaults_unsolicited_grant_service_with_actvity_detection_I_update_tp : tp:ugs-envelope {uses} 
+packetcable_service : traffic-profile-get-defaults-unsolicited-grant-service-with-actvity-detection( in: tp_ref in: tr_transaction_metadata out: update_tp_defaults_unsolicited_grant_service_with_actvity_detection out: tr_transaction_aware)
+packetcable_service : traffic-profile-update-defaults-unsolicited-grant-service-with-actvity-detection( in: tp_ref in: tr_transaction_metadata in: update_tp_defaults_unsolicited_grant_service_with_actvity_detection out: tr_transaction_aware)
+class "update-tp-defaults-downstream-service" as packetcable_service_I_update_tp_defaults_downstream_service_grouping <<(G,Lime) grouping>> 
+class "original-tp" as  packetcable_service_I_update_tp_defaults_downstream_service_I_original_tp <<container>> 
+packetcable_service_I_update_tp_defaults_downstream_service_grouping *-- "1" packetcable_service_I_update_tp_defaults_downstream_service_I_original_tp 
+packetcable_service_I_update_tp_defaults_downstream_service_I_original_tp : tp:us-envelope {uses} 
+class "update-tp" as  packetcable_service_I_update_tp_defaults_downstream_service_I_update_tp <<container>> 
+packetcable_service_I_update_tp_defaults_downstream_service_grouping *-- "1" packetcable_service_I_update_tp_defaults_downstream_service_I_update_tp 
+packetcable_service_I_update_tp_defaults_downstream_service_I_update_tp : tp:us-envelope {uses} 
+packetcable_service : traffic-profile-get-defaults-downstream-service( in: tp_ref in: tr_transaction_metadata out: update_tp_defaults_downstream_service out: tr_transaction_aware)
+packetcable_service : traffic-profile-update-defaults-downstream-service( in: tp_ref in: tr_transaction_metadata in: update_tp_defaults_downstream_service out: tr_transaction_aware)
+end package
+
+packetcable_service --> packetcable_service_I_node_cmts_grouping : uses 
+packetcable_service --> packetcable_service_I_node_cmts_grouping : uses 
+packetcable_service --> packetcable_service_I_update_cmts_grouping : uses 
+packetcable_service_I_cmts_added --> packetcable_service_I_node_cmts_grouping : uses 
+packetcable_service_I_cmts_updated --> packetcable_service_I_node_cmts_grouping : uses 
+packetcable_service_I_cmts_removed --> packetcable_service_I_node_cmts_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_flowspec_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_flowspec_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_best_effort_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_best_effort_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_non_real_time_polling_service_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_non_real_time_polling_service_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_real_time_polling_service_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_real_time_polling_service_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_unsolicited_grant_service_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_unsolicited_grant_service_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_unsolicited_grant_service_with_actvity_detection_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_unsolicited_grant_service_with_actvity_detection_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_downstream_service_grouping : uses 
+packetcable_service --> packetcable_service_I_update_tp_defaults_downstream_service_grouping : uses 
+center footer
+ <size:20> UML Generated : 2014-06-19 17:40 </size>
+ endfooter 
+@enduml 

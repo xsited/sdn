@@ -1,0 +1,36 @@
+module ex-vlan {
+  namespace "http://example.com/vlan";
+  prefix "vlan";
+
+  import ietf-interfaces {
+    prefix if;
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when "if:type = 'ethernetCsmacd' or
+          if:type = 'ieee8023adLag'";
+    leaf vlan-tagging {
+      type boolean;
+      default false;
+    }
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when "if:type = 'l2vlan'";
+
+    leaf base-interface {
+      type if:interface-ref;
+      must "/if:interfaces/if:interface[if:name = current()]"
+         + "/vlan:vlan-tagging = true" {
+        description
+          "The base interface must have vlan tagging enabled.";
+      }
+    }
+    leaf vlan-id {
+      type uint16 {
+        range "1..4094";
+      }
+      must "../base-interface";
+    }
+  }
+}

@@ -1,0 +1,376 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/mef-cfm.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title mef-cfm 
+package "yang:ietf-yang-types" as yang_ietf_yang_types 
+end package 
+package "inet:ietf-inet-types" as inet_ietf_inet_types 
+end package 
+note top of mef_cfm_mef_cfm : <b>Namespace: </b> http://metroethernetforum.org/ns/yang/mef-cfm \n<b>Prefix: </b> mef-cfm \n<b>Organization : </b>\nMetro Ethernet Forum \n<b>Contact : </b>\nWeb URL: http://metroethernetforum.org/ \nE-mail:  mibs@metroethernetforum.org \nPostal:  Metro Ethernet Forum \n6033 W. Century Boulevard, Suite 830 \nLos Angeles, CA 90045 \nU.S.A. \nPhone:                                                                          +1 310-642-2800 \nFax:                                                                            +1 310-642-2808 \n<b>Revision : </b> 2012-04-16 \n
+package "mef-cfm:mef-cfm" as mef_cfm_mef_cfm 
+yang_ietf_yang_types +-- mef_cfm_mef_cfm
+inet_ietf_inet_types +-- mef_cfm_mef_cfm
+class "mef-cfm" as mef_cfm << (M, #33CCFF) module>> 
+class "mep-id-type" as mep_id_type << (T, YellowGreen) typedef>>
+mep_id_type : uint16 [1..8191]
+class "vlan-id-type" as vlan_id_type << (T, YellowGreen) typedef>>
+vlan_id_type : uint16 [1..4094]
+enum "port-status-type" as mef_cfm_I_port_status_type
+mef_cfm_I_port_status_type : no-status-tlv 
+mef_cfm_I_port_status_type : blocked 
+mef_cfm_I_port_status_type : up 
+enum "interface-status-type" as mef_cfm_I_interface_status_type
+mef_cfm_I_interface_status_type : no-status-tlv 
+mef_cfm_I_interface_status_type : up 
+mef_cfm_I_interface_status_type : down 
+mef_cfm_I_interface_status_type : ... 
+enum "mhf-creation-type" as mef_cfm_I_mhf_creation_type
+mef_cfm_I_mhf_creation_type : none 
+mef_cfm_I_mhf_creation_type : default 
+mef_cfm_I_mhf_creation_type : explicit 
+mef_cfm_I_mhf_creation_type : ... 
+enum "id-permission-type" as mef_cfm_I_id_permission_type
+mef_cfm_I_id_permission_type : none 
+mef_cfm_I_id_permission_type : chassis 
+mef_cfm_I_id_permission_type : manage 
+mef_cfm_I_id_permission_type : ... 
+class "mac-address-and-uint-type" as mac_address_and_uint_type << (T, YellowGreen) typedef>>
+mac_address_and_uint_type : binary {length = 8}
+enum "fault-alarm-defect-type" as mef_cfm_I_fault_alarm_defect_type
+mef_cfm_I_fault_alarm_defect_type : remote-rdi 
+mef_cfm_I_fault_alarm_defect_type : remote-mac-error 
+mef_cfm_I_fault_alarm_defect_type : remote-invalid-ccm 
+mef_cfm_I_fault_alarm_defect_type : ... 
+class "fault-alarm-defect-bits-type" as fault_alarm_defect_bits_type << (T, YellowGreen) typedef>>
+fault_alarm_defect_bits_type : bits
+class "lbm-transaction-id-type" as lbm_transaction_id_type << (T, YellowGreen) typedef>>
+lbm_transaction_id_type : uint32
+class "ltm-transaction-id-type" as ltm_transaction_id_type << (T, YellowGreen) typedef>>
+ltm_transaction_id_type : uint32
+class "md-level-type" as md_level_type << (T, YellowGreen) typedef>>
+md_level_type : int32 [0..7]
+class "error-conditions-type" as error_conditions_type << (T, YellowGreen) typedef>>
+error_conditions_type : bits
+class "priority-type" as priority_type << (T, YellowGreen) typedef>>
+priority_type : uint32 [0..7]
+enum "remote-mep-state-type" as mef_cfm_I_remote_mep_state_type
+mef_cfm_I_remote_mep_state_type : idle 
+mef_cfm_I_remote_mep_state_type : start 
+mef_cfm_I_remote_mep_state_type : failed 
+mef_cfm_I_remote_mep_state_type : ... 
+class "component-id-type" as component_id_type << (T, YellowGreen) typedef>>
+component_id_type : uint32 [1..4294967295]
+class "target-address-group" as mef_cfm_I_target_address_group_grouping <<(G,Lime) grouping>> 
+class "address-type" as mef_cfm_I_target_address_group_I_address_type <<choice>> 
+mef_cfm_I_target_address_group_grouping .. mef_cfm_I_target_address_group_I_address_type : choice 
+class "mac-address" as mef_cfm_I_target_address_group_I_address_type_I_mac_address_case <<case>>
+mef_cfm_I_target_address_group_I_address_type .. mef_cfm_I_target_address_group_I_address_type_I_mac_address_case  : choice address-type
+mef_cfm_I_target_address_group_I_address_type_I_mac_address_case : mac-address : yang:mac-address  
+class "mep-id" as mef_cfm_I_target_address_group_I_address_type_I_mep_id_case <<case>>
+mef_cfm_I_target_address_group_I_address_type .. mef_cfm_I_target_address_group_I_address_type_I_mep_id_case  : choice address-type
+mef_cfm_I_target_address_group_I_address_type_I_mep_id_case : mep-id : mep-id-type  
+class "loopback-parameters-group" as mef_cfm_I_loopback_parameters_group_grouping <<(G,Lime) grouping>> 
+class "target-address" as  mef_cfm_I_loopback_parameters_group_I_target_address <<container>> 
+mef_cfm_I_loopback_parameters_group_grouping *-- "1" mef_cfm_I_loopback_parameters_group_I_target_address 
+mef_cfm_I_loopback_parameters_group_I_target_address : target-address-group {uses} 
+mef_cfm_I_loopback_parameters_group_grouping : number-of-messages : uint32 [1..1024]   = 1 
+mef_cfm_I_loopback_parameters_group_grouping : data-tlv : binary  
+mef_cfm_I_loopback_parameters_group_grouping : vlan-priority : priority-type  
+mef_cfm_I_loopback_parameters_group_grouping : vlan-drop-eligible : boolean   = true 
+class "linktrace-parameters-group" as mef_cfm_I_linktrace_parameters_group_grouping <<(G,Lime) grouping>> 
+class "target-address" as  mef_cfm_I_linktrace_parameters_group_I_target_address <<container>> 
+mef_cfm_I_linktrace_parameters_group_grouping *-- "1" mef_cfm_I_linktrace_parameters_group_I_target_address 
+mef_cfm_I_linktrace_parameters_group_I_target_address : target-address-group {uses} 
+mef_cfm_I_linktrace_parameters_group_grouping : transmit-ltm-flags : bits  
+mef_cfm_I_linktrace_parameters_group_grouping : default-ttl : uint8   = 64 
+class "md-level-group" as mef_cfm_I_md_level_group_grouping <<(G,Lime) grouping>> 
+mef_cfm_I_md_level_group_grouping : md-level : int32 [-1 | 0..7]   {mandatory}
+mef_cfm_I_md_level_group_grouping : mhf-creation : mhf-creation-type   {mandatory}
+mef_cfm_I_md_level_group_grouping : default-id-permission : id-permission-type   {mandatory}
+class "port-id-tlv-group" as mef_cfm_I_port_id_tlv_group_grouping <<(G,Lime) grouping>> 
+class "port-id-subtype" as mef_cfm_I_port_id_tlv_group_I_port_id_subtype <<choice>> 
+mef_cfm_I_port_id_tlv_group_grouping .. mef_cfm_I_port_id_tlv_group_I_port_id_subtype : choice 
+class "interface-alias" as mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_interface_alias_case <<case>> 
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype .. mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_interface_alias_case : choice port-id-subtype
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_interface_alias_case : interface-alias : string {length = 0..64}  
+class "port-component" as mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_port_component_case <<case>> 
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype .. mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_port_component_case : choice port-id-subtype
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_port_component_case : port-component : string {length = 0..32}  
+class "mac-address" as mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_mac_address_case <<case>> 
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype .. mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_mac_address_case : choice port-id-subtype
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_mac_address_case : mac-address : yang:mac-address  
+class "network-address" as mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_network_address_case <<case>> 
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype .. mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_network_address_case : choice port-id-subtype
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_network_address_case : network-address : string  
+class "interface-name" as mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_interface_name_case <<case>> 
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype .. mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_interface_name_case : choice port-id-subtype
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_interface_name_case : interface-name : string {length = 0..64}  
+class "agent-circuit-id" as mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_agent_circuit_id_case <<case>> 
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype .. mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_agent_circuit_id_case : choice port-id-subtype
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_agent_circuit_id_case : agent-circuit-id : string  
+class "local" as mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_local_case <<case>> 
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype .. mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_local_case : choice port-id-subtype
+mef_cfm_I_port_id_tlv_group_I_port_id_subtype_I_local_case : local : string  
+class "sender-id-tlv-group" as mef_cfm_I_sender_id_tlv_group_grouping <<(G,Lime) grouping>> 
+class "chassis-id-subtype" as mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype <<choice>> 
+mef_cfm_I_sender_id_tlv_group_grouping .. mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype : choice 
+class "chassis-component" as mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_chassis_component_case <<case>> 
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype .. mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_chassis_component_case : choice chassis-id-subtype
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_chassis_component_case : chassis-component : string {length = 0..32}  
+class "interface-alias" as mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_interface_alias_case <<case>> 
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype .. mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_interface_alias_case : choice chassis-id-subtype
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_interface_alias_case : interface-alias : string {length = 0..64}  
+class "port-component" as mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_port_component_case <<case>> 
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype .. mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_port_component_case : choice chassis-id-subtype
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_port_component_case : port-component : string {length = 0..32}  
+class "mac-address-type" as mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_mac_address_type_case <<case>> 
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype .. mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_mac_address_type_case : choice chassis-id-subtype
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_mac_address_type_case : mac-address-type : yang:mac-address  
+class "network-address" as mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_network_address_case <<case>> 
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype .. mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_network_address_case : choice chassis-id-subtype
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_network_address_case : network-address : string  
+class "interface-name" as mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_interface_name_case <<case>> 
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype .. mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_interface_name_case : choice chassis-id-subtype
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_interface_name_case : interface-name : string {length = 0..64}  
+class "local" as mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_local_case <<case>> 
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype .. mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_local_case : choice chassis-id-subtype
+mef_cfm_I_sender_id_tlv_group_I_chassis_id_subtype_I_local_case : local : string  
+class "management-address" as  mef_cfm_I_sender_id_tlv_group_I_management_address <<container>> 
+mef_cfm_I_sender_id_tlv_group_grouping *-- "1" mef_cfm_I_sender_id_tlv_group_I_management_address 
+class "management-address" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address <<choice>> 
+mef_cfm_I_sender_id_tlv_group_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address : choice 
+class "udp-ipv4" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv4_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv4_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv4_case : udp-ipv4-address : inet:ipv4-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv4_case : udp-ipv4-port : inet:port-number  
+class "udp-ipv6" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv6_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv6_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv6_case : udp-ipv6-address : inet:ipv6-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv6_case : udp-ipv6-port : inet:port-number  
+class "udp-ipv4z" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv4z_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv4z_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv4z_case : udp-ipv4z-address : inet:ipv4-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv4z_case : udp-ipv4z-index : uint32  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv4z_case : udp-ipv4z-port : inet:port-number  
+class "udp-ipv6z" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv6z_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv6z_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv6z_case : udp-ipv6z-address : inet:ipv6-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv6z_case : udp-ipv6z-index : uint32  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_ipv6z_case : udp-ipv6z-port : inet:port-number  
+class "tcp-ipv4" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv4_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv4_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv4_case : tcp-ipv4-address : inet:ipv4-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv4_case : tcp-ipv4-port : inet:port-number  
+class "tcp-ipv6" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv6_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv6_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv6_case : tcp-ipv6-address : inet:ipv6-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv6_case : tcp-ipv6-port : inet:port-number  
+class "tcp-ipv4z" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv4z_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv4z_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv4z_case : tcp-ipv4z-address : inet:ipv4-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv4z_case : tcp-ipv4z-index : uint32  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv4z_case : tcp-ipv4z-port : inet:port-number  
+class "tcp-ipv6z" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv6z_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv6z_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv6z_case : tcp-ipv6z-address : inet:ipv6-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv6z_case : tcp-ipv6z-index : uint32  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_ipv6z_case : tcp-ipv6z-port : inet:port-number  
+class "sctp-ipv4" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv4_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv4_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv4_case : sctp-ipv4-address : inet:ipv4-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv4_case : sctp-ipv4-port : inet:port-number  
+class "sctp-ipv6" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv6_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv6_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv6_case : sctp-ipv6-address : inet:ipv6-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv6_case : sctp-ipv6-port : inet:port-number  
+class "sctp-ipv4z" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv4z_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv4z_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv4z_case : sctp-ipv4z-address : inet:ipv4-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv4z_case : sctp-ipv4z-index : uint32  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv4z_case : sctp-ipv4z-port : inet:port-number  
+class "sctp-ipv6z" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv6z_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv6z_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv6z_case : sctp-ipv6z-address : inet:ipv6-address  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv6z_case : sctp-ipv6z-index : uint32  
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_ipv6z_case : sctp-ipv6z-port : inet:port-number  
+class "local" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_local_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_local_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_local_case : local-address : string {length = 1..255}  
+class "udp-dns" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_dns_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_dns_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_udp_dns_case : udp-dns-address : string {length = 1..255}  
+class "tcp-dns" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_dns_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_dns_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_tcp_dns_case : tcp-dns-address : string {length = 1..255}  
+class "sctp-dns" as mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_dns_case <<case>>
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address .. mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_dns_case  : choice management-address
+mef_cfm_I_sender_id_tlv_group_I_management_address_I_management_address_I_sctp_dns_case : sctp-dns-address : string {length = 1..255}  
+class "maintenance-domain-reference" as mef_cfm_I_maintenance_domain_reference_grouping <<(G,Lime) grouping>> 
+mef_cfm_I_maintenance_domain_reference_grouping : maintenance-domain : leafref : /mef-cfm:maintenance-domain/mef-cfm:id  
+class "maintenance-association-reference" as mef_cfm_I_maintenance_association_reference_grouping <<(G,Lime) grouping>> 
+mef_cfm_I_maintenance_association_reference_grouping : maintenance-domain-reference {uses} 
+mef_cfm_I_maintenance_association_reference_grouping : maintenance-association : leafref : /mef-cfm:maintenance-domain[mef-cfm:id=current{}/../maintenance-domain]/mef-cfm:maintenance-association/mef-cfm:id  
+class "maintenance-association-end-point-reference" as mef_cfm_I_maintenance_association_end_point_reference_grouping <<(G,Lime) grouping>> 
+mef_cfm_I_maintenance_association_end_point_reference_grouping : maintenance-association-reference {uses} 
+mef_cfm_I_maintenance_association_end_point_reference_grouping : maintenance-association-end-point : leafref : /mef-cfm:maintenance-domain[mef-cfm:id=current{}/../maintenance-domain]/mef-cfm:maintenance-association[mef-cfm:id=current{}/../maintenance-association]/mef-cfm:maintenance-association-end-point/mef-cfm:mep-identifier  
+class "default-md-levels" as  mef_cfm_I_default_md_levels <<container>> 
+mef_cfm *-- "1" mef_cfm_I_default_md_levels 
+mef_cfm_I_default_md_levels : md-level-group {uses} 
+class "default-md-level" as mef_cfm_I_default_md_levels_I_default_md_level << (L, #FF7700) list>> 
+mef_cfm_I_default_md_levels *-- "0..N" mef_cfm_I_default_md_levels_I_default_md_level 
+mef_cfm_I_default_md_levels_I_default_md_level : +primary-vid : vlan-id-type  {key} 
+mef_cfm_I_default_md_levels_I_default_md_level : +component-id : component-id-type  {key} 
+mef_cfm_I_default_md_levels_I_default_md_level : vid []: vlan-id-type 
+mef_cfm_I_default_md_levels_I_default_md_level : status : boolean  
+mef_cfm_I_default_md_levels_I_default_md_level : md-level-group {uses} 
+class "configuration-error-list" as mef_cfm_I_configuration_error_list << (L, #FF7700) list>> 
+mef_cfm *-- "0..N" mef_cfm_I_configuration_error_list 
+note bottom of mef_cfm_I_configuration_error_list
+<b>Config = </b>false
+end note 
+mef_cfm_I_configuration_error_list : +vlan-identifier : vlan-id-type  {key} 
+mef_cfm_I_configuration_error_list : +interface : string  {key} 
+mef_cfm_I_configuration_error_list : error-conditions : error-conditions-type   {mandatory}
+class "maintenance-domain" as mef_cfm_I_maintenance_domain << (L, #FF7700) list>> 
+mef_cfm *-- "0..N" mef_cfm_I_maintenance_domain 
+mef_cfm_I_maintenance_domain : +id : string  {key} 
+mef_cfm_I_maintenance_domain : name-type : enumeration : {none,domain-name,mac-address-and-uint,...}  
+mef_cfm_I_maintenance_domain : name : union{inet:host, mac-address-and-uint-type}  
+mef_cfm_I_maintenance_domain : md-level : md-level-type  
+mef_cfm_I_maintenance_domain : mhf-creation : mhf-creation-type   {mandatory}
+mef_cfm_I_maintenance_domain : id-permission : id-permission-type   {mandatory}
+class "maintenance-association" as mef_cfm_I_maintenance_domain_I_maintenance_association << (L, #FF7700) list>> 
+mef_cfm_I_maintenance_domain *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association 
+mef_cfm_I_maintenance_domain_I_maintenance_association : +id : string  {key} 
+mef_cfm_I_maintenance_domain_I_maintenance_association : name-type : enumeration : {primary-vid,character-string,uint16,...}  
+mef_cfm_I_maintenance_domain_I_maintenance_association : name : union{vlan-id-type, string,..}  
+class "component-list" as mef_cfm_I_maintenance_domain_I_maintenance_association_I_component_list << (L, #FF7700) list>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association_I_component_list 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_component_list : +component-id : uint32  {key} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_component_list : vid []: vlan-id-type 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_component_list : mhf-creation : mhf-creation-type   = defer 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_component_list : id-permission : id-permission-type   = defer 
+mef_cfm_I_maintenance_domain_I_maintenance_association : ccm-interval : enumeration : {invalid,3.3ms,10ms,...}   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association : remote-meps []: mep-id-type 
+class "maintenance-association-end-point" as mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point << (L, #FF7700) list>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point : +mep-identifier : mep-id-type  {key} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point : interface : string   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point : direction : enumeration : {up,down,}   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point : primary-vid : vlan-id-type   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point : administrative-state : boolean   {mandatory}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point : mac-address : yang:mac-address   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point : ccm-ltm-priority : priority-type   {mandatory}
+class "continuity-check" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check : cci-enabled : boolean   = false 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check : fng-state : enumeration : {reset,defect,report-defect,...}   = reset  {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check : lowest-fault-priority-defect : fault-alarm-defect-type  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check : highest-priority-defect-found : fault-alarm-defect-type   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check : fng-alarm-time : yang:timeticks   = 250 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check : fng-reset-time : yang:timeticks   = 1000 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check : active-defects : fault-alarm-defect-bits-type   {mandatory} {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check : last-error-ccm : binary {length = 1..1522}   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check : last-cross-connect-ccm : binary {length = 1..1522}   {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check : ccm-sequence-error-count : yang:counter32   {mandatory} {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_continuity_check : sent-ccms : yang:counter32   {mandatory} {Config : false}
+class "loopback" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback 
+note bottom of mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback
+<b>Config = </b>false
+end note 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback : replies-received : yang:counter32   {mandatory} {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback : replies-transmitted : yang:counter32   {mandatory} {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback : out-of-order-replies-received : yang:counter32   {mandatory} {Config : false}
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_loopback : bad-msdu : yang:counter32   {Config : false}
+class "linktrace" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace 
+note bottom of mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace
+<b>Config = </b>false
+end note 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace : unexpected-replies-received : yang:counter32   {mandatory}
+class "linktrace-database" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database 
+class "linktrace" as mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace << (L, #FF7700) list>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace 
+note bottom of mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace
+<b>Config = </b>false
+end note 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace : +transaction-id : ltm-transaction-id-type  {key} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace : linktrace-parameters-group {uses} 
+class "reply" as mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply << (L, #FF7700) list>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : +reply-order : uint32  {key} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : reply-ttl : uint32  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : forwarded : boolean  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : terminal-mep : boolean  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : last-egress-identifier : binary {length = 8}  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : next-egress-identifier : binary {length = 8}  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : ltr-relay : enumeration : {hit,filtering-database,mip-ccm-database,}  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : sender-id-tlv-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : ingress-action : enumeration : {ok,down,blocked,...}  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : ingress-mac : yang:mac-address  
+class "ingress-port-id" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply_I_ingress_port_id <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply_I_ingress_port_id 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply_I_ingress_port_id : port-id-tlv-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : egress-action : enumeration : {ok,down,blocked,...}  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : egress-mac : yang:mac-address  
+class "egress-port-id" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply_I_egress_port_id <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply_I_egress_port_id 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply_I_egress_port_id : port-id-tlv-group {uses} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply : organization-specific-tlv : binary {length = 0|4 .. 1500}  
+class "remote-mep-database" as  mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database <<container>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point *-- "1" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database 
+note bottom of mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database
+<b>Config = </b>false
+end note 
+class "remote-mep" as mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database_I_remote_mep << (L, #FF7700) list>> 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database *-- "0..N" mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database_I_remote_mep 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database_I_remote_mep : +remote-mep-id : mep-id-type  {key} 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database_I_remote_mep : remote-mep-state : remote-mep-state-type  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database_I_remote_mep : failed-ok-time : yang:timeticks  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database_I_remote_mep : mac-address : yang:mac-address  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database_I_remote_mep : rdi : boolean  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database_I_remote_mep : port-status-tlv : port-status-type  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database_I_remote_mep : interface-status-tlv : interface-status-type  
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database_I_remote_mep : sender-id-tlv-group {uses} 
+mef_cfm : transmit-loopback( in: maintenance_domain_id in: maintenance_association_id in: mep_id in: loopback_parameters_group)
+mef_cfm : abort-loopback( in: maintenance_domain_id in: maintenance_association_id in: mep_id)
+mef_cfm : transmit-linktrace( in: maintenance_domain_id in: maintenance_association_id in: mep_id in: linktrace_parameters_group out: transaction_id)
+class "fault-alarm" as mef_cfm_I_fault_alarm << (N,#00D1B2) notification>> 
+mef_cfm -- mef_cfm_I_fault_alarm : notification 
+class "alarm" as  mef_cfm_I_fault_alarm_I_alarm <<container>> 
+mef_cfm_I_fault_alarm *-- "1" mef_cfm_I_fault_alarm_I_alarm 
+mef_cfm_I_fault_alarm_I_alarm : maintenance-domain-id : string  
+mef_cfm_I_fault_alarm_I_alarm : maintenance-association-id : string  
+mef_cfm_I_fault_alarm_I_alarm : mep-id : mep-id-type  
+mef_cfm_I_fault_alarm_I_alarm : active-defects : fault-alarm-defect-bits-type  
+end package
+
+mef_cfm_I_loopback_parameters_group_I_target_address --> mef_cfm_I_target_address_group_grouping : uses 
+mef_cfm_I_linktrace_parameters_group_I_target_address --> mef_cfm_I_target_address_group_grouping : uses 
+mef_cfm_I_maintenance_association_reference_grouping --> mef_cfm_I_maintenance_domain_reference_grouping : uses 
+mef_cfm_I_maintenance_association_end_point_reference_grouping --> mef_cfm_I_maintenance_association_reference_grouping : uses 
+mef_cfm_I_default_md_levels --> mef_cfm_I_md_level_group_grouping : uses 
+mef_cfm_I_default_md_levels_I_default_md_level --> mef_cfm_I_md_level_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace --> mef_cfm_I_linktrace_parameters_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply --> mef_cfm_I_sender_id_tlv_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply_I_ingress_port_id --> mef_cfm_I_port_id_tlv_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_linktrace_I_linktrace_database_I_linktrace_I_reply_I_egress_port_id --> mef_cfm_I_port_id_tlv_group_grouping : uses 
+mef_cfm_I_maintenance_domain_I_maintenance_association_I_maintenance_association_end_point_I_remote_mep_database_I_remote_mep --> mef_cfm_I_sender_id_tlv_group_grouping : uses 
+mef_cfm --> mef_cfm_I_loopback_parameters_group_grouping : uses 
+mef_cfm --> mef_cfm_I_linktrace_parameters_group_grouping : uses 
+center footer
+ <size:20> UML Generated : 2014-06-19 17:39 </size>
+ endfooter 
+@enduml 

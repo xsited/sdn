@@ -1,0 +1,27 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/packetcable-link.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title packetcable-link 
+note top of link_packetcable_link : <b>Namespace: </b> urn:plcm:ucic:xml:ns:link:2011-10-09 \n<b>Prefix: </b> link \n
+package "link:packetcable-link" as link_packetcable_link 
+class "packetcable-link" as packetcable_link << (M, #33CCFF) module>> 
+class "link" as packetcable_link_I_link_grouping <<(G,Lime) grouping>> 
+packetcable_link_I_link_grouping : relationship : string  
+packetcable_link_I_link_grouping : href : string  
+packetcable_link_I_link_grouping : type : string  
+end package
+
+center footer
+ <size:20> UML Generated : 2014-01-14 18:19 </size>
+ endfooter 
+@enduml 

@@ -1,0 +1,110 @@
+module ccap-events {
+  namespace "urn:cablelabs:params:xml:ns:yang:ccap:events"; 
+  prefix "events";
+  organization "Cable Television Laboratories, Inc.";
+  contact
+    "Postal: Cable Television Laboratories, Inc.
+     858 Coal Creek Circle
+     Louisville, Colorado 80027-9750
+     U.S.A.
+     Phone: +1 303-661-9100
+     Fax:   +1 303-661-9199
+     E-mail: mibs@cablelabs.com";
+  reference
+    "RFC 4639";
+  revision 2011-03-22 {
+    description
+      "Initial revision.";
+  }
+  notification ccap-event {
+    leaf sequence-number {
+      type uint64;
+      description
+        "This is an identifier for a single event. It is expected to be unique
+         across all streams ";
+    }
+    leaf level {
+      type enumeration {
+        enum emergency {
+          value 1;
+          description
+            "Indicate vendor-specific fatal hardware or software errors that prevent
+             normal system operation";
+        }
+        enum alert {
+          value 2;
+          description
+            "Indicate a serious failure that causes the reporting system to reboot
+             but that is not caused by hardware or software
+             malfunctioning.";
+        }
+        enum critical {
+          value 3;
+          description
+            "Indicate a serious failure that requires attention and prevents the
+             device from transmitting data but that could be recovered
+             without rebooting the system.";
+        }
+        enum error {
+          value 4;
+          description
+            "Indicate that a failure occurred that could interrupt the normal data
+             flow but that does not cause the device to re-register.";
+        }
+        enum warning {
+          value 5;
+          description
+            "Indicate that a failure occurred that could interrupt the normal data
+             flow but that does not cause the device to re-register.";
+        }
+        enum notice {
+          value 6;
+          description
+            "Indicate a milestone or checkpoint in normal operation that could be of
+             particular importance for troubleshooting.";
+        }
+        enum information {
+          value 7;
+          description
+            "Indicate a milestone or checkpoint in normal operation that could be of
+             particular importance for troubleshooting.";
+        }
+        enum debug {
+          value 8;
+          description
+            "Reserved for vendor-specific events.";
+        }
+      }
+      mandatory true;
+      description
+        "The priority level of this event, as defined by the vendor.  These are
+         ordered from most serious (emergency) to least serious (debug)
+         During normal operation, no event more critical than notice(6)
+         should be generated.  Events between warning and emergency
+         should be generated at appropriate levels of problems (e.g.,
+         emergency when the box is about to crash).";
+      reference
+        "DOCS-CABLE-DEVICE-MIB.docsDevEvLevel";
+    }
+    leaf event-id {
+      type uint32;
+      mandatory true;
+      description
+        "For this product, uniquely identifies the type of event that is reported
+         by this entry.";
+      reference
+        "DOCS-CABLE-DEVICE-MIB.docsDevEvId";
+    }
+    leaf event-message {
+      type string {
+        length "0..255";
+      }
+      mandatory true;
+      description
+        "Provides a human-readable description of the event, including all
+         relevant context (interface numbers, etc.).";
+      reference
+        "DOCS-CABLE-DEVICE-MIB.docsDevEvText";
+    }
+  }  
+}

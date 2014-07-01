@@ -1,0 +1,161 @@
+module packetcable-service-flow-types
+{
+    namespace "urn:opendaylight:flow:types";
+    prefix serviceflow;
+
+    import ietf-yang-types 		{prefix yang; }
+    import packetcable-match-types 	{prefix match; }
+
+
+    typedef flow-mod-flags {
+        type bits {
+            bit CHECK_OVERLAP;
+            bit RESET_COUNTS;
+            bit NO_PKT_COUNTS;
+            bit NO_BYT_COUNTS;
+            bit SEND_FLOW_REM;
+        }
+    }
+
+    typedef removed_reason_flags {
+        type bits {
+            bit IDLE_TIMEOUT;
+            bit HARD_TIMEOUT;
+            bit DELETE;
+            bit GROUP_DELETE;
+        }
+    }
+
+    grouping generic_flow_attributes {
+        leaf priority {
+            type uint16;
+        }
+
+        leaf idle-timeout {
+            type uint16;
+        }
+
+        leaf hard-timeout {
+            type uint16;
+        }
+
+        leaf cookie {
+            type uint64;
+        }
+
+        leaf table_id {
+            type uint8;
+        }
+    }
+
+    grouping flow {
+        container match {
+            uses match:match;
+        }
+
+        uses generic_flow_attributes;
+
+        leaf container-name {
+            type string;
+        }
+
+        leaf cookie_mask {
+            type uint64;
+        }
+
+        leaf buffer_id {
+            type uint32;
+        }
+
+        leaf out_port {
+            type uint64;
+        }
+
+        leaf out_group {
+            type uint32;
+        }
+
+        leaf flags {
+            type flow-mod-flags;
+        }
+
+        leaf flow-name {
+            type string;
+        }
+
+        leaf installHw {
+            type boolean;
+        }
+
+        leaf barrier {
+            type boolean;
+        }
+
+        leaf strict {
+            type boolean;
+            default "false";
+        }
+
+    }
+
+    grouping flow-statistics {
+        leaf packet-count {
+            type yang:counter64;
+        }
+
+        leaf byte-count {
+            type yang:counter64;
+        }
+
+        container duration {
+            leaf second {
+                type yang:counter64;
+            }
+            leaf nanosecond {
+                type yang:counter64;
+            }
+        }
+    }
+
+    grouping flow-table-statistics {
+        leaf active {
+            type yang:counter64;
+        }
+
+        leaf lookup {
+            type yang:counter64;
+        }
+
+        leaf matched {
+            type yang:counter64;
+        }
+    }
+
+    grouping flow-mod-removed {
+        uses generic_flow_attributes;
+
+        leaf removed_reason {
+            type removed_reason_flags;
+        }
+
+        leaf duration_nsec {
+            type uint32;
+        }
+
+        leaf duration_sec {
+            type uint32;
+        }
+
+        leaf packet_count {
+            type uint64;
+        }
+
+        leaf byte_count {
+            type uint64;
+        }
+
+        container match {
+            uses match:match;
+        }
+    }
+}

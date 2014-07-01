@@ -1,0 +1,196 @@
+  module ietf-reverse-ssh {
+
+      namespace "urn:ietf:params:xml:ns:yang:ietf-reverse-ssh";
+
+      prefix "rssh";
+
+      import ietf-inet-types { prefix inet; }
+
+      organization
+        "IETF NETCONF (Network Configuration Protocol) Working Group";
+
+      contact
+        "WG Web:   <http://tools.ietf.org/wg/netconf/>
+         WG List:  <mailto:netconf@ietf.org>
+
+         WG Chair: Bert Wijnen
+                   <mailto:bertietf@bwijnen.net>
+
+         WG Chair: Mehmet Ersue
+                   <mailto:mehmet.ersue@nsn.com>
+
+         Editor: Kent Watsen
+                 <mailto:kwatsen@juniper.net>";
+
+
+      revision 2013-06-18 {
+          description "Initial conception";
+          reference "RFC XXXX: Reverse SSH";
+      }
+      // RFC Ed.: replace XXXX with actual
+      // RFC number and remove this note
+
+
+      container reverse-ssh {
+          container applications {
+              description
+                  "All the application that the device
+                   initiates Reverse SSH connections to";
+              list application {
+                  key name;
+                  min-elements 1;
+                  leaf name {
+                      mandatory true;
+
+                      type string {
+                          length 1..32;
+                      }
+                      description
+                         "The name of the application the device is
+                          connecting to";
+                  }
+                  leaf description {
+                      type string;
+                      description
+                        "An optional description for the application";
+                  }
+                  container servers {
+                      description
+                          "An ordered listing of the application's
+                           servers that the device should attempt
+                           connecting to.";
+                      list server {
+                          key host;
+                          min-elements 1;
+                          ordered-by user;
+                          leaf host {
+                              mandatory true;
+                              type inet:host;
+                              description
+                                  "IP address or domain-name for
+                                   the server";
+                          }
+                          leaf port {
+                              type inet:port-number;
+                              description
+                                  "The IP port for this server.
+                                   The device will use the
+                                   IANA-assigned port if not
+                                   specified.";
+                          }
+                      }
+                  }
+
+                  choice connection-type {
+                      description "Indicates the application's
+                                   preference for how the device's
+                                   connection is maintained.";
+                      default persistent-connection;
+                      leaf persistent-connection {
+                          type empty;
+                      }
+                      container periodic-connection {
+
+                          leaf timeout-mins {
+                              type uint8;
+                              default 5;
+                              units minutes;
+                              description
+                                 "The maximum amount of unconnected
+                                  time the device will wait until
+                                  establishing a connection to the
+                                  applications again to send it.
+                                  The device may establish a
+                                  connection before this time if
+                                  it has data it needs to send to
+                                  the device.";
+                          }
+                          leaf linger-secs {
+                              type uint8;
+                              default 30;
+                              units seconds;
+                              description
+                                 "The amount of time the device should
+                                  wait after last receiving data from
+                                  or sending data to the device before
+                                  closing its connection to the app.";
+                          }
+                      }
+                  }
+                  container host-keys {
+                      description
+                          "An ordered listing of the SSH host keys the
+                           device should advertise to the application.";
+                      list host-key {
+                          key name;
+                          min-elements 1;
+                          ordered-by user;
+                          leaf name {
+                              mandatory true;
+                              type string {
+                                  length 1..64;
+                              }
+                              description
+                                 "The name of a host key the device
+                                  should advertise during the SSH
+                                  key exchange.";
+                          }
+                      }
+                  }
+                  container keep-alive-strategy {
+                      leaf interval-secs {
+                          type uint8;
+                          units seconds;
+                          default 15;
+                          description
+                            "Sets a timeout interval in seconds after
+                             which if no data has been received from
+                             the client, a message will be sent to
+                             request a response from the SSH client.
+                             A value of '0' indicates that no messages
+                             should be sent.";
+                      }
+                      leaf count-max {
+                          type uint8;
+                          default 3;
+                          description
+                            "Sets the number of keep alive messages
+                             that may be sent without receiving any
+                             response from the SSH client before
+                             assuming the SSH client is no longer
+                             alive.  If this threshold is reached
+                             the device will disconnect the SSH
+                             session.  The keep alive interval timer
+                             is reset after each transmission.  Thus,
+                             an unresponsive SSH client will be
+                             disconnected after approximately
+                             'count-max * interval-secs' seconds.";
+                      }
+                  }
+                  container reconnect-strategy {
+                      leaf start-with {
+                          default first-listed;
+                          type enumeration {
+                              enum first-listed;
+                              enum last-connected;
+                          }
+                      }
+                      leaf interval-secs {
+                          type uint8;
+                          units seconds;
+                          default 5;
+                          description
+                            "time delay between connection attempts";
+                      }
+                      leaf count-max {
+                          type uint8;
+                          default 3;
+                          description
+                            "num times try to connect to a server";
+
+                      }
+                  }
+              }
+          }
+      }
+   }

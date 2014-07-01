@@ -1,0 +1,44 @@
+module ex-ethernet {
+  namespace "http://example.com/ethernet";
+  prefix "eth";
+
+  import ietf-interfaces {
+    prefix if;
+  }
+
+  augment "/if:interfaces/if:interface" {
+    when "if:type = 'ethernetCsmacd'";
+
+    container ethernet {
+      must "../if:location" {
+        description
+          "An ethernet interface must specify the physical location
+           of the ethernet hardware.";
+      }
+      choice transmission-params {
+        case auto {
+          leaf auto-negotiate {
+            type empty;
+          }
+        }
+        case manual {
+          leaf duplex {
+            type enumeration {
+              enum "half";
+              enum "full";
+            }
+          }
+          leaf speed {
+            type enumeration {
+              enum "10Mb";
+              enum "100Mb";
+              enum "1Gb";
+              enum "10Gb";
+            }
+          }
+        }
+      }
+      // other ethernet specific params...
+    }
+  }
+}

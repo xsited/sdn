@@ -1,0 +1,29 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/packetcable-subscriber.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title packetcable-subscriber 
+package "link:packetcable-link" as link_packetcable_link 
+end package 
+package "cmts:packetcable-cmts" as cmts_packetcable_cmts 
+end package 
+note top of user_packetcable_subscriber : <b>Namespace: </b> urn:opendaylight:cmts:subscriber \n<b>Prefix: </b> user \n
+package "user:packetcable-subscriber" as user_packetcable_subscriber 
+link_packetcable_link +-- user_packetcable_subscriber
+cmts_packetcable_cmts +-- user_packetcable_subscriber
+class "packetcable-subscriber" as packetcable_subscriber << (M, #33CCFF) module>> 
+end package
+
+center footer
+ <size:20> UML Generated : 2014-01-14 18:19 </size>
+ endfooter 
+@enduml 

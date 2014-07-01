@@ -1,0 +1,29 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/ccap-events.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title ccap-events 
+note top of events_ccap_events : <b>Namespace: </b> urn:cablelabs:params:xml:ns:yang:ccap:events \n<b>Prefix: </b> events \n<b>Organization : </b>\nCable Television Laboratories, Inc. \n<b>Contact : </b>\nPostal: Cable Television Laboratories, Inc. \n858 Coal Creek Circle \nLouisville, Colorado 80027-9750 \nU.S.A. \nPhone: +1 303-661-9100 \nFax:   +1 303-661-9199 \nE-mail: mibs@cablelabs.com \n<b>Revision : </b> 2011-03-22 \n
+package "events:ccap-events" as events_ccap_events 
+class "ccap-events" as ccap_events << (M, #33CCFF) module>> 
+class "ccap-event" as ccap_events_I_ccap_event << (N,#00D1B2) notification>> 
+ccap_events -- ccap_events_I_ccap_event : notification 
+ccap_events_I_ccap_event : sequence-number : uint64  
+ccap_events_I_ccap_event : level : enumeration : {emergency,alert,critical,...}   {mandatory}
+ccap_events_I_ccap_event : event-id : uint32   {mandatory}
+ccap_events_I_ccap_event : event-message : string {length = 0..255}   {mandatory}
+end package
+
+center footer
+ <size:20> UML Generated : 2014-06-19 17:38 </size>
+ endfooter 
+@enduml 

@@ -1,0 +1,26 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/packetcable-traffic-profile-types.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title packetcable-traffic-profile-types 
+package "yang:ietf-yang-types" as yang_ietf_yang_types 
+end package 
+note top of serviceflow_packetcable_traffic_profile_types : <b>Namespace: </b> urn:opendaylight:flow:traffic:types \n<b>Prefix: </b> serviceflow \n
+package "serviceflow:packetcable-traffic-profile-types" as serviceflow_packetcable_traffic_profile_types 
+yang_ietf_yang_types +-- serviceflow_packetcable_traffic_profile_types
+class "packetcable-traffic-profile-types" as packetcable_traffic_profile_types << (M, #33CCFF) module>> 
+end package
+
+center footer
+ <size:20> UML Generated : 2014-01-14 18:19 </size>
+ endfooter 
+@enduml 
