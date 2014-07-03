@@ -1,0 +1,103 @@
+
+module vim
+{
+	namespace "http://cablelabs.com/yang/nfv/vim";
+	prefix cablelabs;
+
+
+  	import ietf-yang-types {
+    		prefix yang;
+    		revision-date 2010-09-24;
+  	}
+  	import ietf-inet-types {
+    		prefix inet;
+    		revision-date 2010-09-24;
+  	}
+
+
+	typedef vm-resource-type
+	{
+		type enumeration {
+		}
+		reference "?";
+		description
+		"This enumeration contains the all EPL service types epl, evpl, .";
+	}
+
+	import vm-resource {
+		leaf  
+	}
+
+class Vim(manager, info, loaded=False)
+Bases: TBD
+A VIM Manager.
+Vim.HUMAN_ID = True
+Vim.NAME_ATTR = 'label'
+Vim.delete()
+
+class  VimManager(api)
+Bases:  TBD
+VimManager.create(**kwargs)
+Create (allocate) a vm. 
+Note the following are referenced from:
+•	vm_ type – int
++----+-----------+-----------+------+-----------+\+-------+-\+-------------+
+| ID | Name      | Memory_MB | Disk | Ephemeral |/| VCPUs | /| extra_specs |
++----+-----------+-----------+------+-----------+\+-------+-\+-------------+
+| 1  | m1.tiny   | 512       | 1    | 0         |/| 1     | /| {}          |
+| 2  | m1.small  | 2048      | 10   | 20        |\| 1     | \| {}          |
+| 3  | m1.medium | 4096      | 10   | 40        |/| 2     | /| {}          |
+| 4  | m1.large  | 8192      | 10   | 80        |\| 4     | \| {}          |
+| 5  | m1.xlarge | 16384     | 10   | 160       |/| 8     | /| {}          |
+•	vm flavors
+ID	A unique numeric ID.
+Name	A descriptive name, such as xx.size_name, is conventional but not required, though some third-party tools may rely on it.
+Memory_MB	Virtual machine memory in megabytes.
+Disk	Virtual root disk size in gigabytes. This is an ephemeral disk the base image is copied into. You don't use it when you boot from a persistent volume. The "0" size is a special case that uses the native base image size as the size of the ephemeral root volume.
+Ephemeral	Specifies the size of a secondary ephemeral data disk. This is an empty, unformatted disk and exists only for the life of the instance.
+Swap	Optional swap space allocation for the instance.
+VCPUs	Number of virtual CPUs presented to the instance.
+RXTX_Factor	Optional property that allows created servers to have a different bandwidth cap from that defined in the network they are attached to. This factor is multiplied by the rxtx_base property of the network. Default value is 1.0 (that is, the same as the attached network).
+Is_Public	Boolean value that indicates whether the flavor is available to all users or private. Private flavors do not get the current tenant assigned to them. Defaults to True.
+extra_specs	
+
+ Return type:	 A vm ( an instance handle)
+
+
+VimManager.delete(vm)
+delete a vm.
+Parameters:	vm – The ID of the vm to delete.
+
+Return type:	 A vm ( an instance handle)
+
+VimManager.list(projectID)
+List all VMs under a project.
+Parameters:	ProjectID – The ID of a project.
+
+Return type:	 A series of VM handles
+
+VimManager.state(Vm)
+Get current VM state.
+Parameters:	vm – The ID of a VM
+Return Type	State – State of the VM
+1.	Paused
+2.	Suspended
+3.	Active
+4.	Shutoff
+5.	rescued
+6.	Stopped.
+
+VimManager.command(Vm, action, **kwarg)
+ Change state of VM.
+Parameters:	vm – The ID of a VM
+Return Type	action – State of the VM
+1.	Unpause
+2.	resume
+3.	pause
+4.	suspend
+5.	rescue
+6.	rebuild
+7.	unrescue
+8.	set admin password
+1.	password -str
+
