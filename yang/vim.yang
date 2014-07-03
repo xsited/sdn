@@ -25,31 +25,54 @@ module vim
 	}
 
 	import vm-resource {
-		leaf  
+		leaf id {
+			type uint8 {
+				range 0..256;
+			}
+			description
+			"";
+		}
+		leaf name {
+			type string {
+			     range 0..64;
+			}
+			description
+			"";
+		}
+		leaf memory {
+			type uint64 {
+				range 0..;
+			}
+			description
+			"";
+		}
+		leaf disk {
+			type uint8 {
+				range 0..256;
+			}
+			description
+			"";
+		}
+		leaf ephemeral {
+			type uint8 {
+				range 0..256;
+			}
+			description
+			"";
+		}
+		leaf vcpu {
+			type uint8 {
+				range 0..256;
+			}
+			description
+			"";
+		}
+
 	}
 
-class Vim(manager, info, loaded=False)
-Bases: TBD
-A VIM Manager.
-Vim.HUMAN_ID = True
-Vim.NAME_ATTR = 'label'
-Vim.delete()
-
-class  VimManager(api)
-Bases:  TBD
-VimManager.create(**kwargs)
-Create (allocate) a vm. 
-Note the following are referenced from:
-•	vm_ type – int
-+----+-----------+-----------+------+-----------+\+-------+-\+-------------+
-| ID | Name      | Memory_MB | Disk | Ephemeral |/| VCPUs | /| extra_specs |
-+----+-----------+-----------+------+-----------+\+-------+-\+-------------+
-| 1  | m1.tiny   | 512       | 1    | 0         |/| 1     | /| {}          |
-| 2  | m1.small  | 2048      | 10   | 20        |\| 1     | \| {}          |
-| 3  | m1.medium | 4096      | 10   | 40        |/| 2     | /| {}          |
-| 4  | m1.large  | 8192      | 10   | 80        |\| 4     | \| {}          |
-| 5  | m1.xlarge | 16384     | 10   | 160       |/| 8     | /| {}          |
-•	vm flavors
+	
+/*
+XXX -- put these descriptions up there
 ID	A unique numeric ID.
 Name	A descriptive name, such as xx.size_name, is conventional but not required, though some third-party tools may rely on it.
 Memory_MB	Virtual machine memory in megabytes.
@@ -60,44 +83,195 @@ VCPUs	Number of virtual CPUs presented to the instance.
 RXTX_Factor	Optional property that allows created servers to have a different bandwidth cap from that defined in the network they are attached to. This factor is multiplied by the rxtx_base property of the network. Default value is 1.0 (that is, the same as the attached network).
 Is_Public	Boolean value that indicates whether the flavor is available to all users or private. Private flavors do not get the current tenant assigned to them. Defaults to True.
 extra_specs	
+*/
 
- Return type:	 A vm ( an instance handle)
+
+	type vm-state-type {
+	type enumeration {
+			enum "paused" {
+				value 1;
+			}
+			enum "suspended" {
+				value 2;
+			}
+			enum "active" {
+				value 3;
+			}
+			enum "shutoff" {
+				value 4;
+			}
+			enum "rescued" {
+				value 5;
+			}
+			enum "stopped" {
+				value 6;
+			}
+	}
+	}
+
+	type vm-action-type {
+	type enumeration {
+			enum "unpause" {
+				value 1;
+			}
+			enum "resume" {
+				value 2;
+			}
+			enum "rescue" {
+				value 3;
+			}
+			enum "rebuild" {
+				value 4;
+			}
+			enum "unrescue" {
+				value 5;
+			}
+			enum "admin-password" {
+				value 6;
+			}
+			enum "password" {
+				value 7;
+			}
+	}
+	}
+
+	typedef vm-reference {
+		type string;
+		description
+		"Type to identify the vm";
+	}
+
+	typedef project-reference {
+		type string;
+		description
+		"Type to identify the project";
+	}
 
 
-VimManager.delete(vm)
-delete a vm.
-Parameters:	vm – The ID of the vm to delete.
+	rpc vim_vm_create {
+			description
+			"Create a vm";
+			reference "";
 
-Return type:	 A vm ( an instance handle)
+			input {
+				container vm-input
+				{
+					uses vm-attributes-grouping;
+				}
+			}
+			output {
+				leaf status
+				{
+					type uint32;
+				}
+				leaf vm-id
+				{
+					type vm-reference;
+				}
+			}
+	}
 
-VimManager.list(projectID)
-List all VMs under a project.
-Parameters:	ProjectID – The ID of a project.
+	rpc vim_vm_get {
+			description
+			"Read a vm";
+			reference "";
 
-Return type:	 A series of VM handles
+			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+				leaf vm-id
+				{
+					type vm-reference;
+				}
+			}
+			output {
+				leaf status
+				{
+					type uint32;
+				}
+				leaf cvm-output
+				{
+					uses vm-attributes-grouping;
+				}
+			}
+	}
 
-VimManager.state(Vm)
-Get current VM state.
-Parameters:	vm – The ID of a VM
-Return Type	State – State of the VM
-1.	Paused
-2.	Suspended
-3.	Active
-4.	Shutoff
-5.	rescued
-6.	Stopped.
+	rpc vim_vm_update {
+			description
+			"Update a vm";
+			reference "";
 
-VimManager.command(Vm, action, **kwarg)
- Change state of VM.
-Parameters:	vm – The ID of a VM
-Return Type	action – State of the VM
-1.	Unpause
-2.	resume
-3.	pause
-4.	suspend
-5.	rescue
-6.	rebuild
-7.	unrescue
-8.	set admin password
-1.	password -str
+			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+				leaf vm-id
+				{
+					type vm-reference;
+				}
+			}
+			output {
+				leaf status
+				{
+					type uint32;
+				}
+				leaf vm-output
+				{
+					uses vm-attributes-grouping;
+				}
+			}
+	}
 
+	rpc vim_vm_delete {
+			description
+			"delete a vm";
+			reference "";
+
+			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+				leaf vm-id
+				{
+					type vm-reference;
+				}
+			}
+			output {
+				leaf status
+				{
+					type uint32;
+				}
+				container vm-input
+				{
+					uses vm-attributes-grouping;
+				}
+			}
+	}
+
+	rpc vim_vm_list {
+			description
+			"List all vms";
+			reference "";
+
+			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+			}
+			output {
+				leaf status
+				{
+					type uint32;
+				}
+				leaf vm-id
+				{
+					type vm-reference;
+				}
+			}
+	}
+}
