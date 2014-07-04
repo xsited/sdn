@@ -102,6 +102,14 @@ module orchestration
 	}
 
 
+
+	typedef tenant-reference {
+		type string;
+		description
+		"Type to identify the tenant or project";
+	}
+
+
 	// XXX – need to look at instance id
 	typedef circuit-reference {
 		type string;
@@ -260,6 +268,11 @@ module orchestration
 			reference "";
 
 			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+
 				container nid-input
 				{
 					uses nid-grouping; //attributes
@@ -287,6 +300,11 @@ module orchestration
 			reference "";
 
 			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+
 				leaf nid-id
 				{
 				     type nid-id;
@@ -316,6 +334,11 @@ module orchestration
 			reference "";
 
 			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+
 				leaf nid-id
 				{
 					type nid-id;
@@ -344,6 +367,15 @@ module orchestration
 			reference "";
 
 			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+
+				leaf nid-id
+				{
+					type nid-id;
+				}
 				container nid-input
 				{
 					uses nid-grouping; //attributes
@@ -355,10 +387,6 @@ module orchestration
 				{
 					type uint32;
 				}
-				leaf nid-id
-				{
-					type nid-id;
-				}
 			}
 		}
 
@@ -368,6 +396,10 @@ module orchestration
 			reference "";
 
 			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
 				container circuit-input
 				{
 					uses circuit-attributes-grouping;
@@ -418,6 +450,10 @@ module orchestration
 			reference "";
 
 			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
 				leaf circuit-id
 				{
 					type circuit-reference;
@@ -443,6 +479,10 @@ module orchestration
 			reference "";
 
 			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
 				leaf circuit-id
 				{
 					type circuit-reference;
@@ -464,6 +504,10 @@ module orchestration
 			reference "";
 
 			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
 				leaf circuit-id
 				{
 					type circuit-reference;
@@ -487,6 +531,10 @@ module orchestration
 			reference "";
 
 			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
 				leaf circuit-id
 				{
 					type circuit-reference;
@@ -509,6 +557,11 @@ module orchestration
 			reference "";
 
 			input {
+				// XXX - Does the VNF know which tenant it belongs to
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
 				leaf circuit-id
 				{
 					type circuit-reference;

@@ -45,6 +45,8 @@ orchestration_I_common_packets_counters_type_grouping : errors : yang:counter32
 orchestration_I_common_packets_counters_type_grouping : dropped : yang:counter32  
 class "mep-id-type" as mep_id_type << (T, YellowGreen) typedef>>
 mep_id_type : uint16 [1..8191]
+class "tenant-reference" as tenant_reference << (T, YellowGreen) typedef>>
+tenant_reference : string
 class "circuit-reference" as circuit_reference << (T, YellowGreen) typedef>>
 circuit_reference : string
 class "nid-id" as nid_id << (T, YellowGreen) typedef>>
@@ -82,17 +84,17 @@ orchestration_I_circuit_grouping_grouping *-- "1" orchestration_I_circuit_groupi
 class "nids-managed" as orchestration_I_circuit_grouping_I_nids_managed_I_nids_managed << (L, #FF7700) list>> 
 orchestration_I_circuit_grouping_I_nids_managed *-- "0..N" orchestration_I_circuit_grouping_I_nids_managed_I_nids_managed 
 orchestration_I_circuit_grouping_I_nids_managed_I_nids_managed : nid-grouping {uses} 
-orchestration : orchestration_nfv_create( in: nid_input out: status out: nid_id)
-orchestration : orchestration_nfv_get( in: nid_id out: status out: nid_output)
-orchestration : orchestration_nfv_update( in: nid_id in: nid_input out: status)
-orchestration : orchestration_nfv_delete( in: nid_input out: status out: nid_id)
-orchestration : orchestration_circuit_create( in: circuit_input out: status out: circuit_id)
+orchestration : orchestration_nfv_create( in: tenant_id in: nid_input out: status out: nid_id)
+orchestration : orchestration_nfv_get( in: tenant_id in: nid_id out: status out: nid_output)
+orchestration : orchestration_nfv_update( in: tenant_id in: nid_id in: nid_input out: status)
+orchestration : orchestration_nfv_delete( in: tenant_id in: nid_id in: nid_input out: status)
+orchestration : orchestration_circuit_create( in: tenant_id in: circuit_input out: status out: circuit_id)
 orchestration : orchestration_circuit_get( in: circuit_id out: status out: circuit_output)
-orchestration : orchestration_circuit_update( in: circuit_id in: circuit_input out: status)
-orchestration : orchestration_circuit_delete( in: circuit_id out: status)
-orchestration : orchestration_circuit_request_authorization( in: circuit_id in: circuit_input out: status)
-orchestration : orchestration_circuit_performance_metrics( in: circuit_id out: status)
-orchestration : orchestration_circuit_fault_report( in: circuit_id in: link_state out: status)
+orchestration : orchestration_circuit_update( in: tenant_id in: circuit_id in: circuit_input out: status)
+orchestration : orchestration_circuit_delete( in: tenant_id in: circuit_id out: status)
+orchestration : orchestration_circuit_request_authorization( in: tenant_id in: circuit_id in: circuit_input out: status)
+orchestration : orchestration_circuit_performance_metrics( in: tenant_id in: circuit_id out: status)
+orchestration : orchestration_circuit_fault_report( in: tenant_id in: circuit_id in: link_state out: status)
 end package
 
 orchestration_I_circuit_attributes_grouping_I_performance_sla --> orchestration_I_circuit_metrics_grouping_grouping : uses 
@@ -100,6 +102,6 @@ orchestration_I_nid_grouping_I_circuits_managed_I_circuits_managed --> orchestra
 orchestration_I_circuit_grouping_I_circuit_attributes --> orchestration_I_circuit_attributes_grouping_grouping : uses 
 orchestration_I_circuit_grouping_I_nids_managed_I_nids_managed --> orchestration_I_nid_grouping_grouping : uses 
 center footer
- <size:20> UML Generated : 2014-06-26 14:56 </size>
+ <size:20> UML Generated : 2014-07-03 16:54 </size>
  endfooter 
 @enduml 

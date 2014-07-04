@@ -1,0 +1,73 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/vim.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title vim 
+package "yang:ietf-yang-types" as yang_ietf_yang_types 
+end package 
+package "inet:ietf-inet-types" as inet_ietf_inet_types 
+end package 
+note top of cablelabs_vim : <b>Namespace: </b> http://cablelabs.com/yang/nfv/vim \n<b>Prefix: </b> cablelabs \n
+package "cablelabs:vim" as cablelabs_vim 
+yang_ietf_yang_types +-- cablelabs_vim
+inet_ietf_inet_types +-- cablelabs_vim
+class "vim" as vim << (M, #33CCFF) module>> 
+class "float" as float << (T, YellowGreen) typedef>>
+float : binary {length = 0..4}
+class "vm-resource-type" as vim_I_vm_resource_type_grouping <<(G,Lime) grouping>> 
+vim_I_vm_resource_type_grouping : id : uint8 [0..255]  
+vim_I_vm_resource_type_grouping : name : string {length = 0..64}  
+vim_I_vm_resource_type_grouping : memory : uint64 [0..1000]  
+vim_I_vm_resource_type_grouping : disk : uint8 [0..255]  
+vim_I_vm_resource_type_grouping : ephemeral : uint8 [0..255]  
+vim_I_vm_resource_type_grouping : vcpu : uint8 [0..255]  
+vim_I_vm_resource_type_grouping : rxtx : float   = 1.0 
+vim_I_vm_resource_type_grouping : is-public : boolean   = true 
+enum "vm-state-type" as vim_I_vm_state_type
+vim_I_vm_state_type : paused 
+vim_I_vm_state_type : suspended 
+vim_I_vm_state_type : active 
+vim_I_vm_state_type : ... 
+enum "vm-action-type" as vim_I_vm_action_type
+vim_I_vm_action_type : unpause 
+vim_I_vm_action_type : resume 
+vim_I_vm_action_type : rescue 
+vim_I_vm_action_type : ... 
+class "vm-reference" as vm_reference << (T, YellowGreen) typedef>>
+vm_reference : string
+class "tenant-reference" as tenant_reference << (T, YellowGreen) typedef>>
+tenant_reference : string
+class "vm-attributes-grouping" as vim_I_vm_attributes_grouping_grouping <<(G,Lime) grouping>> 
+vim_I_vm_attributes_grouping_grouping : vm-id : vm-reference  
+class "vm-resources" as  vim_I_vm_attributes_grouping_I_vm_resources <<container>> 
+vim_I_vm_attributes_grouping_grouping *-- "1" vim_I_vm_attributes_grouping_I_vm_resources 
+vim_I_vm_attributes_grouping_I_vm_resources : vm-resource-type {uses} 
+class "vm-list-grouping" as vim_I_vm_list_grouping_grouping <<(G,Lime) grouping>> 
+class "vm-managed" as  vim_I_vm_list_grouping_I_vm_managed <<container>> 
+vim_I_vm_list_grouping_grouping *-- "1" vim_I_vm_list_grouping_I_vm_managed 
+class "vm-managed" as vim_I_vm_list_grouping_I_vm_managed_I_vm_managed << (L, #FF7700) list>> 
+vim_I_vm_list_grouping_I_vm_managed *-- "0..N" vim_I_vm_list_grouping_I_vm_managed_I_vm_managed 
+vim_I_vm_list_grouping_I_vm_managed_I_vm_managed : vm-attributes-grouping {uses} 
+vim : vim_vm_create( in: tenant_id in: vm_input out: status out: vm_id)
+vim : vim_vm_get( in: tenant_id in: vm_id out: status out: vm_state out: vm_output)
+vim : vim_vm_update( in: tenant_id in: vm_id in: vm_output out: status)
+vim : vim_vm_delete( in: tenant_id in: vm_id out: status)
+vim : vim_vm_control( in: tenant_id in: vm_id in: vm_action out: status)
+vim : vim_vm_list( in: tenant_id out: status out: vm_list)
+end package
+
+vim_I_vm_attributes_grouping_I_vm_resources --> vim_I_vm_resource_type_grouping : uses 
+vim_I_vm_list_grouping_I_vm_managed_I_vm_managed --> vim_I_vm_attributes_grouping_grouping : uses 
+center footer
+ <size:20> UML Generated : 2014-07-03 16:40 </size>
+ endfooter 
+@enduml 

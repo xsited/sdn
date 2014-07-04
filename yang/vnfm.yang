@@ -1,0 +1,344 @@
+module vnfm
+{
+	namespace "http://cablelabs.com/yang/nfv/nfvm";
+	prefix cablelabs;
+
+
+  	import ietf-yang-types {
+    		prefix yang;
+    		revision-date 2010-09-24;
+  	}
+  	import ietf-inet-types {
+    		prefix inet;
+    		revision-date 2010-09-24;
+  	}
+
+	typedef float {
+		type binary {
+			length "0..4";
+		}
+		description
+		"32-bit IEEE floating point number" ;
+	}
+  
+
+
+	typedef vnf-function-type {
+		type enumeration {
+			enum "dpi" {
+				value 1;
+			}
+			enum "firewall" {
+				value 2;
+			}
+			enum "switch" {
+				value 3;
+			}
+			enum "webserver" {
+				value 4;
+			}
+		}
+	}
+
+	typedef vnf-init-type {
+			description
+			" placeholder for cloud init like functionality which is supported by ec2 and openstack
+			  for ubuntu  abstraction for other VM platforms";
+			reference
+		"https://help.ubuntu.com/community/CloudInit
+		 https://www.youtube.com/watch?v=-zL3BdbKyGY
+		";
+		type enumeration {
+			enum "gzip";
+			/*
+			description
+			" content found to be gzip compressed will be uncompressed. The uncompressed data will then be used as if it were not compressed. Compression of data is useful because user-data is limited to 16384 bytes ";
+			*/
+			enum "mime";	
+
+			/*
+			description
+			"This list of rules is applied to each part of this multi-part file. Using a mime-multi part file, the user can specify more than one type of data. For example, both a user data script and a cloud-config type could be specified.";
+			*/
+			enum  "script";
+
+			/*
+			description
+			"script will be executed at rc.local-like level during first boot. rc.local-like means very late in the boot sequence";
+			//begins with: "#!" or "Content-Type: text/x-shellscript 
+
+			enum "include";
+
+			/*
+			description
+			//begins with "#include" or "Content-Type: text/x-include-url"
+			"This content is a include file. The file contains a list of urls, one per line. Each of the URLs will be read, and their content will be passed through this same set of rules. Ie, the content read from the URL can be gzipped, mime-multi-part, or plain text";
+			*/
+
+			enum "config";
+
+			/*
+			description
+			//begins with "#cloud-config" or "Content-Type: text/cloud-config"
+			"This content is cloud-config data. See the examples for a commented example of supported config formats.";
+			*/
+
+			enum "upstart";
+
+			/*
+			description
+			// begins with "#upstart-job" or "Content-Type: text/upstart-job"
+			"Content is placed into a file in /etc/init, and will be consumed by upstart as any other upstart job.";
+			*/
+
+			enum boothook;
+
+			//begins with "#cloud-boothook" or "Content-Type: text/cloud-boothook"
+
+			/*
+			description
+			"This content is boothook data. It is stored in a file under /var/lib/cloud and then executed immediately.";
+
+			*/
+			enum part;
+
+			/*
+			//begins with "#part-handler" or "Content-Type: text/part-handler"
+			*/
+
+			/*
+			"This is a 'part-handler'. It will be written to a file in /var/lib/cloud/data based on its filename. This must be python code that contains a list_types method and a handle_type method. Once the section is read the 'list_types' method will be called. It must return a list of mime-types that this part-handler handlers.";
+			*/
+		}
+	}
+
+
+	typedef vnf-state-type {
+		type enumeration {
+			enum "unpause" {
+				value 1;
+			}
+			enum "resume" {
+				value 2;
+			}
+			enum "rescue" {
+				value 3;
+			}
+			enum "rebuild" {
+				value 4;
+			}
+			enum "unrescue" {
+				value 5;
+			}
+			enum "admin-password" {
+				value 6;
+			}
+			enum "password" {
+				value 7;
+			}
+			enum "stop" {
+				value 8;
+			}
+		}
+	}
+
+	typedef vnf-service-graph-type 
+	{
+		// Placeholder for future thought
+		type uint16 {
+			range "1..8191";
+		}
+	
+
+	}
+
+	grouping vnf-attributes-grouping
+	{
+		leaf vnf-id
+		{
+			type vnf-reference;
+		}
+		// XXX - this is just a start of vnf attributes
+		leaf vnf-personality
+		{
+			type vnf-function-type;
+		}
+		leaf vnf-init
+		{
+			type vnf-init-type;
+			description
+			"The manifest and scripts that allow the personality to be created.";
+
+		}
+		leaf vnf-state
+		{
+			type vnf-state-type;
+		}
+		// XXX - Probably needs it own object that the vnf is a member of
+		leaf vnf-service-graph
+		{
+			type vnf-service-graph-type;
+		}
+	}
+
+	
+
+	typedef vnf-reference {
+		type string;
+		description
+		"Type to identify the vm";
+	}
+
+	typedef tenant-reference {
+		type string;
+		description
+		"Type to identify the tenant or project";
+	}
+
+
+	grouping vnf-list-grouping
+	{
+		container vnf-managed {
+			list vnf-managed {
+				key "vnf-id";
+				unique "vnf-id";
+				description
+				"The list of all VMs ";
+				uses vnf-attributes-grouping;
+			}
+		}
+	}
+
+
+
+	rpc vnfm_vnf_create {
+			description
+			"Create a nfv";
+			reference "";
+
+			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+				container vnf-input
+				{
+					uses vnf-attributes-grouping;
+				}
+			}
+			output {
+				leaf status
+				{
+					type uint32;
+				}
+				leaf vnf-id
+				{
+					type vnf-reference;
+				}
+			}
+	}
+
+	rpc vnfm_vnf_get {
+			description
+			"Read a vnf";
+			reference "";
+
+			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+				leaf vnf-id
+				{
+					type vnf-reference;
+				}
+			}
+			output {
+				leaf status
+				{
+					type uint32;
+				}
+				leaf vnf-state
+				{
+					type vnf-state-type;
+				}
+				container vnf-output
+				{
+					uses vnf-attributes-grouping;
+				}
+			}
+	}
+
+	rpc vnfm_vnf_update {
+			description
+			"Update a nfv";
+			reference "";
+
+			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+				leaf vnf-id
+				{
+					type vnf-reference;
+				}
+				container vnf-output
+				{
+					uses vnf-attributes-grouping;
+				}
+			}
+			output {
+				leaf status
+				{
+					type uint32;
+				}
+			}
+	}
+
+	rpc vnfm_vnf_delete {
+			description
+			"delete a vm";
+			reference "";
+
+			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+				leaf vnf-id
+				{
+					type vnf-reference;
+				}
+			}
+			output {
+				leaf status
+				{
+					type uint32;
+				}
+			}
+	}
+
+	rpc vnfm_vnf_list {
+			description
+			"List all nfvs";
+			reference "";
+
+			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
+			}
+			output {
+				leaf status
+				{
+					type uint32;
+				}
+				container vnf-list
+				{
+					uses vnf-list-grouping;
+				}
+			}
+	}
+}

@@ -14,80 +14,78 @@ module vim
     		revision-date 2010-09-24;
   	}
 
-
-	typedef vm-resource-type
-	{
-		type enumeration {
+	typedef float {
+		type binary {
+			length "0..4";
 		}
-		reference "?";
 		description
-		"This enumeration contains the all EPL service types epl, evpl, .";
+		"32-bit IEEE floating point number" ;
 	}
+  
 
-	import vm-resource {
+
+	grouping vm-resource-type
+	{
 		leaf id {
 			type uint8 {
-				range 0..256;
+				range 0..255;
 			}
 			description
-			"";
+			"A unique numeric ID.";
 		}
 		leaf name {
 			type string {
-			     range 0..64;
+			     length "0..64";
 			}
 			description
-			"";
+			"A descriptive name, such as xx.size_name, is conventional but not required, though some third-party tools may rely on it.";
 		}
 		leaf memory {
 			type uint64 {
-				range 0..;
+				range 0..1000;
 			}
 			description
-			"";
+			"Virtual machine memory in megabytes.";
 		}
 		leaf disk {
 			type uint8 {
-				range 0..256;
+				range 0..255;
 			}
-			description
-			"";
+			description 
+			"Virtual root disk size in gigabytes. ";
 		}
 		leaf ephemeral {
 			type uint8 {
-				range 0..256;
+				range 0..255;
 			}
 			description
-			"";
+			"Specifies the size of a secondary ephemeral data disk. This is an empty, unformatted disk and exists only for the life of the instance.";
 		}
 		leaf vcpu {
 			type uint8 {
-				range 0..256;
+				range 0..255;
 			}
 			description
-			"";
+			"Number of virtual CPUs presented to the instance.";
 		}
-
+		leaf rxtx {
+			type float ;
+			default 1.0;
+			description
+			"Optional property that allows created servers to have a different 
+			bandwidth cap from that defined in the network they are attached to. 
+			This factor is multiplied by the rxtx_base property of the network. 
+			Default value is 1.0 (that is, the same as the attached network).";
+		}
+		leaf is-public {
+			type boolean; 
+			default true;
+		}
 	}
 
 	
-/*
-XXX -- put these descriptions up there
-ID	A unique numeric ID.
-Name	A descriptive name, such as xx.size_name, is conventional but not required, though some third-party tools may rely on it.
-Memory_MB	Virtual machine memory in megabytes.
-Disk	Virtual root disk size in gigabytes. This is an ephemeral disk the base image is copied into. You don't use it when you boot from a persistent volume. The "0" size is a special case that uses the native base image size as the size of the ephemeral root volume.
-Ephemeral	Specifies the size of a secondary ephemeral data disk. This is an empty, unformatted disk and exists only for the life of the instance.
-Swap	Optional swap space allocation for the instance.
-VCPUs	Number of virtual CPUs presented to the instance.
-RXTX_Factor	Optional property that allows created servers to have a different bandwidth cap from that defined in the network they are attached to. This factor is multiplied by the rxtx_base property of the network. Default value is 1.0 (that is, the same as the attached network).
-Is_Public	Boolean value that indicates whether the flavor is available to all users or private. Private flavors do not get the current tenant assigned to them. Defaults to True.
-extra_specs	
-*/
-
-
-	type vm-state-type {
-	type enumeration {
+	typedef vm-state-type {
+		type enumeration {
 			enum "paused" {
 				value 1;
 			}
@@ -106,11 +104,11 @@ extra_specs
 			enum "stopped" {
 				value 6;
 			}
-	}
+		}
 	}
 
-	type vm-action-type {
-	type enumeration {
+	typedef vm-action-type {
+		type enumeration {
 			enum "unpause" {
 				value 1;
 			}
@@ -132,7 +130,10 @@ extra_specs
 			enum "password" {
 				value 7;
 			}
-	}
+			enum "stop" {
+				value 8;
+			}
+		}
 	}
 
 	typedef vm-reference {
@@ -141,11 +142,38 @@ extra_specs
 		"Type to identify the vm";
 	}
 
-	typedef project-reference {
+	typedef tenant-reference {
 		type string;
 		description
-		"Type to identify the project";
+		"Type to identify the tenant or project";
 	}
+
+
+	grouping vm-attributes-grouping {
+				leaf vm-id
+				{
+					type vm-reference;
+				}
+		container vm-resources {
+			uses vm-resource-type;
+		}	
+	        description "This grouping needed?";
+	}
+
+
+	grouping vm-list-grouping
+	{
+		container vm-managed {
+			list vm-managed {
+				key "vm-id";
+				unique "vm-id";
+				description
+				"The list of all VMs ";
+				uses vm-attributes-grouping;
+			}
+		}
+	}
+
 
 
 	rpc vim_vm_create {
@@ -154,6 +182,10 @@ extra_specs
 			reference "";
 
 			input {
+				leaf tenant-id
+				{
+					type tenant-reference;
+				}
 				container vm-input
 				{
 					uses vm-attributes-grouping;
@@ -191,7 +223,11 @@ extra_specs
 				{
 					type uint32;
 				}
-				leaf cvm-output
+				leaf vm-state
+				{
+					type vm-state-type;
+				}
+				container vm-output
 				{
 					uses vm-attributes-grouping;
 				}
@@ -212,15 +248,15 @@ extra_specs
 				{
 					type vm-reference;
 				}
+				container vm-output
+				{
+					uses vm-attributes-grouping;
+				}
 			}
 			output {
 				leaf status
 				{
 					type uint32;
-				}
-				leaf vm-output
-				{
-					uses vm-attributes-grouping;
 				}
 			}
 	}
@@ -245,9 +281,31 @@ extra_specs
 				{
 					type uint32;
 				}
-				container vm-input
+			}
+	}
+
+	rpc vim_vm_control {
+			description
+			"controller a vm";
+			reference "";
+
+			input {
+				leaf tenant-id
 				{
-					uses vm-attributes-grouping;
+					type tenant-reference;
+				}
+				leaf vm-id
+				{
+					type vm-reference;
+				}
+				leaf vm-action {
+					type vm-action-type;
+				}
+			}
+			output {
+				leaf status
+				{
+					type uint32;
 				}
 			}
 	}
@@ -268,9 +326,9 @@ extra_specs
 				{
 					type uint32;
 				}
-				leaf vm-id
+				container vm-list
 				{
-					type vm-reference;
+					uses vm-list-grouping;
 				}
 			}
 	}
