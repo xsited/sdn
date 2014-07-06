@@ -1,0 +1,40 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/vxlan-gpe.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title vxlan-gpe 
+package "inet:ietf-inet-types" as inet_ietf_inet_types 
+end package 
+package "yang:ietf-yang-types" as yang_ietf_yang_types 
+end package 
+note top of vxlan_gpe_vxlan_gpe : <b>Namespace: </b> urn:cisco:params:xml:ns:yang:vxlan-gpe \n<b>Prefix: </b> vxlan-gpe \n<b>Organization : </b>\nCisco Systems, Inc. \n<b>Contact : </b>\nReinaldo Penno <repenno@cisco.com> \n<b>Revision : </b> 2013-12-04 \n
+package "vxlan-gpe:vxlan-gpe" as vxlan_gpe_vxlan_gpe 
+inet_ietf_inet_types +-- vxlan_gpe_vxlan_gpe
+yang_ietf_yang_types +-- vxlan_gpe_vxlan_gpe
+class "vxlan-gpe" as vxlan_gpe << (M, #33CCFF) module>> 
+class "vxlan-gpw-header-flag-type" as vxlan_gpw_header_flag_type << (T, YellowGreen) typedef>>
+vxlan_gpw_header_flag_type : bits
+class "vxlan-gpe-header" as  vxlan_gpe_I_vxlan_gpe_header <<container>> 
+vxlan_gpe *-- "1" vxlan_gpe_I_vxlan_gpe_header 
+vxlan_gpe_I_vxlan_gpe_header : gpe-header-flag-value : vxlan-gpw-header-flag-type  
+vxlan_gpe_I_vxlan_gpe_header : reserved : uint8   = 0 
+vxlan_gpe_I_vxlan_gpe_header : protocol-type : uint16  
+vxlan_gpe_I_vxlan_gpe_header : vni-low : uint8  
+vxlan_gpe_I_vxlan_gpe_header : vni-med : uint8  
+vxlan_gpe_I_vxlan_gpe_header : vni-hi : uint8  
+vxlan_gpe_I_vxlan_gpe_header : reserved2 : uint8 [0 .. 255]   = 0 
+end package
+
+center footer
+ <size:20> UML Generated : 2014-07-06 11:22 </size>
+ endfooter 
+@enduml 

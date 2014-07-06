@@ -1,0 +1,46 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/service-function-chain.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title service-function-chain 
+package "inet:ietf-inet-types" as inet_ietf_inet_types 
+end package 
+package "yang:ietf-yang-types" as yang_ietf_yang_types 
+end package 
+package "sfc-sf:service-function" as sfc_sf_service_function 
+end package 
+note top of sfc_sfc_service_function_chain : <b>Namespace: </b> urn:cisco:params:xml:ns:yang:sfc-sfc \n<b>Prefix: </b> sfc-sfc \n<b>Organization : </b>\nCisco Systems, Inc. \n<b>Contact : </b>\nReinaldo Penno <repenno@cisco.com> \n<b>Revision : </b> 2014-06-30 \n
+package "sfc-sfc:service-function-chain" as sfc_sfc_service_function_chain 
+inet_ietf_inet_types +-- sfc_sfc_service_function_chain
+yang_ietf_yang_types +-- sfc_sfc_service_function_chain
+sfc_sf_service_function +-- sfc_sfc_service_function_chain
+class "service-function-chain" as service_function_chain << (M, #33CCFF) module>> 
+class "service-function-chain-grouping" as service_function_chain_I_service_function_chain_grouping_grouping <<(G,Lime) grouping>> 
+class "service-function-chain" as service_function_chain_I_service_function_chain_grouping_I_service_function_chain << (L, #FF7700) list>> 
+service_function_chain_I_service_function_chain_grouping_grouping *-- "0..N" service_function_chain_I_service_function_chain_grouping_I_service_function_chain 
+service_function_chain_I_service_function_chain_grouping_I_service_function_chain : +name : string  {key} 
+class "service-function-type" as service_function_chain_I_service_function_chain_grouping_I_service_function_chain_I_service_function_type << (L, #FF7700) list>> 
+service_function_chain_I_service_function_chain_grouping_I_service_function_chain *-- "0..N" service_function_chain_I_service_function_chain_grouping_I_service_function_chain_I_service_function_type : ordered-by : user
+service_function_chain_I_service_function_chain_grouping_I_service_function_chain_I_service_function_type : +name : string  {key} 
+service_function_chain_I_service_function_chain_grouping_I_service_function_chain_I_service_function_type : type : string  
+class "service-function-chains" as  service_function_chain_I_service_function_chains <<container>> 
+service_function_chain *-- "1" service_function_chain_I_service_function_chains 
+service_function_chain_I_service_function_chains : service-function-chain-grouping {uses} 
+service_function_chain : put-service-function-chains( in: service_function_chain_grouping)
+end package
+
+service_function_chain_I_service_function_chains --> service_function_chain_I_service_function_chain_grouping_grouping : uses 
+service_function_chain --> service_function_chain_I_service_function_chain_grouping_grouping : uses 
+center footer
+ <size:20> UML Generated : 2014-07-06 11:21 </size>
+ endfooter 
+@enduml 
