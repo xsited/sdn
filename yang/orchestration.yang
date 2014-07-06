@@ -15,10 +15,20 @@ module orchestration
 
 
 
-	organization "CableLabs";
+
+  organization "CableLabs, Inc.";
+  contact "Thomas Kee <t.kee@cablelabs.com>";
 
 	description
 	"This module contains data types and rpc definitions for the nfv orchestration layer sample for the EPL use case";
+
+
+  	revision 2014-07-4 {
+    		description
+      		"Initial revision";
+    		reference 
+		"";
+  	}
 
 	typedef epl-service-type
 	{
@@ -168,7 +178,6 @@ module orchestration
 		leaf service-type
 		{
 			type epl-service-type;
-			mandatory false;
 		        default epl;
 			description
 			"The service type for the EPL.";
@@ -199,7 +208,6 @@ module orchestration
 
 		leaf enabled {
 			type boolean;
-			mandatory false;
 			default false;
 			description
 			"Specifies if the NID is enabled.";
@@ -222,7 +230,6 @@ module orchestration
 		leaf nid-state
 		{
 			type up-down-state-type;
-			mandatory false;
 			default down;
 			description
 			"The NID up or down";

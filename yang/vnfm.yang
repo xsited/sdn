@@ -13,6 +13,19 @@ module vnfm
     		revision-date 2010-09-24;
   	}
 
+  organization "CableLabs, Inc.";
+  contact "Thomas Kee <t.kee@cablelabs.com>";
+
+  description
+    "This module contains a collection of YANG definitions for NFV.";
+
+  	revision 2014-07-4 {
+    		description
+      		"Initial revision";
+    		reference 
+		"";
+  	}
+
 	typedef float {
 		type binary {
 			length "0..4";
