@@ -20,7 +20,7 @@ module vim
   description
     "This module contains a collection of YANG definitions for NFV.";
 
-  	revision 2014-07-4 {
+  	revision 2014-07-04 {
     		description
       		"Initial revision";
     		reference 

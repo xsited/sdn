@@ -23,7 +23,7 @@ module orchestration
 	"This module contains data types and rpc definitions for the nfv orchestration layer sample for the EPL use case";
 
 
-  	revision 2014-07-4 {
+  	revision 2014-07-04 {
     		description
       		"Initial revision";
     		reference 
