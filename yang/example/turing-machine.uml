@@ -1,0 +1,67 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/turing-machine.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title turing-machine 
+note top of tm_turing_machine : <b>Namespace: </b> http://example.net/turing-machine \n<b>Prefix: </b> tm \n<b>Revision : </b> 2013-12-27 \n
+package "tm:turing-machine" as tm_turing_machine 
+class "turing-machine" as turing_machine << (M, #33CCFF) module>> 
+class "tape-symbol" as tape_symbol << (T, YellowGreen) typedef>>
+tape_symbol : string {length = 0..1}
+class "cell-index" as cell_index << (T, YellowGreen) typedef>>
+cell_index : int64
+class "state-index" as state_index << (T, YellowGreen) typedef>>
+state_index : uint16
+enum "head-dir" as turing_machine_I_head_dir
+turing_machine_I_head_dir : left 
+turing_machine_I_head_dir : right 
+class "tape-cells" as turing_machine_I_tape_cells_grouping <<(G,Lime) grouping>> 
+class "cell" as turing_machine_I_tape_cells_I_cell << (L, #FF7700) list>> 
+turing_machine_I_tape_cells_grouping *-- "0..N" turing_machine_I_tape_cells_I_cell 
+turing_machine_I_tape_cells_I_cell : +coord : cell-index  {key} 
+turing_machine_I_tape_cells_I_cell : symbol : tape-symbol {length = 1}  
+class "turing-machine" as  turing_machine_I_turing_machine <<container>> 
+turing_machine *-- "1" turing_machine_I_turing_machine 
+turing_machine_I_turing_machine : state : state-index   {mandatory} {Config : false}
+turing_machine_I_turing_machine : head-position : cell-index   {mandatory} {Config : false}
+class "tape" as  turing_machine_I_turing_machine_I_tape <<container>> 
+turing_machine_I_turing_machine *-- "1" turing_machine_I_turing_machine_I_tape 
+note bottom of turing_machine_I_turing_machine_I_tape
+<b>Config = </b>false
+end note 
+turing_machine_I_turing_machine_I_tape : tape-cells {uses} 
+class "transition-function" as  turing_machine_I_turing_machine_I_transition_function <<container>> 
+turing_machine_I_turing_machine *-- "1" turing_machine_I_turing_machine_I_transition_function 
+class "delta" as turing_machine_I_turing_machine_I_transition_function_I_delta << (L, #FF7700) list>> 
+turing_machine_I_turing_machine_I_transition_function *-- "0..N" turing_machine_I_turing_machine_I_transition_function_I_delta 
+turing_machine_I_turing_machine_I_transition_function_I_delta : +label : string  {key} 
+class "input" as  turing_machine_I_turing_machine_I_transition_function_I_delta_I_input <<container>> 
+turing_machine_I_turing_machine_I_transition_function_I_delta *-- "1" turing_machine_I_turing_machine_I_transition_function_I_delta_I_input 
+turing_machine_I_turing_machine_I_transition_function_I_delta_I_input : state : state-index   {mandatory}
+turing_machine_I_turing_machine_I_transition_function_I_delta_I_input : symbol : tape-symbol   {mandatory}
+class "output" as  turing_machine_I_turing_machine_I_transition_function_I_delta_I_output <<container>> 
+turing_machine_I_turing_machine_I_transition_function_I_delta *-- "1" turing_machine_I_turing_machine_I_transition_function_I_delta_I_output 
+turing_machine_I_turing_machine_I_transition_function_I_delta_I_output : state : state-index  
+turing_machine_I_turing_machine_I_transition_function_I_delta_I_output : symbol : tape-symbol  
+turing_machine_I_turing_machine_I_transition_function_I_delta_I_output : head-move : head-dir  
+turing_machine : initialize( in: tape_content)
+turing_machine : run()
+class "halted" as turing_machine_I_halted << (N,#00D1B2) notification>> 
+turing_machine -- turing_machine_I_halted : notification 
+turing_machine_I_halted : state : state-index   {mandatory}
+end package
+
+turing_machine_I_turing_machine_I_tape --> turing_machine_I_tape_cells_grouping : uses 
+center footer
+ <size:20> UML Generated : 2014-07-09 07:40 </size>
+ endfooter 
+@enduml 

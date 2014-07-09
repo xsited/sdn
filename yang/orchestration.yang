@@ -16,11 +16,11 @@ module orchestration
 
 
 
-  organization "CableLabs, Inc.";
-  contact "Thomas Kee <t.kee@cablelabs.com>";
+  	organization "CableLabs, Inc.";
+  	contact "Thomas Kee <t.kee@cablelabs.com>";
 
 	description
-	"This module contains data types and rpc definitions for the nfv orchestration layer sample for the EPL use case";
+	"This module contains data types and rpc definitions for the nfv orchestration layer;"
 
 
   	revision 2014-07-04 {
@@ -29,21 +29,6 @@ module orchestration
     		reference 
 		"";
   	}
-
-	typedef epl-service-type
-	{
-		type enumeration {
-			enum epl;
-			enum ep-tree;
-			enum ep-lan;
-			enum evpl;
-			enum evp-lan; 
-			enum evp-tree;
-		}
-		reference "?";
-		description
-		"This enumeration contains the all EPL service types epl, evpl, .";
-	}
 
 	typedef up-down-state-type {
 		type enumeration {
@@ -54,64 +39,6 @@ module orchestration
 		"Type for specifying state of a circuit.";
 	}
 
-	typedef float {
-		type binary {
-			length "0..4";
-		}
-		description
-		"32-bit IEEE floating point number" ;
-	}
-  
-
-// XXX – some ideas that may not be necessary
-	typedef interface-speed-type {
-		type enumeration {
-			enum "ten" {
-				value 10;
-			}
-			enum "hundred" {
-				value 100;
-			}
-			enum "thousand" {
-				value 1000;
-			}
-		}
-	}
-
-	typedef interfaced-duplex-type {
-		type enumeration {
-			enum "half";
-			enum "full";
-		}
-	}
-
-	grouping common-packets-counters-type {
-		leaf bytes {
-			type yang:counter64;
-		}
-		leaf packets {
-			type yang:counter64;
-		}
-		leaf errors {
-			type yang:counter32;
-		}
-		leaf dropped {
-			type yang:counter32;
-		}
-	}
-
-	// XXX  - This from mef.
-	typedef mep-id-type {
-		type uint16 {
-			range "1..8191";
-		}
-		description
-		"Maintenance association End Point Identifier (MEPID): A small integer,
-		unique over a given Maintenance Association, identifying a specific MEP.";
-		reference "[802.1q] 3.19 and 19.2.1";
-	}
-
-
 
 	typedef tenant-reference {
 		type string;
@@ -119,159 +46,58 @@ module orchestration
 		"Type to identify the tenant or project";
 	}
 
-
-	// XXX – need to look at instance id
-	typedef circuit-reference {
+	typedef vnf-reference {
 		type string;
 		description
-		"Type to specify the connection between two endpoint NID's or circuit.";
-		reference "[RFC3046]";
-	}
-	typedef nid-id {
-		type inet:ip-address;
-		description
-		"An identifier that identifies a NID.
-		The management IP address of the NID.";
-	}
-
-	grouping circuit-metrics-grouping
-	{
-
-		leaf latency
-		{
-			type uint32 {
-				range 0..65535;
-			}
-			description
-			"Circuit latency allowed in microseconds.";
-
-		}
-		container throughput
-		{
-			leaf bps {
-				type yang:counter64;
-			}
-			leaf pps {
-				type yang:counter64;
-			}
-			description "Circuit throughput.";
-
-		}
-	}
-
-	grouping circuit-attributes-grouping {
-		leaf circuit-id {
-			type circuit-reference;
-		}
-		leaf name
-		{
-			type string {
-				length "0..64";
-			}
-		}
-		container performance-sla
-		{
-			uses circuit-metrics-grouping;
-			description
-				"Performance SLA.";
-		}
-		leaf service-type
-		{
-			type epl-service-type;
-		        default epl;
-			description
-			"The service type for the EPL.";
-
-		}
-
-		leaf service-label
-		{
-			type string {
-				length "0..32";
-			}
-
-			description
-			"The label is dependent on the encapsulation type.
-			For example if the encapsulation type was VLAN then label would be
-			a VLAN tag.  If the encapsulation type is MPLS then the label would be e.g. RED or ORANGE";
-
-		}
+		"Type to identify the VNF";
 	}
 
 
-	grouping nid-grouping
+	grouping vnf-grouping
 	{
 		description
-		"An endpoint device is an Internet-capable computer hardware device on a TCP/IP network and
-		for our purposes represents device that can be or emulate the functions as network devices
-		that acts as a switch.";
+		"Reserve VIM resources for VNF";
 
 		leaf enabled {
 			type boolean;
 			default false;
 			description
-			"Specifies if the NID is enabled.";
+			"Specifies if the VNF is enabled.";
 		}
 
-		leaf nid-id {
-			type nid-id;
+		leaf vnf-id {
+			type vnf-id;
 			mandatory true;
 			description
-			"An identifier that identifies a NID.
-			The management IP address of the NID.";
+			"The ID of the VNF.";
 		}
-		//XXX – may not be needed
-		leaf mac-address {
-			type yang:mac-address;
-			description
-			"The MAC address of the NID.";
-		}
-
-		leaf nid-state
+		leaf vnf-state
 		{
 			type up-down-state-type;
 			default down;
 			description
-			"The NID up or down";
+			"The VNF up or down";
 
 		}
 
-
-		container circuits-managed
+/* XXX - Need a reference to the resources managed by VNFM
+		container vims-managed
 		{
-			list circuits-managed {
-				key "circuit-id";
-				unique "circuit-id";
+			list vims-managed {
+				key "vm-id";
+				unique "vm-id";
 				description
-				"The list of all circuits managed by NID instance.";
-				uses circuit-attributes-grouping;
+				"The list of all VM instances used by the VNF.";
+				uses vim-attributes-grouping;
 			}
 		}
+*/
+
 	}
 
-	grouping circuit-grouping
-	{
-		container circuit-attributes
-		{
-			uses circuit-attributes-grouping;
-		}
-		container nids-managed {
-			list nids-managed {
-				key "nid-id";
-				unique "nid-id";
-				description
-				"The list of all NIDs hosting the circuit instance.
-				Here the endpoint are the fist and last members in the list";
-				uses nid-grouping;
-			}
-		}
-	}
-
-
-			// XXX create NID
-		rpc orchestration_nfv_create {
+	rpc orchestration_nfv_create {
 			description
-			"Create a NID endpoints with a switch or controller?";
+			"Create a VNF";
 			reference "";
 
 			input {
@@ -280,9 +106,9 @@ module orchestration
 					type tenant-reference;
 				}
 
-				container nid-input
+				container vnf-input
 				{
-					uses nid-grouping; //attributes
+					uses vnf-grouping; //attributes
 				}
 
 			}
@@ -291,18 +117,17 @@ module orchestration
 				{
 					type uint32;
 				}
-				leaf nid-id
+				leaf vnf-id
 				{
-					type nid-id;
+					type vnf-id;
 				}
 			}
-		}
+	}
 
-			// XXX create NID
-		rpc orchestration_nfv_get {
+			// XXX create VNF
+	rpc orchestration_nfv_get {
 			description
-			"Create a NID endpoints with a switch or controller?
-				Can not delete a NID with circuits";
+			"Get a VNF ";
 
 			reference "";
 
@@ -312,9 +137,9 @@ module orchestration
 					type tenant-reference;
 				}
 
-				leaf nid-id
+				leaf vnf-id
 				{
-				     type nid-id;
+				     type vnf-id;
 				}
 
 			}
@@ -323,20 +148,19 @@ module orchestration
 				{
 				     type uint32;
 				}
-				container nid-output
+				container vnf-output
 				{
-				     uses nid-grouping; //attributes
+				     uses vnf-grouping; //attributes
 				}
 
 			}
-		}
+	}
 
 
-		// XXX create NID
-		rpc orchestration_nfv_update {
+		// XXX create VNF
+	rpc orchestration_nfv_update {
 			description
-			"Create a NID endpoints with a switch or controller?
-				Can not delete a NID with circuits";
+			"Update a VNF";
 
 			reference "";
 
@@ -346,13 +170,13 @@ module orchestration
 					type tenant-reference;
 				}
 
-				leaf nid-id
+				leaf vnf-id
 				{
-					type nid-id;
+					type vnf-id;
 				}
-				container nid-input
+				container vnf-input
 				{
-					uses nid-grouping; //attributes
+					uses vnf-grouping; //attributes
 				}
 
 
@@ -363,13 +187,12 @@ module orchestration
 					type uint32;
 				}
 			 }
-		}
+	}
 
-		// XXX create NID
-		rpc orchestration_nfv_delete {
+		// XXX create VNF
+	rpc orchestration_nfv_delete {
 			description
-			"Create a NID endpoints with a switch or controller?
-     			 Can not delete a NID with circuits";
+			"Delete a VNF ";
 
 			reference "";
 
@@ -379,120 +202,13 @@ module orchestration
 					type tenant-reference;
 				}
 
-				leaf nid-id
+				leaf vnf-id
 				{
-					type nid-id;
+					type vnf-id;
 				}
-				container nid-input
+				container vnf-input
 				{
-					uses nid-grouping; //attributes
-				}
-
-			}
-			output {
-				leaf status
-				{
-					type uint32;
-				}
-			}
-		}
-
-		rpc orchestration_circuit_create{
-			description
-			"Create a circuit on a part of NID endpoints and return a circuit id";
-			reference "";
-
-			input {
-				leaf tenant-id
-				{
-					type tenant-reference;
-				}
-				container circuit-input
-				{
-					uses circuit-attributes-grouping;
-				}
-			}
-			output {
-				leaf status
-				{
-					type uint32;
-				}
-				leaf circuit-id
-				{
-					type circuit-reference;
-				}
-			}
-		}
-
-		rpc orchestration_circuit_get {
-			description
-			"Read and return a circuit definition given a circuit id";
-			reference "";
-
-			input {
-				leaf circuit-id
-				{
-					type circuit-reference;
-				}
-
-			}
-			output {
-				leaf status
-				{
-					type uint32;
-				}
-				container circuit-output
-				{
-					uses circuit-attributes-grouping;
-				}
-			}
-		}
-
-		rpc orchestration_circuit_update{
-			description
-			"Update the attributes of an existing circuit given a circuit id.
-			Changing the end point addresses constitutes a delete and create.
-			Performance, encapsulation, and other attributes are primary attributes
-			of interest";
-			reference "";
-
-			input {
-				leaf tenant-id
-				{
-					type tenant-reference;
-				}
-				leaf circuit-id
-				{
-					type circuit-reference;
-				}
-				container circuit-input
-				{
-					uses circuit-attributes-grouping;
-				}
-			}
-			output {
-				leaf status
-				{
-					type uint32;
-				}
-
-			}
-		}
-
-
-		rpc orchestration_circuit_delete{
-			description
-			"Delete a given circuit id.";
-			reference "";
-
-			input {
-				leaf tenant-id
-				{
-					type tenant-reference;
-				}
-				leaf circuit-id
-				{
-					type circuit-reference;
+					uses vnf-grouping; //attributes
 				}
 
 			}
@@ -502,87 +218,6 @@ module orchestration
 					type uint32;
 				}
 			}
-		}
+	}
 
-		rpc orchestration_circuit_request_authorization{
-			description
-			" Send a request to a policy server to check authorization to perform circuit
-			action.  ";
-			reference "";
-
-			input {
-				leaf tenant-id
-				{
-					type tenant-reference;
-				}
-				leaf circuit-id
-				{
-					type circuit-reference;
-				}
-				container circuit-input
-				{
-					uses circuit-attributes-grouping;
-				}
-			}
-			output {
-				leaf status
-				{
-					type uint32;
-				}
-			}
-		}
-
-		rpc orchestration_circuit_performance_metrics {
-			description
-			" Given a circuitID retrieve the current performance metrics.";
-			reference "";
-
-			input {
-				leaf tenant-id
-				{
-					type tenant-reference;
-				}
-				leaf circuit-id
-				{
-					type circuit-reference;
-				}
-			}
-			output {
-				leaf status
-				{
-					type uint32;
-				}
-
-			}
-		}
-
-		// XXX – notification or rpc?
-		rpc orchestration_circuit_fault_report {
-			description
-			" Given a circuitID resolve the current fault situation for the circuit.
-			type of fault might be link down or performance ";
-			reference "";
-
-			input {
-				// XXX - Does the VNF know which tenant it belongs to
-				leaf tenant-id
-				{
-					type tenant-reference;
-				}
-				leaf circuit-id
-				{
-					type circuit-reference;
-				}
-				leaf link-state
-				{
-					type up-down-state-type;
-				}
-			}
-			output {
-				leaf status
-				{
-					type uint32;
-				}
-			}
-		}
 }

@@ -1,0 +1,35 @@
+default namespace = "urn:ietf:params:xml:ns:netconf:base:1.0"
+namespace nma = "urn:ietf:params:xml:ns:netmod:dsdl-annotations:1"
+namespace tm = "http://example.net/turing-machine"
+
+include "relaxng-lib.rnc"
+start =
+  element config {
+    grammar {
+      include "turing-machine-gdefs-config.rnc" inherit = tm
+      start =
+        element tm:turing-machine {
+          empty
+          & empty
+          & empty?
+          & element tm:transition-function {
+              element tm:delta {
+                element tm:label { xsd:string },
+                (element tm:input {
+                   element tm:state { turing-machine__state-index }
+                   & element tm:symbol { turing-machine__tape-symbol }
+                 }
+                 & element tm:output {
+                     element tm:state { turing-machine__state-index }?
+                     & element tm:symbol {
+                         turing-machine__tape-symbol
+                       }?
+                     & element tm:head-move {
+                         turing-machine__head-dir
+                       }?
+                   }?)
+              }*
+            }?
+        }
+    }
+  }
