@@ -1,0 +1,107 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/vnf-be.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title vnf-be 
+package "yang:ietf-yang-types" as yang_ietf_yang_types 
+end package 
+package "inet:ietf-inet-types" as inet_ietf_inet_types 
+end package 
+note top of cablelabs_vnf_be : <b>Namespace: </b> http://cablelabs.com/yang/nfv/orchestration \n<b>Prefix: </b> cablelabs \n<b>Organization : </b>\nCableLabs, Inc. \n<b>Contact : </b>\nThomas Kee <t.kee@cablelabs.com> \n<b>Revision : </b> 2014-07-04 \n
+package "cablelabs:vnf-be" as cablelabs_vnf_be 
+yang_ietf_yang_types +-- cablelabs_vnf_be
+inet_ietf_inet_types +-- cablelabs_vnf_be
+class "vnf-be" as vnf_be << (M, #33CCFF) module>> 
+enum "epl-service-type" as vnf_be_I_epl_service_type
+vnf_be_I_epl_service_type : epl 
+vnf_be_I_epl_service_type : ep-tree 
+vnf_be_I_epl_service_type : ep-lan 
+vnf_be_I_epl_service_type : ... 
+enum "up-down-state-type" as vnf_be_I_up_down_state_type
+vnf_be_I_up_down_state_type : up 
+vnf_be_I_up_down_state_type : down 
+class "float" as float << (T, YellowGreen) typedef>>
+float : binary {length = 0..4}
+enum "interface-speed-type" as vnf_be_I_interface_speed_type
+vnf_be_I_interface_speed_type : ten 
+vnf_be_I_interface_speed_type : hundred 
+vnf_be_I_interface_speed_type : thousand 
+enum "interfaced-duplex-type" as vnf_be_I_interfaced_duplex_type
+vnf_be_I_interfaced_duplex_type : half 
+vnf_be_I_interfaced_duplex_type : full 
+class "common-packets-counters-type" as vnf_be_I_common_packets_counters_type_grouping <<(G,Lime) grouping>> 
+vnf_be_I_common_packets_counters_type_grouping : bytes : yang:counter64  
+vnf_be_I_common_packets_counters_type_grouping : packets : yang:counter64  
+vnf_be_I_common_packets_counters_type_grouping : errors : yang:counter32  
+vnf_be_I_common_packets_counters_type_grouping : dropped : yang:counter32  
+class "mep-id-type" as mep_id_type << (T, YellowGreen) typedef>>
+mep_id_type : uint16 [1..8191]
+class "tenant-reference" as tenant_reference << (T, YellowGreen) typedef>>
+tenant_reference : string
+class "circuit-reference" as circuit_reference << (T, YellowGreen) typedef>>
+circuit_reference : string
+class "nid-id" as nid_id << (T, YellowGreen) typedef>>
+nid_id : inet:ip-address
+class "circuit-metrics-grouping" as vnf_be_I_circuit_metrics_grouping_grouping <<(G,Lime) grouping>> 
+vnf_be_I_circuit_metrics_grouping_grouping : latency : uint32 [0..65535]  
+class "throughput" as  vnf_be_I_circuit_metrics_grouping_I_throughput <<container>> 
+vnf_be_I_circuit_metrics_grouping_grouping *-- "1" vnf_be_I_circuit_metrics_grouping_I_throughput 
+vnf_be_I_circuit_metrics_grouping_I_throughput : bps : yang:counter64  
+vnf_be_I_circuit_metrics_grouping_I_throughput : pps : yang:counter64  
+class "circuit-attributes-grouping" as vnf_be_I_circuit_attributes_grouping_grouping <<(G,Lime) grouping>> 
+vnf_be_I_circuit_attributes_grouping_grouping : circuit-id : circuit-reference  
+vnf_be_I_circuit_attributes_grouping_grouping : name : string {length = 0..64}  
+class "performance-sla" as  vnf_be_I_circuit_attributes_grouping_I_performance_sla <<container>> 
+vnf_be_I_circuit_attributes_grouping_grouping *-- "1" vnf_be_I_circuit_attributes_grouping_I_performance_sla 
+vnf_be_I_circuit_attributes_grouping_I_performance_sla : circuit-metrics-grouping {uses} 
+vnf_be_I_circuit_attributes_grouping_grouping : service-type : epl-service-type   = epl 
+vnf_be_I_circuit_attributes_grouping_grouping : service-label : string {length = 0..32}  
+class "nid-grouping" as vnf_be_I_nid_grouping_grouping <<(G,Lime) grouping>> 
+vnf_be_I_nid_grouping_grouping : enabled : boolean   = false 
+vnf_be_I_nid_grouping_grouping : nid-id : nid-id   {mandatory}
+vnf_be_I_nid_grouping_grouping : mac-address : yang:mac-address  
+vnf_be_I_nid_grouping_grouping : nid-state : up-down-state-type   = down 
+class "circuits-managed" as  vnf_be_I_nid_grouping_I_circuits_managed <<container>> 
+vnf_be_I_nid_grouping_grouping *-- "1" vnf_be_I_nid_grouping_I_circuits_managed 
+class "circuits-managed" as vnf_be_I_nid_grouping_I_circuits_managed_I_circuits_managed << (L, #FF7700) list>> 
+vnf_be_I_nid_grouping_I_circuits_managed *-- "0..N" vnf_be_I_nid_grouping_I_circuits_managed_I_circuits_managed 
+vnf_be_I_nid_grouping_I_circuits_managed_I_circuits_managed : circuit-attributes-grouping {uses} 
+class "circuit-grouping" as vnf_be_I_circuit_grouping_grouping <<(G,Lime) grouping>> 
+class "circuit-attributes" as  vnf_be_I_circuit_grouping_I_circuit_attributes <<container>> 
+vnf_be_I_circuit_grouping_grouping *-- "1" vnf_be_I_circuit_grouping_I_circuit_attributes 
+vnf_be_I_circuit_grouping_I_circuit_attributes : circuit-attributes-grouping {uses} 
+class "nids-managed" as  vnf_be_I_circuit_grouping_I_nids_managed <<container>> 
+vnf_be_I_circuit_grouping_grouping *-- "1" vnf_be_I_circuit_grouping_I_nids_managed 
+class "nids-managed" as vnf_be_I_circuit_grouping_I_nids_managed_I_nids_managed << (L, #FF7700) list>> 
+vnf_be_I_circuit_grouping_I_nids_managed *-- "0..N" vnf_be_I_circuit_grouping_I_nids_managed_I_nids_managed 
+vnf_be_I_circuit_grouping_I_nids_managed_I_nids_managed : nid-grouping {uses} 
+vnf_be : vnf_circuit_create( in: tenant_id in: circuit_input out: status out: circuit_id)
+vnf_be : vnf_circuit_get( in: circuit_id out: status out: circuit_output)
+vnf_be : vnf_circuit_update( in: tenant_id in: circuit_id in: circuit_input out: status)
+vnf_be : vnf_circuit_delete( in: tenant_id in: circuit_id out: status)
+vnf_be : vnf_circuit_request_authorization( in: tenant_id in: circuit_id in: circuit_input out: status)
+vnf_be : vnf_circuit_performance_metrics( in: tenant_id in: circuit_id out: status)
+vnf_be : vnf_circuit_fault_report( in: tenant_id in: circuit_id in: link_state out: status)
+vnf_be : vnf_service_node_nid_create( in: tenant_id in: switch_input out: status out: nid_id)
+vnf_be : vnf_service_node_nid_get( in: tenant_id in: nid_id out: status out: switch_output)
+vnf_be : vnf_service_node_nid_update( in: tenant_id in: nid_id in: switch_input out: status)
+vnf_be : vnf_service_node_nid_delete( in: tenant_id in: nid_id in: switch_input out: status)
+end package
+
+vnf_be_I_circuit_attributes_grouping_I_performance_sla --> vnf_be_I_circuit_metrics_grouping_grouping : uses 
+vnf_be_I_nid_grouping_I_circuits_managed_I_circuits_managed --> vnf_be_I_circuit_attributes_grouping_grouping : uses 
+vnf_be_I_circuit_grouping_I_circuit_attributes --> vnf_be_I_circuit_attributes_grouping_grouping : uses 
+vnf_be_I_circuit_grouping_I_nids_managed_I_nids_managed --> vnf_be_I_nid_grouping_grouping : uses 
+center footer
+ <size:20> UML Generated : 2014-07-09 07:40 </size>
+ endfooter 
+@enduml 
