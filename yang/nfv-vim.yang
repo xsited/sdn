@@ -1,5 +1,5 @@
 
-module vim
+module nfv-vim
 {
 	namespace "http://cablelabs.com/yang/nfv/vim";
 	prefix cablelabs;

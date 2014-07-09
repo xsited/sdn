@@ -1,4 +1,4 @@
-module vnfm
+module nfv-vnfm
 {
 	namespace "http://cablelabs.com/yang/nfv/nfvm";
 	prefix cablelabs;
@@ -12,6 +12,12 @@ module vnfm
     		prefix inet;
     		revision-date 2010-09-24;
   	}
+  	import service-function {
+    		prefix sf;
+  		revision-date 2014-06-29;
+	}
+  }
+
 
   organization "CableLabs, Inc.";
   contact "Thomas Kee <t.kee@cablelabs.com>";

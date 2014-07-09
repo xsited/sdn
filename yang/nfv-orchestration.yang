@@ -1,4 +1,4 @@
-module orchestration
+module nfv-orchestration
 {
 	namespace "http://cablelabs.com/yang/nfv/orchestration";
 	prefix cablelabs;
