@@ -4,11 +4,29 @@ module packetcable-match-types
     prefix "match";
 
     import ietf-inet-types {prefix inet; }
+    import ietf-yang-types { prefix yang; }
+    import packetcable-traffic-profile {prefix tp; }
 
-    revision "2014-01-20" {
+
+    revision "2014-08-08" {
         description "Initial revision of packetcable match types";
     }        
     
+    grouping "subscriber-device" {
+        leaf subscriber-id {
+            type inet:ip-address;
+            mandatory true;
+            description "An identifier that identifies a cable modem. The IP address of the CM.";
+        }
+        leaf mac-address {
+            type yang:mac-address;
+            description "The MAC address of the CM.";
+        }
+    }
+
+    grouping "docsis-traffic-profiles" {
+        uses tp:traffic-profile-grouping;
+    }
 
     grouping "ip-match-fields" {
         leaf ip-protocol {
@@ -178,3 +196,4 @@ module packetcable-match-types
         }
     }
 }
+

@@ -5,12 +5,13 @@ module packetcable-traffic-profile
 
     organization "OpenDaylight Project";
     contact "TBD";
+
     description
          "This module contains a collection of groupings and
          data definition statements related to the configuration
          of Traffic Profiles.";
 
-    revision "2014-01-20" {
+    revision "2014-08-08" {
         description "Initial revision of packetcable traffic profile";
     }        
     
@@ -58,7 +59,7 @@ module packetcable-traffic-profile
     type enumeration {
         enum flowspec { value 0; }
         enum docsis-service-class-name { value 1; }
-        enum docsis-specific-paramterization { value 2; }
+        enum docsis-specific-parameterization { value 2; }
         enum upstream-drop { value 3; }
 
         enum best-effort { value 4; }
@@ -408,33 +409,23 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
     }
 
 
-    container traffic-profile-flowspec {
-        leaf traffic-profile-type {
-                type traffic-profile-type;
-                default flowspec;
-                description "This attribute contains the type of upstream flow scheduling type.";
-        }
-	container authorized-envelope {
+    grouping traffic-profile-flowspec {
+	grouping authorized-envelope {
 		uses flowspec-envelope;
                 description "manadatory";
 	}
-	container reserved-envelope {
+	grouping reserved-envelope {
 		uses flowspec-envelope;
                 description "optional";
 	}
-	container committed-envelope {
+	grouping committed-envelope {
 		uses flowspec-envelope;
                 description "optional";
 	}
     }
 
 
-    container traffic-profile-docsis-service-class-name {
-        leaf traffic-profile-type {
-                type traffic-profile-type;
-                default docsis-service-class-name;
-                description "This attribute contains the type of upstream flow scheduling type.";
-        }
+    grouping traffic-profile-docsis-service-class-name {
 	leaf service-class-name {
 		type string;
                 description 
@@ -449,122 +440,92 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
     }
 
 
-    container traffic-profile-best-effort {
-        leaf traffic-profile-type {
-                type traffic-profile-type;
-                default best-effort;
-                description "This attribute contains the type of upstream flow scheduling type.";
-        }
-	container authorized-envelope {
+    grouping traffic-profile-best-effort {
+	grouping authorized-envelope {
 		uses default-envelope;
                 description "manadatory";
 	}
-	container reserved-envelope {
+	grouping reserved-envelope {
 		uses default-envelope;
                 description "optional";
 	}
-	container committed-envelope {
+	grouping committed-envelope {
 		uses default-envelope;
                 description "optional";
 	}
     }
 
-    container traffic-profile-non-real-time-polling-service {
-        leaf traffic-profile-type {
-                type traffic-profile-type;
-                default non-real-time-polling-service ;
-                description "This attribute contains the type of upstream flow scheduling type.";
-        }
-	container authorized-envelope {
+    grouping traffic-profile-non-real-time-polling-service {
+	grouping authorized-envelope {
 		uses default-envelope;
                 description "manadatory";
 	}
-	container reserved-envelope {
+	grouping reserved-envelope {
 		uses default-envelope;
                 description "optional";
 	}
-	container committed-envelope {
+	grouping committed-envelope {
 		uses default-envelope;
                 description "optional";
 	}
     }
 
 
-    container traffic-profile-real-time-polling-service {
-        leaf traffic-profile-type {
-                type traffic-profile-type;
-                default real-time-polling-service ;
-                description "This attribute contains the type of upstream flow scheduling type.";
-        }
-	container authorized-envelope {
+    grouping traffic-profile-real-time-polling-service {
+	grouping authorized-envelope {
 		uses default-envelope;
                 description "manadatory";
 	}
-	container reserved-envelope {
+	grouping reserved-envelope {
 		uses default-envelope;
                 description "optional";
 	}
-	container committed-envelope {
+	grouping committed-envelope {
 		uses default-envelope;
                 description "optional";
 	}
     }
 
-    container traffic-profile-unsolicited-grant-service {
-        leaf traffic-profile-type {
-                type traffic-profile-type;
-                default  unsolicited-grant-service ;
-                description "This attribute contains the type of upstream flow scheduling type.";
-        }
-	container authorized-envelope {
+    grouping traffic-profile-unsolicited-grant-service {
+	grouping authorized-envelope {
 		uses ugs-envelope;
                 description "manadatory";
 	}
-	container reserved-envelope {
+	grouping reserved-envelope {
 		uses ugs-envelope;
                 description "optional";
 	}
-	container committed-envelope {
+	grouping committed-envelope {
 		uses ugs-envelope;
                 description "optional";
 	}
     }
 
-    container traffic-profile-unsolicited-grant-service-with-activity-detection {
-        leaf traffic-profile-type {
-                type traffic-profile-type;
-                default  unsolicited-grant-service-with-activity-detection;
-                description "This attribute contains the type of upstream flow scheduling type.";
-        }
-	container authorized-envelope {
+    grouping traffic-profile-unsolicited-grant-service-with-activity-detection {
+	grouping authorized-envelope {
 		uses ugs-envelope;
                 description "manadatory";
 	}
-	container reserved-envelope {
+	grouping reserved-envelope {
 		uses ugs-envelope;
                 description "optional";
 	}
-	container committed-envelope {
+	grouping committed-envelope {
 		uses ugs-envelope;
                 description "optional";
 	}
     }
 
-    container traffic-profile-downstream-service {
-        leaf traffic-profile-type {
-                type traffic-profile-type;
-                default  downstream-service ;
-                description "This attribute contains the type of upstream flow scheduling type.";
-        }
-	container authorized-envelope {
+    grouping traffic-profile-downstream-service {
+	grouping authorized-envelope {
 		uses us-envelope;
                 description "manadatory";
 	}
-	container reserved-envelope {
+	grouping reserved-envelope {
 		uses us-envelope;
                 description "optional";
 	}
-	container committed-envelope {
+	grouping committed-envelope {
 		uses us-envelope;
                 description "optional";
 	}
@@ -572,12 +533,42 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
     }
 
 
-    container traffic-profile-upstream-drop {
-        leaf traffic-profile-type {
-                type traffic-profile-type;
-                default  upstream-drop;
-                description "This attribute contains the type of upstream flow scheduling type.";
-        }
+    grouping traffic-profile-upstream-drop {
+    }
+    grouping traffic-profile-docsis-specific-parameterization {
     }
 
+
+    grouping traffic-profile-grouping {
+        leaf tp-type {
+                type traffic-profile-type;
+                default  best-effort;
+                description "This attribute contains the type of upstream flow scheduling type.";
+        }
+	choice tp-type-choice {
+           case "flowspec" { uses traffic-profile-flowspec; }
+           case "docsis-service-class-name" { uses traffic-profile-docsis-service-class-name; }
+           case "docsis-specific-parameterization" { uses traffic-profile-docsis-specific-parameterization; }
+           case "upstream-drop" { uses traffic-profile-upstream-drop; }
+           case "best-effort" { uses traffic-profile-best-effort; }
+           case "unsolicited-grant-service" { uses traffic-profile-unsolicited-grant-service; }
+           case "unsolicited-grant-service-with-activity-detection" { uses traffic-profile-unsolicited-grant-service-with-activity-detection; }
+           case "non-real-time-polling-service" { uses traffic-profile-non-real-time-polling-service; }
+           case "real-time-polling-service" { uses traffic-profile-real-time-polling-service; }
+           case "downstream-service" { uses traffic-profile-downstream-service; }
+        }	
+    }
+
+    grouping taffic-profile-default-singleton-grouping {
+        grouping flowspec { uses traffic-profile-upstream-drop; }
+        grouping docsis-service-class-name { uses traffic-profile-upstream-drop; }
+        grouping docsis-specific-parameterization { uses traffic-profile-docsis-specific-parameterization; }
+        grouping upstream-drop { uses traffic-profile-upstream-drop; }
+        grouping best-effort { uses traffic-profile-best-effort; }
+        grouping unsolicited-grant-service { uses traffic-profile-unsolicited-grant-service; }
+        grouping unsolicited-grant-service-with-activity-detection { uses traffic-profile-unsolicited-grant-service-with-activity-detection; }
+        grouping non-real-time-polling-service { uses traffic-profile-non-real-time-polling-service; }
+        grouping downstream-service { uses traffic-profile-downstream-service; }
+    }
 }
+
