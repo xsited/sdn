@@ -1,0 +1,38 @@
+'Download plantuml from http://plantuml.sourceforge.net/ 
+'Generate png with java -jar plantuml.jar <file> 
+'Output in img/<module>.png 
+'If Java spits out memory error increase heap size with java -Xmx1024m  -jar plantuml.jar <file> 
+@startuml img/service-function-path.png 
+hide empty fields 
+hide empty methods 
+hide <<case>> circle
+hide <<augment>> circle
+hide <<choice>> circle
+hide <<leafref>> stereotype
+hide <<leafref>> circle
+page 1x1 
+Title service-function-path 
+package "inet:ietf-inet-types" as inet_ietf_inet_types 
+end package 
+package "yang:ietf-yang-types" as yang_ietf_yang_types 
+end package 
+package "sfc-sf:service-function" as sfc_sf_service_function 
+end package 
+note top of sfc_path_service_function_path : <b>Namespace: </b> urn:TBD:params:xml:ns:yang:sfc-path \n<b>Prefix: </b> sfc-path \n<b>Organization : </b>\nCisco Systems, Inc. \n<b>Contact : </b>\nReinaldo Penno <repenno@cisco.com> \n<b>Revision : </b> 2014-06-16 \n
+package "sfc-path:service-function-path" as sfc_path_service_function_path 
+inet_ietf_inet_types +-- sfc_path_service_function_path
+yang_ietf_yang_types +-- sfc_path_service_function_path
+sfc_sf_service_function +-- sfc_path_service_function_path
+class "service-function-path" as service_function_path << (M, #33CCFF) module>> 
+class "service-function-paths" as  service_function_path_I_service_function_paths <<container>> 
+service_function_path *-- "1" service_function_path_I_service_function_paths 
+class "service-function-path" as service_function_path_I_service_function_paths_I_service_function_path << (L, #FF7700) list>> 
+service_function_path_I_service_function_paths *-- "0..N" service_function_path_I_service_function_paths_I_service_function_path 
+service_function_path_I_service_function_paths_I_service_function_path : +name : string  {key} 
+service_function_path_I_service_function_paths_I_service_function_path : service-function-instance []: sfc-sf:service-function-ref 
+end package
+
+center footer
+ <size:20> UML Generated : 2014-07-09 08:38 </size>
+ endfooter 
+@enduml 

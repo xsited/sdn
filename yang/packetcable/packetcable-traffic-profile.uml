@@ -188,6 +188,6 @@ packetcable_traffic_profile_I_traffic_profile_downstream_service_I_authorized_en
 packetcable_traffic_profile_I_traffic_profile_downstream_service_I_reserved_envelope --> packetcable_traffic_profile_I_us_envelope_grouping : uses 
 packetcable_traffic_profile_I_traffic_profile_downstream_service_I_committed_envelope --> packetcable_traffic_profile_I_us_envelope_grouping : uses 
 center footer
- <size:20> UML Generated : 2014-06-19 17:40 </size>
+ <size:20> UML Generated : 2014-07-09 08:38 </size>
  endfooter 
 @enduml 

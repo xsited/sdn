@@ -1,0 +1,240 @@
+/*
+
+5.1. VNF instance Module Structure
+
+   The data model for VNF instance has the following structure:
+
+   module: ietf-vnfis
+
+      +--rw vnfis
+
+         +--rw vnfi* [id]
+
+            +--rw id                      uint32
+
+            +--rw vnfd-id?                leafref
+
+            +--rw flavor-id?              leafref
+
+            +--rw external-attachments
+
+            |  +--rw external-attachment* [connection-point-id]
+
+            |     +--rw connection-point-id    leafref
+
+            |     +--rw virtual-link-id?    leafref
+
+            +--rw scale-policy {auto-scale}?
+
+            |  +--rw policy-id?          leafref
+
+            |  +--rw criteria-value*     uint32
+
+            |  +--rw target-flavor-id?   leafref
+
+5.2. VNF instance YANG Module
+*/
+   module ietf-vnfis {
+
+       namespace "urn:ietf:params:xml:ns:yang:ietf-vnfis";
+
+       prefix "vnfi";
+
+       import ietf-vnfds {
+
+         prefix vnfd;
+
+       }
+
+       import ietf-vlds {
+
+         prefix vld;
+
+       }
+
+       import ietf-dfs {
+
+         prefix df;
+
+       }
+
+        organization "";
+
+        contact "TBD";
+
+       description
+
+        "This module contains YANG definitions for managing VNF instance.
+
+         Copyright (c) 2014 IETF Trust and the persons
+
+         identified as authors of the code.  All rights reserved.
+
+         Redistribution and use in source and binary forms, with or
+
+         without modification, is permitted pursuant to, and subject
+
+         to the license terms contained in, the Simplified BSD License
+
+         set forth in Section 4.c of the IETF Trust's Legal Provisions
+
+         Relating to IETF Documents
+
+         (http://trustee.ietf.org/license-info).
+
+         This version of this YANG module is part of RFC XXXX; see
+
+         the RFC itself for full legal notices.";
+
+       revision "2014-05-18" {
+
+         description
+
+           "Initial version";
+
+         reference "RFC XXXX";
+
+       }
+
+       // feature statements
+
+       feature auto-scale {
+
+         description "Support auto scaling.";
+
+       }
+
+       container vnfis {
+
+         description
+
+           "VNF instances configuration parameters.";
+
+         list vnfi {
+
+           key id;
+
+           description
+
+             "The list of VNF instance configuration parameters.";
+
+           leaf id {
+
+             type uint32;
+
+             description
+
+               "the id of VNF instance.";
+
+           }
+
+           leaf vnfd-id {
+
+             type leafref {
+
+               path "/vnfd:vnfds/vnfd:vnfd/vnfd:id";
+
+             }
+
+             description "VNF descriptor ID";
+
+           }
+
+           leaf flavor-id {
+
+             type leafref {
+
+               path "/vnfd:vnfds/vnfd:vnfd/vnfd:deploy-flavors/vnfd:deploy-flavor-id";
+
+             }
+
+             description "VNF flavor ID";
+
+           }
+
+           container external-attachments {
+
+             list external-attachment {
+
+               key connection-point-id;
+
+               leaf connection-point-id {
+
+                 type leafref {
+
+                   path "/vnfd:vnfds/vnfd:vnfd/vnfd:connection-points/vnfd:connection-point/vnfd:id";
+
+                 }
+
+                 description "VNF connection point ID to be attached with a virtual link.";
+
+               }
+
+               leaf virtual-link-id {
+
+                 type leafref {
+
+                   path "/vld:vlds/vld:vld/vld:id";
+
+                 }
+
+                 description "virtual link ID attached to the VNF connection point";
+
+               }
+
+             }
+
+           }
+
+           container scale-policy {
+
+
+             if-feature auto-scale;
+
+             leaf policy-id {
+
+               type leafref {
+
+                 path "/vnfd:vnfds/vnfd:vnfd/vnfd:auto-scale-policies/vnfd:auto-scale-policy/vnfd:policy-id";
+
+               }
+
+               description
+
+                 "auto scaling policy ID";
+
+             }
+
+             leaf-list criteria-value {
+
+               type uint32;
+
+               description
+
+                 "A set of criteria value in the policy rules";
+
+             }
+
+             leaf target-flavor-id {
+
+               type leafref {
+
+                 path "/df:dfs/df:df/df:df-id";
+
+               }
+
+               description
+
+                 "The target deployment flavor ID";
+
+             }
+
+
+           }
+
+         }
+
+       }
+
+   }
+

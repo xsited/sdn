@@ -1,0 +1,427 @@
+/*
+5. Data Model of Virtualization Deployment Unit (VDU)
+
+   VDU models the deployment and operational behavior of a subset of a
+   VNF instance, or the entire VNF instance if it was not componentized
+   in subsets.
+
+   It specifies various resource requirements, such as CPU, memory,
+   storage and etc. It can also specify the VNF operating behaviors,
+   which could be embedded in scripts when the VNF instance is
+   initialized, terminated or shut down.
+
+
+5.1. VDU Module Structure
+
+   module: ietf-vdus
+
+      +--rw vdus
+
+         +--rw vdu* [id]
+
+            +--rw id                 yang:uuid
+
+            +--rw instance_num?      string
+
+            +--rw vm_image?          string
+
+            +--rw resource
+
+            |  +--rw cpu
+
+            |  |  +--rw vCPU_num?    uint32
+
+            |  |  +--rw vCPU_spec* [name]
+
+            |  |     +--rw name           string
+
+            |  |     +--rw description?   string
+
+            |  |     +--rw value?         uint32
+
+            |  +--rw memory
+
+            |  |  +--rw memory_size?   uint32
+
+            |  |  +--rw memory_spec* [name]
+
+            |  |     +--rw name           string
+
+            |  |     +--rw description?   string
+
+            |  |     +--rw value?         uint32
+
+            |  +--rw disk
+
+            |  |  +--rw disk_size?   uint32
+
+            |  |  +--rw disk_KQI* [name]
+
+            |  |     +--rw name           string
+
+            |  |     +--rw description?   string
+
+            |  |     +--rw value?         uint32
+
+            |  +--rw vnic
+
+            |     +--rw vnic_num?   uint32
+
+            +--rw workflow_script
+
+               +--rw init?                string
+
+               +--rw terminate?           string
+
+               +--rw graceful-shutdown?   string
+
+
+
+5.2. VDU YANG Module
+
+
+*/
+module ietf-vdus {
+
+       namespace "urn:ietf:params:xml:ns:yang:ietf-vdus";
+
+       prefix "vdu";
+
+       import ietf-yang-types {
+
+         prefix yang;
+
+       }
+
+        organization "";
+
+        contact "TBD";
+
+       description
+
+        "This module defines a VNF Deployment Unit.
+
+         Copyright (c) 2014 IETF Trust and the persons
+
+         identified as authors of the code.  All rights reserved.
+
+         Redistribution and use in source and binary forms, with or
+
+         without modification, is permitted pursuant to, and subject
+
+         to the license terms contained in, the Simplified BSD License
+
+         set forth in Section 4.c of the IETF Trust's Legal Provisions
+
+         Relating to IETF Documents
+
+         (http://trustee.ietf.org/license-info).
+
+         This version of this YANG module is part of RFC XXXX; see
+
+         the RFC itself for full legal notices.";
+
+       revision "2014-05-18" {
+
+         description
+
+           "Initial version";
+
+         reference
+
+           "RFC XXXX";
+
+       }
+
+       container vdus {
+
+         description
+
+           "Vdus used in a vnfd";
+
+         list vdu {
+
+
+           key id;
+
+           description
+
+             "Vdu key";
+
+           leaf id {
+
+             type yang:uuid;
+
+             description
+
+               "VDU ID";
+
+           }
+
+           leaf instance-num {
+
+             type uint16;
+
+             description
+
+               "Number of instances of the said VDU which shall be instantiated";
+
+           }
+
+           leaf vm-image {
+
+             type string;
+
+             description
+
+               "Reference to a VM image";
+
+           }
+
+           container resource {
+
+             description
+
+               "The required resource";
+
+             container cpu {
+
+               description
+
+                 "The required computation resource";
+
+               leaf vCPU_num {
+
+                 type uint32;
+
+                 description
+
+                   "The number of virtual CPU units";
+
+               }
+
+               list vCPU-spec {
+
+                 key "name";
+
+                 description
+
+                   "Processor characteristics for the VDU";
+
+                 leaf name {
+
+                   type string;
+
+                   description
+
+                     "Name of vCPU-spec";
+
+                 }
+
+
+                 leaf description {
+
+                   type string;
+
+                   description
+
+                     "Description of vCPU-spec";
+
+                 }
+
+                 leaf value {
+
+                   type uint32;
+
+                   description
+
+                     "Value of vCPU-spec";
+
+                 }
+
+               }
+
+             }
+
+             container memory {
+
+               description
+
+                 "The required memory resource";
+
+               leaf memory_size {
+
+                 type uint32;
+
+                 description
+
+                   "Memory size, unit:MBytes";
+
+               }
+
+
+               list memory-spec {
+
+                 key name;
+
+                 description
+
+                   "Memory characteristics for the VDU";
+
+                 leaf name {
+
+                   type string;
+
+                   description
+
+                     "Name of memory-spec";
+
+                 }
+
+                 leaf description {
+
+                   type string;
+
+                   description
+
+                     "Description of memory-spec";
+
+                 }
+
+                 leaf value {
+
+                   type uint32;
+
+                   description
+
+                     "Value of memory-spec";
+
+                 }
+
+               }
+
+             }
+
+             container disk {
+
+               description
+
+                 "The required storage resource";
+
+               leaf disk-size {
+
+                 type uint32;
+
+                 description
+
+                   "Virtual storage size, unit:MBytes";
+
+               }
+
+               list disk-KQI {
+
+                 key name;
+
+                 description
+
+                   "Storage characteristics in the VDU";
+
+                 leaf name {
+
+                   type string;
+
+                   description
+
+                     "Name of disk-KQI";
+
+                 }
+
+
+                 leaf description {
+
+                   type string;
+
+                   description
+
+                     "Description of disk-KQI";
+
+                 }
+
+                 leaf value {
+
+                   type uint32;
+
+                   description
+
+                     "Value of disk-KQI";
+
+                 }
+
+               }
+
+             }
+
+             container vnic {
+
+               description
+
+                 "Virtual network interface card (vnic) resource";
+
+               leaf vnic-num {
+
+                 type uint32;
+
+                 description
+
+                   "The total number of virtual vnic";
+
+               }
+
+             }
+
+           }
+
+           container workflow-script {
+
+             description
+
+               "VDU workflow script";
+
+             leaf init {
+
+               type string;
+
+               description
+
+                 "VDU initialization script";
+
+             }
+
+             leaf terminate {
+
+               type string;
+
+               description
+
+                 "VDU termination script";
+
+             }
+
+             leaf graceful-shutdown {
+
+               type string;
+
+               description
+
+                 "VDU graceful shutdown script";
+
+             }
+
+           }
+
+         }
+
+       }
+
+   }
+

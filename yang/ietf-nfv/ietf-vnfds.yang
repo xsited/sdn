@@ -1,0 +1,474 @@
+/*
+8. Data Model of Virtual Network Function Descriptor (VNFD)
+
+   VNFD describes the deployment and operational behavior of a VNF.
+
+   The main objective of VNF modeling will include:
+
+   - Basic VNF attributes: The core information, such as VNF name,
+   version, function description.
+
+   - Deployment attributes: It specifies the infrastructure resource
+   requirements in case of  VNF deployment, such as virtual CPU, memory
+   and disk requirements. It usually refer to a set of deployment flavor,
+   which provide the detail requirement. It also specifies the workflow
+   during the VNF initialization, termination, graceful shutdown.
+
+   - Interface attributes: It represents a set of external interfaces
+   exposed by this VNF, Here Connection-point was used as a term to
+   express those interfaces, Each connection-point will refer to a
+   virtualization link.
+
+   - Automatic scale policy attributes: It represents automatic scale
+   policy meta data, which include the criteria parameter,action-type,
+   and etc.
+
+8.1. VNFD Module Structure
+
+   module: ietf-vnfds
+
+      +--rw vnfds
+
+         +--rw vnfd* [id]
+
+            +--rw name?                  string
+
+            +--rw id                     yang:uuid
+
+            +--rw description?           string
+
+            +--rw vendor?                string
+
+            +--rw descriptor-version?    string
+
+            +--rw version?               string
+
+            +--rw deploy-flavors
+
+            |  +--rw deploy-flavor-id*   leafref
+
+            +--rw workflow_script
+
+            |  +--rw init?                string
+
+            |  +--rw terminate?           string
+
+            |  +--rw graceful-shutdown?   string
+
+            +--rw connection-points
+
+            |  +--rw connection-point* [id]
+
+            |     +--rw id      yang:uuid
+
+            |     +--rw name?   string
+
+            +--rw monitor-paras
+
+            |  +--rw name*   enumeration
+
+            +--rw auto-scale-policies
+
+               +--rw auto-scale-policy* [policy-id]
+
+                  +--rw policy-id    string
+
+                  +--rw criteria
+
+                  |  +--rw criterion* [monitor-para-name]
+
+                  |     +--rw monitor-para-name    leafref
+
+
+                  |     +--rw expression?          enumeration
+
+                  +--rw actions
+
+                     +--rw action* [action-name]
+
+                        +--rw action-name    enumeration
+
+8.2. VNFD YANG Module
+*/
+
+   module ietf-vnfds {
+
+       namespace "urn:ietf:params:xml:ns:yang:ietf-vnfds";
+
+       prefix "vnfd";
+
+       import ietf-yang-types {
+
+         prefix yang;
+
+       }
+
+       import ietf-dfs {
+
+         prefix df;
+
+       }
+
+        organization "";
+
+        contact "TBD";
+
+       description
+
+
+        "This module defines a template for other YANG modules.
+
+         Copyright (c) 2014 IETF Trust and the persons
+
+         identified as authors of the code.  All rights reserved.
+
+         Redistribution and use in source and binary forms, with or
+
+         without modification, is permitted pursuant to, and subject
+
+         to the license terms contained in, the Simplified BSD License
+
+         set forth in Section 4.c of the IETF Trust's Legal Provisions
+
+         Relating to IETF Documents
+
+         (http://trustee.ietf.org/license-info).
+
+         This version of this YANG module is part of RFC XXXX; see
+
+         the RFC itself for full legal notices.";
+
+       revision "2014-05-18" {
+
+         description
+
+           "Initial version";
+
+         reference "RFC XXXX";
+
+       }
+
+       container vnfds {
+
+         description
+
+
+           "vnfd configuration parameters.";
+
+         list vnfd {
+
+           key id;
+
+           description
+
+             "The list of vnfd configuration parameters.";
+
+           leaf name {
+
+             type string;
+
+             description
+
+               "The name of the vnf descriptor.";
+
+           }
+
+           leaf id {
+
+             type yang:uuid;
+
+             description
+
+               "The UUID of the vnf descriptor.";
+
+           }
+
+           leaf description {
+
+             type string;
+
+             description
+
+               "The description of the vnf descriptor.";
+
+           }
+
+
+           leaf vendor {
+
+             type string;
+
+             description
+
+               "The vendor of the vnf descriptor.";
+
+           }
+
+           leaf descriptor-version {
+
+             type string;
+
+             description
+
+               "The version of the vnf descriptor.";
+
+           }
+
+           leaf version {
+
+             type string;
+
+             description
+
+               "The version of the vnf software.";
+
+           }
+
+           container deploy-flavors {
+
+             description
+
+               "Deployment Flavor configuration parameters.";
+
+             leaf-list deploy-flavor-id {
+
+               type leafref {
+
+                 path "/df:dfs/df:df/df:df-id";
+
+               }
+
+               description
+
+                 "The list of deployment flavor configuration parameters.";
+
+             }
+
+           }
+
+           container workflow_script {
+
+             description
+
+               "The VDU workflow including the functional script. ";
+
+             leaf init {
+
+               type string;
+
+               description
+
+                 "The VDU initiation script.";
+
+             }
+
+             leaf terminate {
+
+               type string;
+
+               description
+
+                 "The VDU termination script.";
+
+             }
+
+
+             leaf graceful-shutdown {
+
+               type string;
+
+               description
+
+                 "The VDU graceful shutdown script.";
+
+             }
+
+           }
+
+           container connection-points {
+
+             description
+
+               "It describes an external interface exposed by this VNF enabling connection with a VL..";
+
+             list connection-point {
+
+               key id;
+
+               description
+
+                 "The connection point exposed by the VNF enabling connection with a VLD.";
+
+               leaf id {
+
+                 type yang:uuid;
+
+                 description
+
+                   "The unique identifier of connection point.";
+
+               }
+
+               leaf name {
+
+                 type string;
+
+                 description
+
+                   "The name of connection point.";
+
+               }
+
+             }
+
+           }
+
+           container monitor-paras {
+
+             description
+
+               "Monitoring parameter, which can be tracked for this VNF.";
+
+             leaf-list name {
+
+               type enumeration {
+
+                 enum cpu-utili;
+
+                 enum memory-consumption;
+
+                 enum bandwidth-consumption;
+
+                 enum calls-per-secon;
+
+                 enum number-of-subscriber;
+
+                 enum num-of-rules;
+
+                 enum flows-per-second;
+
+               }
+
+               description
+
+                 "A list of monitor parameters.";
+
+             }
+
+           }
+
+           container auto-scale-policies {
+
+             description
+
+               "The policy of automatic scale in/out.";
+
+             list auto-scale-policy {
+
+               key policy-id;
+
+               description
+
+                 "The unique identifier of automatic scale policy.";
+
+               leaf policy-id {
+
+                   type string;
+
+               }
+
+               container criteria {
+
+                 description
+
+                   "The auto-scale criteria parameter. Note that the default logical operation among these rules is 'OR'.";
+
+                 list criterion {
+
+                   key monitor-para-name;
+
+                   description
+
+                     "A list of rules";
+
+                   leaf monitor-para-name {
+
+                     type leafref {
+
+                       path "../../../../../monitor-paras/name";
+
+                     }
+
+                     description
+
+                       "The name of monitor parameter.";
+
+                   }
+
+                   leaf expression {
+
+                     type enumeration {
+
+                       enum "eq";
+
+                       enum "neq";
+
+                       enum "lt";    //less than
+
+                       enum "gt";    //greater than
+
+                     }
+
+                     description
+
+                       "The logical criteria expression.";
+
+                   }
+
+                 }
+
+               }
+
+               container actions {
+
+                 description
+
+                   "Action configuration parameters.";
+
+                 list action {
+
+                   key action-name;
+
+                   description
+
+                     "A list of configured action.";
+
+                   leaf action-name {
+
+                     type enumeration {
+
+                       enum "scale-out";
+
+                       enum "scale-in";
+
+                     }
+
+                     description
+
+                       "The type of action.";
+
+                   }
+
+                 }
+
+               }
+
+             }
+
+           }
+
+         }
+
+       }
+
+   }

@@ -2143,6 +2143,6 @@ ccap_I_ccap_group_I_management_I_snmp_I_notification_receiver_config_I_notificat
 ccap_I_ccap_group_I_management_I_snmp_I_notification_receiver_config --> ccap_I_view_config_ref_grouping : uses 
 ccap_I_ccap --> ccap_I_ccap_group_grouping : uses 
 center footer
- <size:20> UML Generated : 2014-06-19 17:38 </size>
+ <size:20> UML Generated : 2014-07-09 08:36 </size>
  endfooter 
 @enduml 
