@@ -1,0 +1,452 @@
+module bgp-peer {
+  namespace "http://nordu.net/ns/ncs/bgp";
+  prefix bgp;
+
+  import ietf-inet-types { prefix inet;  }
+  import tailf-common    { prefix tailf; }
+  import tailf-ncs       { prefix ncs;   }
+
+  grouping prefix-limit {
+    container prefix-limit {
+      leaf maximum {
+        description "Maximum number of prefixes from a peer";
+        type uint32 { range "1..max"; }
+        default 50;
+      }
+      leaf teardown-limit-threshold {
+        description "Percentage of prefix-limit to start warnings";
+        type uint32 { range "1..100"; }
+        default 80;
+      }
+      leaf teardown-idle-timeout {
+        description "Timeout before attempting to restart peer";
+        type uint32 { range "1..2400"; }
+        default 60;
+      }
+    }
+  }
+
+  grouping bgp-peer-settings {
+    leaf description  { type string; }
+    leaf as-macro4    { type string; }
+    leaf as-macro6    { type string; }
+    leaf md5-sum      { type string; }
+
+    uses prefix-limit;
+  }
+
+  grouping bgp-peer-retrieve-info   {
+    tailf:action retrieve-info {
+      description "Fill in service values using whois information";
+      tailf:actionpoint bgp-peer-retrieve-info { }
+      input { }
+      output {
+        leaf result { type string; }
+      }
+    }
+  }
+
+  grouping bgp-peer-delete-neighbors {
+    tailf:action delete-neighbors {
+      description "Delete pre-existing bgp neighbors and policies";
+      tailf:actionpoint bgp-peer-delete-neighbors { }
+      input { }
+      output {
+        leaf result { type string; }
+      }
+    }
+  }
+
+  grouping bgp-peer-update-as-filter {
+    tailf:action update-as-filter {
+      description "Update as-path filter for a BGP service";
+      tailf:actionpoint bgp-peer-update-as-filter { }
+      input {
+          leaf force { type boolean; default false; }
+      }
+      output {
+        leaf result { type string; }
+      }
+    }
+  }
+
+  grouping bgp-customer-update-prefix-list {
+    tailf:action update-prefix-list {
+      description "Update prefix list for a BGP service";
+      tailf:actionpoint bgp-customer-update-prefix-list { }
+      input {
+          leaf force { type boolean; default false; }
+      }
+      output {
+        leaf result { type string; }
+      }
+    }
+  }
+
+  grouping bgp-peer-mass-update-as-filters {
+    tailf:action mass-update-as-filters {
+      description "Update as-path filters for all BGP services";
+      tailf:actionpoint bgp-peer-mass-update-as-filters { }
+      input { }
+      output {
+        leaf result { type string; }
+      }
+    }
+  }
+
+  grouping bgp-customer-mass-update-prefix-lists {
+    tailf:action mass-update-prefix-lists {
+      description "Update prefix lists for all BGP customers";
+      tailf:actionpoint bgp-customer-mass-update-prefix-lists { }
+      input { }
+      output {
+        leaf result { type string; }
+      }
+    }
+  }
+
+  augment /ncs:services/ncs:service/ncs:type/ncs:service-type-choice {
+    case bgp-peer {
+      container bgp-peer {
+
+        leaf as {
+          type inet:as-number;
+          mandatory true;
+
+          must "not (/ncs:ncs/ncs:sm/ncs:service" +
+            "[ncs:object-id != current()/../../ncs:object-id]/ncs:type/bgp:bgp-peer" +
+            "[as = current()/bgp:as])" {
+            error-message "An AS cannot be defined in BGP peers";
+            tailf:dependency ".";
+          }
+        }
+
+        leaf auto-update {
+            type boolean;
+            default true;
+        }
+
+        leaf-list import-rules {
+          description "Import rules for peering";
+          type string;
+          ordered-by user;
+        }
+
+         leaf-list export-rules {
+           description "Export rules for peering";
+           type string;
+           ordered-by user;
+        }
+
+        uses bgp-peer-retrieve-info;
+        uses bgp-peer-delete-neighbors;
+        uses bgp-peer-update-as-filter;
+
+        uses bgp-peer-settings;
+
+        list exchange-points {
+          key exchange-point;
+
+          leaf exchange-point {
+            description "Exchange point to peer on";
+            type leafref {
+              path "/ncs:services/ncs:properties/bgp:bgp-peer/bgp:exchange-points/bgp:name";
+            }
+          }
+
+          leaf as {
+            description "Local AS number for this IX (overrides the service AS)";
+            type inet:as-number;
+            tailf:default-ref '../../as';
+          }
+
+          leaf md5-sum {
+            description "Local MD5 sum for this IX (overrides the service md5-sum)";
+            type string;
+          }
+
+          leaf-list import-rules {
+            description "Import rules for peering";
+            type string;
+            ordered-by user;
+          }
+
+          leaf-list export-rules {
+            description "Export rules for peering";
+            type string;
+            ordered-by user;
+          }
+
+          list peering {
+            key ip;
+            leaf ip {
+              description "Neighbor IP address(es) for peering";
+              type inet:ip-address;
+            }
+
+            leaf md5-sum {
+              description "MD5 sum for the specific peering session (overrides the service and ix md5-sum)";
+              type string;
+            }
+
+            leaf as {
+              description "Local AS number for this peering (overrides the IX AS)";
+              type inet:as-number;
+              tailf:default-ref '../../as';
+            }
+
+            leaf-list import-rules {
+              description "Import rules for peering";
+              type string;
+              ordered-by user;
+            }
+
+            leaf-list export-rules {
+              description "Export rules for peering";
+              type string;
+              ordered-by user;
+            }
+          }
+        }
+      }
+    }
+    case bgp-customer {
+      container bgp-customer {
+
+        leaf as {
+          type inet:as-number;
+          mandatory true;
+
+          must "not (/ncs:ncs/ncs:sm/ncs:service" +
+            "[ncs:object-id != current()/../../ncs:object-id]/ncs:type/bgp:bgp-customer" +
+            "[as = current()/bgp:as])" {
+            error-message "An AS cannot be defined in BGP customers";
+            tailf:dependency ".";
+          }
+        }
+
+        leaf auto-update {
+          type boolean;
+          default true;
+        }
+
+        leaf-list import-rules {
+          description "Import rules for service";
+          type string;
+          ordered-by user;
+        }
+
+        leaf-list export-rules {
+          description "Export rules for service";
+          type string;
+          ordered-by user;
+        }
+
+        leaf-list prefix-list {
+          description "Manually updated IPv4 prefix list";
+          type inet:ipv4-prefix;
+        }
+
+        leaf-list prefix-list-v6 {
+          description "Manually updated IPv6 prefix list";
+          type inet:ipv6-prefix;
+        }
+
+        leaf prefix-list-delta-limit {
+          description "Percentage limit for maximum automated IPv4 prefix list update";
+          type uint8;
+        }
+
+        leaf prefix-list-delta-limit-v6 {
+          description "Percentage limit for maximum automated IPv6 prefix list update";
+          type uint8;
+        }
+
+        leaf bfd-minimum-interval {
+          description "Minimum BFD interval";
+          type uint32 { range "1..255000"; }
+        }
+
+        uses bgp-customer-update-prefix-list;
+        uses bgp-peer-settings;
+
+        list routers {
+          description "Routers that the customer peer on";
+          key router;
+
+          leaf router {
+            description "Customer router to peer on";
+            type leafref {
+              path "/ncs:devices/ncs:device/ncs:name";
+            }
+          }
+          uses prefix-limit;
+
+          leaf md5-sum {
+            description "MD5 sum for this router (overrides the service md5-sum)";
+            type string;
+          }
+
+          leaf description  {
+            type string;
+          }
+
+          leaf-list import-rules {
+            description "Import rules for router";
+            type string;
+            ordered-by user;
+          }
+
+          leaf-list export-rules {
+            description "Export rules for router";
+            type string;
+            ordered-by user;
+          }
+
+          leaf bfd-minimum-interval {
+            description "Minimum BFD interval";
+            type uint32 { range "1..255000"; }
+          }
+
+          list peering {
+            key ip;
+            leaf ip {
+              description "Customer IP address(es) for peering";
+              type inet:ip-address;
+            }
+
+            leaf description  {
+              type string;
+            }
+
+            leaf local-address {
+              description "Local IP address(es) for peering";
+              type inet:ip-address;
+            }
+
+            uses prefix-limit;
+
+            leaf md5-sum {
+              description "MD5 sum for the specific peering session (overrides the service and router md5-sum)";
+              type string;
+            }
+
+            leaf-list import-rules {
+              description "Import rules for peering";
+              type string;
+              ordered-by user;
+            }
+
+            leaf-list export-rules {
+              description "Export rules for peering";
+              type string;
+              ordered-by user;
+            }
+
+            leaf bfd-minimum-interval {
+              description "Minimum BFD interval";
+              type uint32 { range "1..255000"; }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Properties
+  augment /ncs:services/ncs:properties {
+    container bgp-peer {
+
+      uses bgp-peer-mass-update-as-filters;
+
+      list exchange-points {
+
+        key name;
+        leaf name { type string; }
+
+        leaf routing-instance {
+            description "Place neighbor entries for this IX under a certain routing-instance";
+            type string;
+        }
+
+        list router {
+          // there should be at least one of these, but I cannot get the must count to work
+          key name;
+          leaf name {
+            description "Router at this exchange point";
+            type leafref {
+              path /ncs:devices/ncs:device/ncs:name;
+            }
+            mandatory true;
+          }
+          leaf-list prefixes {
+            description "Prefixes used at this IX.";
+            type inet:ip-prefix;
+          }
+        }
+
+        leaf-list aliases {
+          description "Alternative names for the exchange point";
+          type string;
+        }
+
+        leaf-list import-rules {
+          description "Policies for the exchange point.";
+          type string;
+        }
+
+      }
+
+      leaf irr-database {
+        description "Internet Routing Registry whois server to query";
+        type inet:host;
+        default "whois.radb.net";
+      }
+
+      leaf as-filter-delta-limit {
+        description "Percentage limit for maximum automated AS filter update";
+        type uint8;
+        default 15;
+      }
+
+    }
+  }
+  augment /ncs:services/ncs:properties {
+    container bgp-customer {
+
+      uses bgp-customer-mass-update-prefix-lists;
+
+      leaf bgp-group {
+        description "The name of the customer BGP group.";
+        type string;
+      }
+
+      leaf bgp-group-ipv6 {
+        description "The name of the customer IPv6 BGP group.";
+        type string;
+      }
+
+      leaf irr-database {
+        description "Internet Routing Registry whois server to query";
+        type inet:host;
+      }
+
+      leaf irr-protocol {
+        description "Internet Routing Registry whois protocol (irrd or ripe)";
+        type string;
+      }
+
+      leaf prefix-list-delta-limit {
+        description "Percentage limit for maximum automated IPv4 prefix list update";
+        type uint8;
+      }
+
+      leaf prefix-list-delta-limit-v6 {
+        description "Percentage limit for maximum automated IPv6 prefix list update";
+        type uint8;
+      }
+    }
+  }
+}
+
+

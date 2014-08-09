@@ -1,0 +1,110 @@
+module vpnaas {
+	leaf vpn-id	{
+		descsription
+		"uuid-str	N/A	R	generated	N/A	UUID for VPNService Object"
+	}
+
+	leaf tenant_id	{
+		descsription
+		"uuid-str	Yes	CR	None	valid tenant_id	UUID of the tenant for the vpn service"
+	}
+
+	leaf vpn-name	{
+		description
+		"string	no	CRU	None	N/A	name of the VPN Service"
+	}
+
+	leaf vpn-description	{
+		description
+		"string	no	CRU	None	N/A	Description of the VPN Service"
+	}
+
+
+	leaf vpn-status	
+		"string	N/A	R	N/A	N/A	Indicates whether ipsec vpnservice is currently operational. Possible values include:
+		type enumeration {
+			emum "active" {
+				value 1;
+			}
+			emum "down" {
+				value 2;
+			}
+			emum "up" {
+				value 3;
+			}
+			emum "error" {
+				value 4;
+			}
+		}
+	}
+
+
+	leaf admin_state_up {
+		description
+		"bool	N/A	CRU	TRUE	true/false	Administrative state of vpnservice. If false (down), port does not forward packets"
+	}
+
+	leaf subnet_id	{
+		description
+		"uuid	yes*( subnet_id is needed)	CR	N/A	Valid subnet id	Subnet id in which the tenant wants the vpn service"
+	}
+
+	leaf router_id	{
+		description
+		"uuid	yes	CR	N/A	Valid router id	Router id to which the vpn service is inserted"
+	}
+
+}
+
+
+IKEPolicies Resource
+Attribute	Type	Required	CRUD	DefaultValue	Validation Constraint	Notes
+id	uuid-str	N/A	R	generated	N/A	UUID for  the  IKEPolicy
+tenant_id	uuid-str	Yes	CR	None	valid tenant_id	UUID for owner of the vpn service
+name	string	yes	CRU	None	N/A	friendly name for the ikepolicy
+description	string	no	CRU	None	N/A	Description of the ikepolicy
+auth_algorithm	string	no	CRU	sha1	N/A	Authentication Hash algorithms“sha1”.
+encryption_algorithm	string	no	CRU	aes-128	N/A	Encryption Algorithms 3des, aes-128, aes-256, aes-192 etc.,
+phase1_negotiation_mode	string	no	CRU	Main Mode	N/A	IKE mode Main mode
+pfs	string	no	CRU	Group5	N/A	Perfect Forward Secrecy  ( Group2, Group5, Group14)
+ike_version	string	no	CRU	v1	N/A	v1 or v2 version
+lifetime
+units	string	no	CRU	seconds	"seconds"	Lifetime of the  SA unit in ‘seconds’
+value	integer	no	CRU	3600 for seconds	Integer	Lifetime value in  seconds (value >= 60)
+IPsecPolicies Resource
+Attribute	Type	Required	CRUD	DefaultValue	Validation Constraint	Notes
+id	uuid-str	N/A	R	generated	N/A	UUID for  the  IPsecPolicy
+tenant_id	uuid-str	Yes	CR	None	valid tenant_id	UUID for owner of the vpn service
+name	string	yes	CRU	None	N/A	friendly name for the IPsecPolicy
+description	string	no	CRU	None	N/A	Description of  the policy
+transform_protocol	string	no	CRU	ESP	N/A	Tranform  Protocol used such as ESP or AH or AH-ESP
+encapsulation_mode	string	no	CRU	tunnel	N/A	Encapsulation mode either Tunnel mode or transport mode
+auth_algorithm	string	no	CRU	sha1	N/A	Authentication algorithm sha1
+encryption_algorithm	string	no	CRU	aes-128	N/A	Encryption Algorithms 3des, aes-128, aes-256, aes-192
+pfs	string	no	CRU	group5	N/A	Perfect Forward Secrecy  ( group2, group5, group14)
+lifetime
+units	string	no	CRU	seconds	"seconds	Lifetime of the  SA unit in ‘seconds’
+value	integer	no	CRU	3600 for seconds	Integer	Lifetime value in  seconds (value >= 60)
+ipsec-site-connection Resource
+Attribute	Type	Required	CRUD	DefaultValue	Validation Constraint	Notes
+id	uuid-str	N/A	R	generated	N/A	UUID for  the vpns connection
+tenant_id	uuid-str	Yes	CR	None	valid tenant_id	UUID for owner of the  vpn service
+name	string	no	CRU	None	N/A	name for ipsec-site-connection
+description	string	no	CRU	None	N/A	Description of the ipsec-site-connection
+peer_address	ipaddress(v4 or v6)	yes	CRU	N/A	valid ip address (v4 or v6)	peer vpn gateway public address or FQDN
+peer_id	string	yes	CRU	N/A	N/A	Peer identifier ( Can be name, string or FQDN )
+peer_cidrs	list[string]	yes	CRU	N/A	list of valid cidr in the form <network_address>/<prefix>	Peer private cidrs
+route_mode	string	no	R	static	static	Static
+mtu	integer	no	CRU	1500	Integer	mtu - maximum transmission unit to address fragmentation ( value>=68 )
+auth_mode	string	no	R	psk	psk/certs	Authentication mode, either PSK or certificate
+psk	string	yes	CRU	N/A	NO	Pre-shared-key any string.
+initiator	string	no	CRU	bi-directional	"bi-directional / response-only"	Whether this VPN can only respond to connections or can initiate as well
+admin_state_up	bool	N/A	CRU	TRUE	"true / false"	Administrative state of vpn connection. If false (down), vpn concd nection does not forward packets
+status	string	N/A	R	N/A	N/A	Indicates whether vpn connection is currently operational. Possible values include:ACTIVE,DOWN,BUILD,ERROR
+ikepolicy_id	uuid	yes	CR	N/A	uuid of ikepolicy	uuid id of ikepolicy
+ipsecpolicy_id	uuid	yes	CR	N/A	uuid of ipsecpolicy	uuid id of ipsecpolicy
+vpnservice_id	uuid	yes	CR	N/A	uuid of vpnservice	service id of vpnservice
+dpd
+action	string	no	CRU	hold	"hold / clear / disabled /restart /restart_by_peer"	DPD actions controls the use of Dead Peer Detection Protocol. ( clear, hold, restart, disabled, restart-by-peer)
+interval	integer	no	CRU	30	> 0	sec for DPD delay
+timeout	integer	no	CRU	120	> 0 & > dpd_interval	sec for DPD timeout
