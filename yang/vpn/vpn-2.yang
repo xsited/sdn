@@ -1,0 +1,150 @@
+module vpn-2 {
+  namespace "http://nordu.net/ns/ncs/vpn";
+  prefix vpn;
+
+  import ietf-yang-types { prefix ietf; }
+  import tailf-common    { prefix tailf; }
+
+  typedef vlan-id {
+    type uint32 {
+      range "1..4095";
+    }
+  }
+
+  grouping vpn-router-interface {
+    leaf router {
+        type leafref {
+            path /ncs:devices/ncs:device/ncs:name;
+        }
+        mandatory true;
+    }
+    leaf interface {
+        type string;
+        mandatory true;
+    }
+  }
+
+  grouping vpn-register-service {
+    tailf:action register-service {
+      description "Manually register service in NI (in case automatic registration fails)";
+      tailf:actionpoint vpn-register-service { }
+      input { }
+      output {
+        leaf result { type string; }
+      }
+    }
+  }
+
+  augment /ncs:services/ncs:service/ncs:type/ncs:service-type-choice {
+    case vpn {
+      container vpn {
+
+        leaf vpn-type {
+            type string;
+            default "l2vpn";
+        }
+
+        container side-a {
+            uses vpn-router-interface;
+        }
+        container side-b {
+            uses vpn-router-interface;
+        }
+
+        leaf encapsulation-type {
+            type enumeration {
+                enum ethernet;
+                enum ethernet-vlan;
+            }
+        }
+
+        leaf vlan {
+            type vlan-id;
+            description "VLAN, should only be defined if encapsulation type is Ethernet-VLAN";
+        }
+
+        leaf vrf-target {
+            type string;
+            description "Network unique descriptor to pair interfaces into VPN";
+        }
+        leaf route-distinguisher {
+            type string;
+            description "Router unique descriptor for VPN interface";
+        }
+        leaf service-id {
+            type string;
+            description "Unique id for the service";
+        }
+
+        uses vpn-register-service;
+
+      }
+    }
+  }
+
+  // Properties
+  augment /ncs:services/ncs:properties {
+    container vpn {
+
+      leaf vrf-target-serial {
+          type ietf:zero-based-counter32;
+          description "Serial for creating VRF Target";
+      }
+
+      leaf route-distinguisher-serial {
+          type ietf:zero-based-counter32;
+          description "Serial for creating route distinguisher";
+      }
+
+    }
+  }
+
+}
+/*
+
+module vpn
+{
+    namespace "urn:cablelabs:vpn";
+    prefix "vpn";
+
+    import ietf-yang-types 	{ prefix yang; }
+    import ietf-inet-types 	{ prefix inet; }
+    import ietf-interfaces 	{ prefix if;   }
+    import ietf-ip 	        { prefix ip;   }
+
+    description "This module contains a collection of generic VPN definitions";
+    organization "CableLabs";
+    contact "Thomas Kee t.kee@cablelabs.com";
+    revision "2014-08-09" {
+        description "Initial revision of vpn";
+    }        
+    
+
+   list vpn {
+           key name;
+           leaf name { type string { length 64; } }
+           leaf protocol {
+               type enumeration {
+                   enum l2vpn;
+                   enum l3vpn;
+                   enum ssl;
+                   enum ipsec;
+               }
+           }
+           leaf topology {
+               type enumeration {
+                   enum hub-n-spoke;
+                   enum mesh;
+               }
+           }
+           list members {
+               key "device interface";
+               leaf device { ... }
+               leaf interface { ... }
+           }
+           list classifiers {
+           }
+       }
+}
+*/
+
