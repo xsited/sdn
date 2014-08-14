@@ -1,7 +1,49 @@
 module vpnaas
 {
-    grouping vpn-router-interface {
+    import ietf-yang-types 	{ prefix yang; }
+    import ietf-inet-types 	{ prefix inet; }
+    import ietf-interfaces 	{ prefix if;   }
+ 
+
+    description 
+	"This module contains a collection of generic VPN definitions";
+    organization 
+	"CableLabs";
+    contact 
+	"Thomas Kee t.kee@cablelabs.com";
+    revision "2014-08-09" {
+        description "Initial revision of vpn";
+    }        
+
+    typedef router-instance {
+        type instance-identifier;
+    }
+    typedef subscriber-instance {
+        type instance-identifier;
+    }
+    typedef circuit-instance {
+        type instance-identifier;
+    }
+    typedef device-instance {
+        type instance-identifier;
+    }
+    typedef service-instance {
+        type instance-identifier;
+    }
+    typedef router-instance {
+        type instance-identifier;
+    }
+    typedef subnet-instance {
+        type instance-identifier;
+    }
+
+    grouping router-interface {
+        leaf router-id {
+            type router-instance;
+        }
         leaf router {
+            description
+            " devices definitions";
             mandatory true;
         }
         leaf interface {
@@ -14,10 +56,56 @@ module vpnaas
         type enumeration {
             enum hub-n-spoke;
             enum mesh;
-            enum  tree;
+            enum tree64;
         }
     }
 
+
+    grouping subscriber-grouping {
+        leaf subscriber-id {
+            type subscriber-instance;
+        }
+        grouping flow-grouping  {
+            container flows {
+                list flows {
+                    key "flow-id";
+                    unique "flow-id";
+                    description
+                    "The list of all flow applied to this subscriber.";
+                }
+            }
+        }
+        grouping device-grouping  {
+            container devices {
+                list devices {
+                    key "device-id";
+                    unique "device-id";
+                    description
+                    "The list of all device applied to this subscriber.";
+                }
+            }
+        }
+        grouping circuit-grouping  {
+            container circuits {
+                list circuits {
+                    key "circuit-id";
+                    unique "circuit-id";
+                    description
+                    "The list of all circuits used for this subscriber.";
+                }
+            }
+        }
+        grouping tenant-grouping  {
+            container tenants {
+                list tenants {
+                    key "tenant-id";
+                    unique "tenant-id";
+                    description
+                    "The list of all tenant groups this subscriber belongs to";
+                }
+            }
+        }
+    }
 
     grouping circuit-grouping  {
 
@@ -27,17 +115,19 @@ module vpnaas
                 enum l3vpn;
                 enum ssl;
                 enum ipsec;
+                enum gre;
+                enum vxlan;
             }
-        default "l2vpn";
+            default "l2vpn";
         }
 
 
         container endpoint-a {
-            uses vpn-router-interface;
+            uses router-interface;
         }
 
         container endpoint-b {
-            uses vpn-router-interface;
+            uses router-interface;
         }
 
         leaf encapsulation-type {
@@ -52,24 +142,34 @@ module vpnaas
             description "VLAN, should only be defined if encapsulation type is Ethernet-VLAN";
         }
 
+        leaf mep-id {
+            type mep-id;
+        }
+
         leaf service-id {
-            type string;
+            type service-instance;
             description "Unique id for the service";
         }
 
-        leaf vpn-id	{
+        leaf circuit-id	{
+            type circuit-instance;
             descsription
             "uuid-str	N/A	R	generated	N/A	UUID for VPNService Object";
+            mandatory true;
         }
 
         leaf tenant-id	{
+            type tenant-instance;
             descsription
             "uuid-str	Yes	CR	None	valid tenant_id	UUID of the tenant for the vpn service";
+            mandatory true;
         }
 
         leaf subscriber-id	{
+            type subscriber-instance;
             descsription
             "uuid-str	Yes	CR	None	valid tenant_id	UUID of the tenant for the vpn service";
+            mandatory true;
         }
 
         leaf vpn-name	{
@@ -116,28 +216,33 @@ module vpnaas
             description
             "bool	N/A	CRU	TRUE	true/false	Administrative state of vpnservice. If false (down), port does not forward packets";
             type boolean;
-
+            default "True";
         }
 
         leaf subnet-id	{
             description
             "uuid	yes*( subnet_id is needed)	CR	N/A	Valid subnet id	Subnet id in which the tenant wants the vpn service";
+            type subnet-instance;
+            mandatory true;
         }
 
         leaf router-id	{
             description
             "uuid	yes	CR	N/A	Valid router id	Router id to which the vpn service is inserted";
+            type router-instance;
+            mandatory true;
         }
 
     }
 
 
+    // augment gen-oam and add mef-soam.yang
     rpc ping {
         description
         "Generate icmp and return response";
         input {
             leaf circuit_id {
-                use uuid;
+                 type circuit-instance;
             }
 
             leaf ecmp-choice {
@@ -149,46 +254,47 @@ module vpnaas
             list probe-interfaces {
                 key "interface";
                 leaf interface {
-                    type if:interface-ref;
-            }
-        }
+                    //type if:interface-ref;
+			type string;
+                 }
+             }
 
-        container source-address {
-            uses mep-address;
-            leaf mep-id {
-                type MEP-id;
-            }
-        }
-        container destination-address {
-            uses mep-address;
-            leaf mep-id {
-                type MEP-id;
-            }
-        }
-    }
-    output {
-        uses performance-metrics {
-            description
-            "Statistics";
-        }
-    }
-}
+             container source-address {
+                 uses mep-address;
+                 leaf mep-id {
+                     type MEP-id;
+                 }
+             }
+             container destination-address {
+                 uses mep-address;
+                 leaf mep-id {
+                     type MEP-id;
+                 }
+             }
+         }
+         output {
+             uses performance-metrics {
+                 description
+                 "Statistics";
+             }
+         }
+     }
 
-rpc iperf {
-    description
-    "Generate icmp and return response";
+     rpc iperf {
+         description
+         "Generate icmp and return response";
 
-    input {
-        leaf circuit_id {
-            use uuid;
-        }
+         input {
+             leaf circuit-id {
+                 type circuit-instance;
+             }
         leaf data_length {
             type uint16;
         default 64;
         }
         leaf duration {
             type uint16;
-        default 30;
+            default 30;
         }
         container source-address {
             uses mep-address;
@@ -202,50 +308,57 @@ rpc iperf {
                 type MEP-id;
             }
         }
-    }
+        }
     output {
         uses performance-metrics {
             description
             "Statistics";
         }
     }
-}
+    }
 
 
 
-grouping ike-policy-grouping
-{
+    grouping ike-policy-grouping
+    {
 
-    leaf id	{
+    leaf ike-policy-id	{
         description
         "uuid-str	N/A	R	generated	N/A	UUID for  the  IKEPolicy";
+        type instance-identifier;
     }
 
     leaf tenant-id	{
         description
         "uuid-str	Yes	CR	None	valid tenant_id	UUID for owner of the vpn service";
+        type tenant-instance;
+        mandatory true;
     }
 
-    leaf name {
+    leaf ike-policy-name {
         description
         "string	yes	CRU	None	N/A	friendly name for the ikepolicy";
+	type string { length 64;  }
     }
 
-    leaf description {
+    leaf ike-policy-description {
         description
         "string	no	CRU	None	N/A	Description of the ikepolicy";
+	type string;
     }
 
-    leaf auth_algorithm {
+    leaf auth-algorithm {
         description
         "string	no	CRU	sha1	N/A	Authentication Hash algorithms sha1";
         type enumeration {
             emum "sha1" {
                 value 1;
             }
+            default "sha1";
         }
     }
-    leaf encryption_algorithm {
+
+    leaf encryption-algorithm {
         description
         "string	no	CRU	aes-128	N/A	Encryption Algorithms 3des, aes-128, aes-256, aes-192 etc.,";
         type enumeration {
@@ -261,10 +374,11 @@ grouping ike-policy-grouping
             emum "aes-192" {
                 value 4;
             }
+            default "aes-128";
         }
     }
 
-    leaf phase1_negotiation_mode {
+    leaf phase1-negotiation-mode {
         description
         "string	no	CRU	Main Mode	N/A	IKE mode Main mode";
         type enumeration {
@@ -274,14 +388,18 @@ grouping ike-policy-grouping
             emum "main" {
                 value 2;
             }
+            default "main";
         }
     }
+
     leaf pfs {
         description
         "	string	no	CRU	Group5	N/A	Perfect Forward Secrecy  ( Group2, Group5, Group14)";
         type string { length 16; }
+        default "Group5";
     }
-    leaf ike_version{
+
+    leaf ike_version {
         description
         "string	no	CRU	v1	N/A	v1 or v2 version";
         type enumeration {
@@ -291,8 +409,10 @@ grouping ike-policy-grouping
             emum "v2" {
                 value 2;
             }
+            default "v1";
         }
     }
+
     conatiner lifetime {
         leaf units {
             description
@@ -301,163 +421,275 @@ grouping ike-policy-grouping
         leaf value {
             description
             "	integer	no	CRU	3600 for seconds	Integer	Lifetime value in  seconds (value >= 60)";
-            type int;
-        default 3600;
+            type uint32;
+            default 3600;
         }
+    }
     }
 
     grouping ipsec-policy-grouping
     {
-        leaf id	{
-            description
-            "uuid-str	N/A	R	generated	N/A	UUID for  the  IPsecPolicy";
-        }
-        leaf tenant_id	{
-            description
-            "uuid-str	Yes	CR	None	valid tenant_id	UUID for owner of the vpn service";
-        }
-        leaf name	{
-            description
-            "string	yes	CRU	None	N/A	friendly name for the IPsecPolicy";
-        }
-        leaf description	{
-            description
-            "string	no	CRU	None	N/A	Description of  the policy";
-        }
+    leaf ipsec-policy-id	{
+        description
+        "uuid-str	N/A	R	generated	N/A	UUID for  the  IPsecPolicy";
+        type instance-identifier;
+    }
+    leaf tenant-id	{
+        description
+        "uuid-str	Yes	CR	None	valid tenant_id	UUID for owner of the vpn service";
+        type tenant-instance;
+    }
+    leaf ipsec-policy-name	{
+        description
+        "string	yes	CRU	None	N/A	friendly name for the IPsecPolicy";
+        type string { length 64; }
+    }
+    leaf ipsec-policy-description	{
+        description
+        "string	no	CRU	None	N/A	Description of  the policy";
+        type string ;
+    }
 
-        leaf transform_protocol	{
-            description
-            "string	no	CRU	ESP	N/A	Tranform  Protocol used such as ESP or AH or AH-ESP";
+    leaf transform-protocol	{
+        description
+        "string	no	CRU	ESP	N/A	Tranform  Protocol used such as ESP or AH or AH-ESP";
+        type enumeration {
+            emum "esp" {
+                value 1;
+            }
+            emum "ah" {
+                value 2;
+            }
+            emum "ah-esp" {
+                value 3;
+            }
+            default "esp";
         }
+    }
 
-        leaf encapsulation_mode	{
-            description
-            "string	no	CRU	tunnel	N/A	Encapsulation mode either Tunnel mode or transport mode";
+    leaf encapsulation_mode	{
+        description
+        "string	no	CRU	tunnel	N/A	Encapsulation mode either Tunnel mode or transport mode";
+        type enumeration {
+            emum "tunnel" {
+                value 1;
+            }
+            emum "transparent" {
+                value 2;
+            }
+            default "tunnel";
         }
-        leaf auth_algorithm	{
+        leaf auth-algorithm	{
             description
             "string	no	CRU	sha1	N/A	Authentication algorithm sha1";
+            type enumeration {
+                emum "sha1" {
+                    value 1;
+                }
+            default "sha1";
+            }
         }
 
-        leaf encryption_algorithm	{
+        leaf encryption-algorithm	{
             description
             "string	no	CRU	aes-128	N/A	Encryption Algorithms 3des, aes-128, aes-256, aes-192";
+            type enumeration {
+                emum "3des" {
+                    value 1;
+                }
+                emum "aes-128" {
+                    value 2;
+                }
+                emum "aes-256" {
+                    value 3;
+                }
+                emum "aes-192" {
+                    value 4;
+                }
+                default "aes-128";
+            }
         }
 
-        leaf pfs	{
+        leaf pfs {
             description
             "string	no	CRU	group5	N/A	Perfect Forward Secrecy  ( group2, group5, group14)";
+            type string {length 16;}
+            default "Group5";
         }
         grouping lifetime-grouping {
 
             leaf units	{
                 description
                 "string	no	CRU	seconds	seconds	Lifetime of the  SA unit in ‘seconds’";
+                string { lengthn 16; }
+            default "seconds";
             }
             leaf value	{
                 description
                 "integer	no	CRU	3600 for seconds	Integer	Lifetime value in  seconds (value >= 60)";
+                type uint32;
+            default 3600;
             }
         }
     }
 
 
-    grouping ipsec-site-connection {
-        leaf id
+    grouping ipsec-site-connection-grouping
+    {
+        leaf ipsec-site-connection-id
         {
             description
             "uuid-str	N/A	R	generated	N/A	UUID for  the vpns connection";
+            type instance-identifier;
         }
-        leaf tenant_id
+        leaf tenant-id
         {
             description
             "uuid-str	Yes	CR	None	valid tenant_id	UUID for owner of the  vpn service";
+            type tenant-instance;
         }
-        leaf name
+        leaf ipsec-site-connection-name
         {
             description
             "string	no	CRU	None	N/A	name for ipsec-site-connection";
+            type string { length 64; }
         }
-        leaf description
+        leaf ipsec-site-connection-description
         {
             description
             "string	no	CRU	None	N/A	Description of the ipsec-site-connection";
+            type string;
         }
-        leaf peer_address
+        leaf peer-address
         {
             description
             "ipaddress(v4 or v6)	yes	CRU	N/A	valid ip address (v4 or v6)	peer vpn gateway public address or FQDN";
+            type inet:ip-address;
         }
 
-        leaf peer_id
+        leaf peer-id
         {
             description
             "string	yes	CRU	N/A	N/A	Peer identifier ( Can be name, string or FQDN )";
+            type instance-identifier;
+
         }
-        leaf peer_cidrs
+        leaf peer-cidrs
         {
             description
             "list[string]	yes	cru	n/a	list of valid cidr in the form <network_address>/<prefix>	peer private cidrs";
+            type instance-identifier;
         }
 
-        leaf route_mode
+        leaf route-mode
         {
             description
             "string	no	r	static	static	static";
+            type string { length 16; }
+        default "static";
         }
 
         leaf mtu
         {
             description
             "integer	no	cru	1500	integer	mtu - maximum transmission unit to address fragmentation ( value>=68 )";
+            type uint32 {
+                range 68..1500;
+            }
+            default 1500;
         }
-        leaf auth_mode
+
+        leaf auth-mode
         {
             description
             "string	no	r	psk	psk/certs	authentication mode, either psk or certificate";
+            type enumeration {
+                emum "psk" {
+                    value 1;
+                }
+                emum "certificate" {
+                    value 2;
+                }
+            default "psk";
+            }
         }
         leaf psk
         {
             description
             "string	yes	CRU	N/A	NO	Pre-shared-key any string.";
+            type string;
         }
 
         leaf initiator
         {
             description
             "string	no	CRU	bi-directional	bi-directional / response-only	Whether this VPN can only respond to connections or can initiate as well";
+            type enumeration {
+                emum "bi-directional" {
+                    value 1;
+                }
+                emum "response-only" {
+                    value 2;
+                }
+                default "bi-directional";
+            }
         }
 
-        leaf admin_state_up
+        leaf admin-state-up
         {
             description
             "bool	N/A	CRU	TRUE	true / false	Administrative state of vpn connection. If false (down), vpn concd nection does not forward packets";
+            type boolean;
+            default "true";
         }
+
 
         leaf status
         {
             description
             "string	N/A	R	N/A	N/A	Indicates whether vpn connection is currently operational. Possible values include:ACTIVE,DOWN,BUILD,ERROR";
+            type enumeration {
+                emum "active" {
+                    value 1;
+                }
+                emum "down" {
+                    value 2;
+                }
+                emum "up" {
+                    value 3;
+                }
+                emum "build" {
+                    value 4;
+                }
+                emum "error" {
+                    value 5;
+                }
+            }
         }
 
-        leaf ikepolicy_id
+        leaf ike-policy-id
         {
             description
             "uuid	yes	CR	N/A	uuid of ikepolicy	uuid id of ikepolicy";
+            type instance-identifier;
         }
 
-        leaf ipsecpolicy_id
+        leaf ipsec-policy-id
         {
             description
             "uuid	yes	CR	N/A	uuid of ipsecpolicy	uuid id of ipsecpolicy";
+            type instance-identifier;
         }
 
-        leaf vpnservice_id
+        leaf service-id
         {
             description
             "uuid	yes	CR	N/A	uuid of vpnservice	service id of vpnservice";
+            type service-instance;
         }
-        grouping dpd-grouping {
+
+        grouping dpd-grouping 
+	{
             leaf action
             {
                 description
@@ -468,283 +700,17 @@ grouping ike-policy-grouping
             {
                 description
                 "integer	no	CRU	30	> 0	sec for DPD delay";
+		type uint32;
+		default 30;
             }
             leaf timeout
             {
                 description
                 "integer	no	CRU	120	> 0 & > dpd_interval	sec for DPD timeout";
+		type uint32;
+		default 120;
             }
         }
     }
-}
-
-
-
-
-
-grouping ike-policy-grouping
-{
-
-leaf id	{
-    description
-    "uuid-str	N/A	R	generated	N/A	UUID for  the  IKEPolicy";
-}
-
-leaf tenant-id	{
-    description
-    "uuid-str	Yes	CR	None	valid tenant_id	UUID for owner of the vpn service";
-}
-
-leaf name {
-    description
-    "string	yes	CRU	None	N/A	friendly name for the ikepolicy";
-}
-
-leaf description {
-    description
-    "string	no	CRU	None	N/A	Description of the ikepolicy";
-}
-
-leaf auth_algorithm {
-    description
-    "string	no	CRU	sha1	N/A	Authentication Hash algorithms sha1";
-    type enumeration {
-        emum "sha1" {
-            value 1;
-        }
-    }
-}
-leaf encryption_algorithm {
-    description
-    "string	no	CRU	aes-128	N/A	Encryption Algorithms 3des, aes-128, aes-256, aes-192 etc.,";
-    type enumeration {
-        emum "3des" {
-            value 1;
-        }
-        emum "aes-128" {
-            value 2;
-        }
-        emum "aes-256" {
-            value 3;
-        }
-        emum "aes-192" {
-            value 4;
-        }
-    }
-}
-
-leaf phase1_negotiation_mode {
-    description
-    "string	no	CRU	Main Mode	N/A	IKE mode Main mode";
-    type enumeration {
-        emum "ike" {
-            value 1;
-        }
-        emum "main" {
-            value 2;
-        }
-    }
-}
-leaf pfs {
-    description
-    "	string	no	CRU	Group5	N/A	Perfect Forward Secrecy  ( Group2, Group5, Group14)";
-    type string { length 16; }
-}
-leaf ike_version{
-    description
-    "string	no	CRU	v1	N/A	v1 or v2 version";
-    type enumeration {
-        emum "v1" {
-            value 1;
-        }
-        emum "v2" {
-            value 2;
-        }
-    }
-}
-container lifetime {
-leaf units {
-    description
-    "string	no	CRU	seconds	seconds	Lifetime of the  SA unit in ‘seconds’";
-}
-leaf value {
-    description
-    "	integer	no	CRU	3600 for seconds	Integer	Lifetime value in  seconds (value >= 60)";
-    type int;
-default 3600;
-}
-}
-}
-
-grouping ipsec-policy-grouping
-{
-    leaf id	{
-        description
-        "uuid-str	N/A	R	generated	N/A	UUID for  the  IPsecPolicy";
-    }
-    leaf tenant_id	{
-        description
-        "uuid-str	Yes	CR	None	valid tenant_id	UUID for owner of the vpn service";
-    }
-    leaf name	{
-        description
-        "string	yes	CRU	None	N/A	friendly name for the IPsecPolicy";
-    }
-    leaf description	{
-        description
-        "string	no	CRU	None	N/A	Description of  the policy";
-    }
-
-    leaf transform_protocol	{
-        description
-        "string	no	CRU	ESP	N/A	Tranform  Protocol used such as ESP or AH or AH-ESP";
-    }
-
-    leaf encapsulation_mode	{
-        description
-        "string	no	CRU	tunnel	N/A	Encapsulation mode either Tunnel mode or transport mode";
-    }
-    leaf auth_algorithm	{
-        description
-        "string	no	CRU	sha1	N/A	Authentication algorithm sha1";
-    }
-
-    leaf encryption_algorithm	{
-        description
-        "string	no	CRU	aes-128	N/A	Encryption Algorithms 3des, aes-128, aes-256, aes-192";
-    }
-
-    leaf pfs	{
-        description
-        "string	no	CRU	group5	N/A	Perfect Forward Secrecy  ( group2, group5, group14)";
-    }
-    container lifetime {
-
-        leaf units	{
-            description
-            "string	no	CRU	seconds	seconds	Lifetime of the  SA unit in ‘seconds’";
-        }
-        leaf value	{
-            description
-            "integer	no	CRU	3600 for seconds	Integer	Lifetime value in  seconds (value >= 60)";
-        }
-    }
-}
-
-
-grouping ipsec-site-connection {
-   leaf id
-   {
-        description
-        "uuid-str	N/A	R	generated	N/A	UUID for  the vpns connection";
-   }
-   leaf tenant_id
-   {
-        description
-       "uuid-str	Yes	CR	None	valid tenant_id	UUID for owner of the  vpn service";
-   }
-   leaf name
-   {
-        description
-        "string	no	CRU	None	N/A	name for ipsec-site-connection";
-   }
-   leaf description
-   {
-        description
-        "string	no	CRU	None	N/A	Description of the ipsec-site-connection";
-   }
-   leaf peer_address
-   {
-         description
-        "ipaddress(v4 or v6)	yes	CRU	N/A	valid ip address (v4 or v6)	peer vpn gateway public address or FQDN";
-   }
-
-   leaf peer_id
-   {
-        description
-        "string	yes	CRU	N/A	N/A	Peer identifier ( Can be name, string or FQDN )";
-   }
-   leaf peer_cidrs
-   {
-        description
-        "list[string]	yes	CRU	N/A	list of valid cidr in the form <network_address>/<prefix>	Peer private cidrs";
-   }
-
-   leaf route_mode
-   {
-                description
-                "string	no	R	static	static	Static";
-   }
-
-   leaf mtu
-   {
-       description
-       "integer	no	CRU	1500	Integer	mtu - maximum transmission unit to address fragmentation ( value>=68 )";
-   }
-   leaf auth_mode
-   {
-       description
-       "string	no	R	psk	psk/certs	Authentication mode, either PSK or certificate";
-   }
-   leaf psk
-   {
-       description
-       "string	yes	CRU	N/A	NO	Pre-shared-key any string.";
-   }
-
-   leaf initiator
-   {
-       description
-       "string	no	CRU	bi-directional	bi-directional / response-only	Whether this VPN can only respond to connections or can initiate as well";
-    }
-
-   leaf admin_state_up
-   {
-       description
-       "bool	N/A	CRU	TRUE	true / false	Administrative state of vpn connection. If false (down), vpn concd nection does not forward packets";
-   }
-
-   leaf status
-   {
-       description
-       "string	N/A	R	N/A	N/A	Indicates whether vpn connection is currently operational. Possible values include:ACTIVE,DOWN,BUILD,ERROR";
-   }
-
-   leaf ikepolicy_id
-   {
-        description
-        "uuid	yes	CR	N/A	uuid of ikepolicy	uuid id of ikepolicy";
-   }
-
-   leaf ipsecpolicy_id
-   {
-        description
-         "uuid	yes	CR	N/A	uuid of ipsecpolicy	uuid id of ipsecpolicy";
-   }
-
-   leaf vpnservice_id
-   {
-       description
-       "uuid	yes	CR	N/A	uuid of vpnservice	service id of vpnservice";
-    }
-   container dpd{
-       leaf action
-       {
-            description
-            "string	no	CRU	hold	hold / clear / disabled /restart /restart_by_peer	DPD actions controls the use of Dead Peer Detection Protocol. ( clear, hold, restart, disabled, restart-by-peer)";
-       }
-
-       leaf interval
-       {
-           description
-          "integer	no	CRU	30	> 0	sec for DPD delay";
-       }
-       leaf timeout
-       {
-           description
-           "integer	no	CRU	120	> 0 & > dpd_interval	sec for DPD timeout";
-       }
-    }
-  }
 }
 
