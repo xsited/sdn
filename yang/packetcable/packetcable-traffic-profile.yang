@@ -109,37 +109,58 @@ Similarly, the following associations apply for DOCSIS Real-Time Polling Service
 • RSpec Reserved Rate (R) ~= used to calculate the Polling Interval
 • RSpec Slack Term ~= Tolerated Polling Jitter
 
+Token Bucket Rate [r] (encoded as IEEE floating point) 
+0x461C4000 (10,000 Bps) 
+Token Bucket Size [b] (encoded as IEEE floating point) 
+0x43480000 (200 bytes) 
+Peak Data Rate [p] (encoded as IEEE floating point) 
+0x461C4000 (10,000 Bps) 
+Minimum Policed Unit [m] 
+0x000000C8 (200 bytes) 
+Maximum Packet Size [M] 
+0x000000C8 (200 bytes) 
+Rate [R] (encoded as IEEE floating point) 
+0x461C4000 (10,000 Bps) 
+Slack Term [S] 
+0x00000320 (800 μs) 
     ";
 
 
 	leaf token-bucket-rate {
 		type float;
 		description "[r] (IEEE floating point number ";
+		default 10000;
 	}
 	leaf token-bucket-size {
 		type float;
 		description "[p] IEEE floating point number";
+		default 200;
 	}
 	leaf peak-data-rate {
 		type float;
 		description "[m] IEEE floating point number";
+		default 10000;
 	}
 	leaf minimum-policed-unit {
 		type uint32;
 		description "[m] (integer)";
+		default 200;
 	}
 
 	leaf maximum-packet-size {
 		type uint32;
 		description "[M] (integer)";
+		default 200;
 	}
 	leaf rate {
 		type uint32;
 		description "[R] (IEEE floating point number)";
+		default 10000;
 	}
 	leaf slack-term {
 		type uint32;
 		description "[S] (integer)";
+		default 800;
 	}
     }
 
@@ -150,18 +171,22 @@ Similarly, the following associations apply for DOCSIS Real-Time Polling Service
 			"	
 			Traffic Priority is a 1-byte unsigned integer field specifying the relative priority assigned to the Service Flow in comparison with other flows. This field is fully defined in section C.2.2.5.1 of [1]. A default Traffic Priority of 0 SHOULD be used if a specific Traffic Priority value is not required.
 		";
+		default 0;
 	}
 	leaf reserved0 {
 		type uint8;
+		default 0;
 	}
 	leaf reserved1 {
 		type uint16;
+		default 0;
 	}
 	leaf request-transmission-policy {
 		type uint32;
 		description "
 			Request/Transmission Policy is a 4-byte bit field as defined in section C.2.2.6.3 of [1]. A default Request/Transmission policy of 0 SHOULD be used if a specific Request/Transmission Policy value is not required.
 		";
+		default 0;
 	}
 	leaf maximum-sustained-traffic-rate {
 		type uint32;
@@ -169,12 +194,14 @@ Similarly, the following associations apply for DOCSIS Real-Time Polling Service
 			Maximum Sustained Traffic Rate is a 4-byte unsigned integer field specifying the rate parameter, in bits/sec, for [1]. A value of 0 indicates that no explicitly-enforced Maximum Sustained Rate is requested. A default Maximum Sustained Traffic Rate of 0 SHOULD be used if a specific Maximum Sustained Traffic Rate is not required.
 
 		";
+		default 0;
 	}
 	leaf maximum-traffic-burst {
 		type uint32;
 		description "
 			Maximum Traffic Burst is a 4-byte unsigned integer field specifying the token bucket size, in bytes, for a token- bucket-based rate limit for this Service Flow. This field is fully defined in section C.2.2.5.3 of [1]. A default Maximum Traffic Burst of 3044 bytes SHOULD be used if a specific Maximum Traffic Burst is not required. The value of this parameter has no effect unless a non-zero value has been provided for the Maximum Sustained Traffic Rate parameter.
 		";
+		default 3044;
 	}
 	leaf minimum-reserved-traffic-rate {
 		type uint16;
@@ -183,6 +210,7 @@ Similarly, the following associations apply for DOCSIS Real-Time Polling Service
 			Minimum Reserved Traffic Rate is a 4-byte unsigned integer field specifying the minimum rate, in bits/sec, reserved for this Service Flow. This field is fully defined in section C.2.2.5.4 of [1]. A default Minimum Reserved Traffic Rate of 0 SHOULD be used if a specific Minimum Reserved Traffic Rate is not required.		
 
 ";
+		default 0;
 	}
 	leaf assumed-minimum-reserved-traffic-rate-packet-size {
 		type uint16;
@@ -191,6 +219,7 @@ Similarly, the following associations apply for DOCSIS Real-Time Polling Service
 			Assumed Minimum Reserved Traffic Rate Packet Size is a 2-byte unsigned integer field specifying an assumed minimum packet size, in bytes, for which the Minimum Reserved Traffic Rate will be provided for this flow. This field is fully defined in section C.2.2.5.5 of [1]. A default Assumed Minimum Reserved Traffic Rate Packet Size of 0 SHOULD be used if a specific Assumed Minimum Reserved Traffic Rate Packet size is not required. Upon receipt of a value of 0 the CMTS MUST utilize its implementation-specific default size for this parameter, not 0 bytes.		
 	
 ";
+		default 0;
 	}
 	leaf maximum-concatenated-burst {
 		type uint16;
@@ -198,6 +227,7 @@ Similarly, the following associations apply for DOCSIS Real-Time Polling Service
 		"
 			Maximum Concatenated Burst is a 2-byte unsigned integer specifying the maximum concatenated burst (in bytes) which a Service Flow is allowed. This field is fully defined in section C.2.2.6.1 of [1]. A value of 0 means there is no limit. A default Maximum Concatenated Burst of 1522 bytes SHOULD be used if a specific Maximum Concatenated Burst is not required.
 ";
+		default 1522;
 	}
 
 	leaf upstream-peak-traffic-rate {
@@ -207,6 +237,7 @@ Similarly, the following associations apply for DOCSIS Real-Time Polling Service
 Upstream Peak Traffic Rate is a 4-byte unsigned integer specifying the Peak traffic rate (in bits per second) which a 
 Service Flow is allowed. This field is fully defined in section C.2.2.5.10.1 of [1]. 
 		";
+		default 0;
 	}
 
 	leaf required-attribute-mask {
@@ -216,6 +247,7 @@ Service Flow is allowed. This field is fully defined in section C.2.2.5.10.1 of 
 			Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0 service flow. The CMTS MUST ignore the bonded bit in the Required and Forbidden Attribute Mask objects if the cable modem associated with the service flow is operating in pre-3.0 DOCSIS mode. The Required Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by requiring certain attributes. This field is fully defined in section C.2.2.3.6 of [1]. The Forbidden Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by forbidding certain attributes. This field is fully defined in section C.2.2.3.7 of [1]. The CMTS is free to assign the service flow to any channel that satisfies the traffic profile if no ￼channel is available that satisfies the Required Attribute Mask and Forbidden Attribute Mask for the service flow. The Attribute Aggregation Rule Mask provides guidance to the CMTS as to how it might use the attribute masks of individual channels to construct a dynamic bonding group for this service flow. This field is fully described in section 'Service Flow Attribute Aggregation Rule Mask' of [1]. As described in that section a default Attribute Aggregation Rule Mask of 0 SHOULD be used if specific Attribute Aggregation Rules are not required.
 
 ";
+		default 0;
 	}
 	leaf forbidden-attribute-mask {
 		type uint32;
@@ -223,6 +255,7 @@ Service Flow is allowed. This field is fully defined in section C.2.2.5.10.1 of 
 		"
 			Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0 service flow. The CMTS MUST ignore the bonded bit in the Required and Forbidden Attribute Mask objects if the cable modem associated with the service flow is operating in pre-3.0 DOCSIS mode. The Required Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by requiring certain attributes. This field is fully defined in section C.2.2.3.6 of [1]. The Forbidden Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by forbidding certain attributes. This field is fully defined in section C.2.2.3.7 of [1]. The CMTS is free to assign the service flow to any channel that satisfies the traffic profile if no ￼channel is available that satisfies the Required Attribute Mask and Forbidden Attribute Mask for the service flow. The Attribute Aggregation Rule Mask provides guidance to the CMTS as to how it might use the attribute masks of individual channels to construct a dynamic bonding group for this service flow. This field is fully described in section 'Service Flow Attribute Aggregation Rule Mask' of [1]. As described in that section a default Attribute Aggregation Rule Mask of 0 SHOULD be used if specific Attribute Aggregation Rules are not required.
 ";
+		default 0;
 	}
 	leaf attribute-aggregation-rule-mask {
 		type uint32;
@@ -230,6 +263,7 @@ Service Flow is allowed. This field is fully defined in section C.2.2.5.10.1 of 
 		"
 			Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0 service flow. The CMTS MUST ignore the bonded bit in the Required and Forbidden Attribute Mask objects if the cable modem associated with the service flow is operating in pre-3.0 DOCSIS mode. The Required Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by requiring certain attributes. This field is fully defined in section C.2.2.3.6 of [1]. The Forbidden Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by forbidding certain attributes. This field is fully defined in section C.2.2.3.7 of [1]. The CMTS is free to assign the service flow to any channel that satisfies the traffic profile if no ￼channel is available that satisfies the Required Attribute Mask and Forbidden Attribute Mask for the service flow. The Attribute Aggregation Rule Mask provides guidance to the CMTS as to how it might use the attribute masks of individual channels to construct a dynamic bonding group for this service flow. This field is fully described in section 'Service Flow Attribute Aggregation Rule Mask' of [1]. As described in that section a default Attribute Aggregation Rule Mask of 0 SHOULD be used if specific Attribute Aggregation Rules are not required.
 ";
+		default 0;
 	}
 	leaf minimum-buffer {
 		type uint32;
@@ -237,6 +271,7 @@ Service Flow is allowed. This field is fully defined in section C.2.2.5.10.1 of 
 		"
 Minimum Buffer is a 4-byte unsigned integer parameter that defines a lower limit for the size of the buffer that is to be provided for a service flow. This field is fully defined in section C.2.2.5.11.3 of [1]. If this parameter is omitted, the Minimum Buffer defaults to a value of 0, which indicates that there is no lower limit.
 		";
+		default 0;
 	}
 	leaf target-buffer {
 		type uint32;
@@ -245,6 +280,7 @@ Minimum Buffer is a 4-byte unsigned integer parameter that defines a lower limit
 Target Buffer is a 4-byte unsigned integer parameter that defines a desired value for the size of the buffer that is to be provided for a service flow. This field is fully defined in section C.2.2.5.11.4 of [1]. If this parameter is omitted or set to a value of 0, the device selects any buffer size within the range of the Minimum and Maximum Buffers, via a vendor-specific algorithm.
 
 		";
+		default 0;
 	}
 	leaf maximum-buffer {
 		type uint32;
@@ -252,6 +288,7 @@ Target Buffer is a 4-byte unsigned integer parameter that defines a desired valu
 		"
 Maximum Buffer is a 4-byte unsigned integer parameter that defines an upper limit for the size of the buffer that is to be provided for a service flow. This field is fully defined in section C.2.2.5.11.5 of [1]. If this parameter is omitted, the Maximum Buffer defaults to a value of no limit.
 		";
+		default 0;
 	}
     }
 
@@ -262,23 +299,27 @@ Maximum Buffer is a 4-byte unsigned integer parameter that defines an upper limi
 		description "
 		Request/Transmission Policy is a 4-byte bit field as defined in section C.2.2.6.3 of [1]. Note: for this Service Flow Scheduling Type there is no default value for Request/Transmission Policy and all values (including 0) have meaning in DOCSIS. Bit 9 in the Request/Transmission Policy enables/disables the use of segment headers. A segment header is 8 bytes in length. It MUST be accounted for in the Unsolicited Grant Size parameter when segment header usage is enabled. The CMTS MUST ignore Bit 9 in the Request/Transmission Policy if the cable modem associated with the service flow is operating in DOCSIS 1.1 or 2.0 mode. For more information on segment headers and their use please see section 6.3 of [1].
 		";
+		default 0;
     }
     leaf unsolicited-grant-size {
 		type uint16;
 		description "
 		Unsolicited Grant Size is a 2-byte unsigned integer field specifying the grant size (in bytes) as defined in section C.2.2.6.6 of [1]. There is no default value of Unsolicited Grant Size.
 		";
+		default 0;
     }
     leaf grants-interval {
 		type uint8;
 		description "
 	Grants per Interval is a 1-byte unsigned integer field specifying the number of grants per Nominal Grant Interval as defined in section C.2.2.6.9 of [1]. There is no default value of Grants per Interval, but a value of 1 is recommended.	
 		";
+		default 1;
     }
     leaf reserved {
 		type uint8;
 		description "
 		";
+		default 0;
     }
     leaf nominal-grant-interval {
 		type uint32;
@@ -286,30 +327,35 @@ Maximum Buffer is a 4-byte unsigned integer parameter that defines an upper limi
 			Nominal Grant Interval is a 4-byte unsigned integer field specifying the nominal time between successive data grant opportunities for this Service Flow (in units of microseconds) as defined in section C.2.2.6.7 of [1].
 		
 		";
+		default 0;
     }
     leaf tolerated-grant-jitter {
 		type uint32;
 		description "
 Tolerated Grant Jitter is a 4-byte unsigned integer field specifying the maximum amount of time that transmission opportunities may be delayed from the nominal periodic schedule (in units of microseconds) as defined in section C.2.2.6.8 of [1]. The minimum allowed value is 800. If the CMTS receives a Gate-Set message with Tolerated Grant Jitter less than 800, the CMTS MUST reply with a Gate-Set-Err message with a PacketCable Error-Code of 'Invalid Field Value in Object'. There is no default value of Nominal Grant Interval. There is no default value for Tolerated Grant Jitter.
 		";
+		default 0;
     }
     leaf required-attribute-mask {
 		type uint32;
 		description "
 Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0 service flow. The CMTS MUST ignore the bonded bit in the Required and Forbidden Attribute Mask objects if the cable modem associated with the service flow is operating in pre-3.0 DOCSIS mode. The Required Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by requiring certain attributes. This field is fully defined in section C.2.2.3.6 of [1]. The Forbidden Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by forbidding certain attributes. This field is fully defined in section C.2.2.3.7 of [1]. The CMTS is free to assign the service flow to any channel that satisfies the traffic profile if no channel is available that satisfies the Required Attribute Mask and Forbidden Attribute Mask for the service flow. The Attribute Aggregation Rule Mask provides guidance to the CMTS as to how it might use the attribute masks of individual channels to construct a dynamic bonding group for this service flow. This field is fully described in section 'Service Flow Attribute Aggregation Rule Mask' of [1]. As described in that section, a default Attribute Aggregation Rule Mask of 0 SHOULD be used if specific Attribute Aggregation Rules are not required.
 		";
+		default 0;
     }
     leaf forbidden-attribute-mask {
 		type uint32;
 		description "
 Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0 service flow. The CMTS MUST ignore the bonded bit in the Required and Forbidden Attribute Mask objects if the cable modem associated with the service flow is operating in pre-3.0 DOCSIS mode. The Required Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by requiring certain attributes. This field is fully defined in section C.2.2.3.6 of [1]. The Forbidden Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by forbidding certain attributes. This field is fully defined in section C.2.2.3.7 of [1]. The CMTS is free to assign the service flow to any channel that satisfies the traffic profile if no channel is available that satisfies the Required Attribute Mask and Forbidden Attribute Mask for the service flow. The Attribute Aggregation Rule Mask provides guidance to the CMTS as to how it might use the attribute masks of individual channels to construct a dynamic bonding group for this service flow. This field is fully described in section 'Service Flow Attribute Aggregation Rule Mask' of [1]. As described in that section, a default Attribute Aggregation Rule Mask of 0 SHOULD be used if specific Attribute Aggregation Rules are not required.
 		";
+		default 0;
     }
     leaf attribute-aggregation-rule-mask {
 		type uint32;
 		description "
 Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0 service flow. The CMTS MUST ignore the bonded bit in the Required and Forbidden Attribute Mask objects if the cable modem associated with the service flow is operating in pre-3.0 DOCSIS mode. The Required Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by requiring certain attributes. This field is fully defined in section C.2.2.3.6 of [1]. The Forbidden Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by forbidding certain attributes. This field is fully defined in section C.2.2.3.7 of [1]. The CMTS is free to assign the service flow to any channel that satisfies the traffic profile if no channel is available that satisfies the Required Attribute Mask and Forbidden Attribute Mask for the service flow. The Attribute Aggregation Rule Mask provides guidance to the CMTS as to how it might use the attribute masks of individual channels to construct a dynamic bonding group for this service flow. This field is fully described in section 'Service Flow Attribute Aggregation Rule Mask' of [1]. As described in that section, a default Attribute Aggregation Rule Mask of 0 SHOULD be used if specific Attribute Aggregation Rules are not required.
 		";
+		default 0;
     }
 	
     }
@@ -322,18 +368,21 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
 Traffic Priority is a 1-byte unsigned integer field specifying the relative priority assigned to the Service Flow in comparison with other flows. This field is fully defined in section C.2.2.5.1 of [1]. A default Traffic Priority of 0 SHOULD be used if a specific Traffic Priority value is not required.
 
 		";
+		default 0;
     }
     leaf downstream-resequencing {
 		type uint32;
 		description "
 DOCSIS 3.0 service flows. This field is fully defined in section C.2.2.7.3 of [1]. The CMTS MUST honor the requested Downstream Resequencing operation for all Gate requests. It is possible that the CMTS may receive conflicting downstream resequencing direction by the AM for Multicast Gate requests (e.g., multiple Multicast Gate requests for the same Multicast destination but with different downstream resequencing operation). In such a case the CMTS MUST either honor the Multicast Gate request or reject it with error code 35 (Multicast Gate Downstream Resequencing mismatch). For a Multicast Gate, the CMTS MUST ignore the Downstream Resequencing object if the cable modem associated with the service flow is operating in MDF disabled mode. The CMTS MUST ignore the Downstream Resequencing object if the cable modem associated with the service flow is operating in pre-3.0 DOCSIS mode. DOCSIS 3.0 introduced the concept of downstream channel bonding where the CMTS can simultaneously transmit on multiple channels. Downstream channels may not all have the same amount of latency such that two packets scheduled simultaneously by the CMTS may not arrive simultaneously at the cable modem. The CMTS can insert sequence numbers in each DOCSIS packet header to allow the cable modem to re- order out of sequence packets. The cable modem will hold higher numbered packets while waiting for lower numbered packets to arrive. The maximum wait time is 18ms. Applications that can tolerate lost packets or applications that cannot tolerate packet latency of up to 18ms can disable the use of sequence numbers by setting the Downstream Resequencing value to 1.
 		";
+		default 0;
     }
     leaf reserved0{
 		type uint32;
 		description "
 
 		";
+		default 0;
     }
     leaf maximum-sustained-traffic-rate {
 		type uint32;
@@ -341,6 +390,7 @@ DOCSIS 3.0 service flows. This field is fully defined in section C.2.2.7.3 of [1
 Maximum Sustained Traffic Rate is a 4-byte unsigned integer field specifying the rate parameter, in bits/sec, for a token-bucket-based rate limit for this Service Flow. This field is fully defined in section C.2.2.5.2 of [1]. A value of 0 indicates that no explicitly-enforced Maximum Sustained Rate is requested. A default Maximum Sustained Traffic Rate of 0 SHOULD be used if a specific Maximum Sustained Traffic Rate is not required.
 
 		";
+		default 0;
     }
     leaf maximum-traffic-burst {
 		type uint32;
@@ -348,6 +398,7 @@ Maximum Sustained Traffic Rate is a 4-byte unsigned integer field specifying the
 Maximum Traffic Burst is a 4-byte unsigned integer field specifying the token bucket size, in bytes, for a token- bucket-based rate limit for this Service Flow. This field is fully defined in section C.2.2.5.3 of [1]. A default Maximum Traffic Burst of 3044 bytes SHOULD be used if a specific Maximum Traffic Burst is not required. The value of this parameter has no effect unless a non-zero value has been provided for the Maximum Sustained Traffic Rate parameter.
 
 		";
+		default 3044;
     }
     leaf minimum-reserved-traffic-rate {
 		type uint32;
@@ -355,6 +406,7 @@ Maximum Traffic Burst is a 4-byte unsigned integer field specifying the token bu
 Minimum Reserved Traffic Rate is a 4-byte unsigned integer field specifying the minimum rate, in bits/sec, reserved for this Service Flow. This field is fully defined in section C.2.2.5.4 of [1]. A default Minimum Reserved Traffic Rate of 0 SHOULD be used if a specific Minimum Reserved Traffic Rate is not required.
 
 		";
+		default 0;
     }
     leaf assumed-minimum-reserved-traffic-rate-packet-size {
 		type uint32;
@@ -363,12 +415,14 @@ Assumed Minimum Reserved Traffic Rate Packet Size is a 2-byte unsigned integer f
 
 
 		";
+		default 0;
     }
     leaf reserved1{
 		type uint32;
 		description "
 
 		";
+		default 0;
     }
     leaf maximum-downstream-latency {
 		type uint32;
@@ -377,6 +431,7 @@ Maximum Downstream Latency is a 4-byte unsigned integer field specifying the max
 
 
 		";
+		default 0;
     }
     leaf downstream-peak-traffic-rate {
 		type uint32;
@@ -384,6 +439,7 @@ Maximum Downstream Latency is a 4-byte unsigned integer field specifying the max
 Downstream Peak Traffic Rate is a 4-byte unsigned integer field, specifying the rate parameter P of a token-bucket- based peak rate limiter for packets of a downstream service flow. Configuring this peak rate parameter permits an operator to define a Maximum Burst value for the Downstream Maximum Sustained Rate much larger than a maximum packet size, but still limit the burst of packets consecutively transmitted for a service flow. The Downstream Peak Traffic Rate parameter is fully defined in section C.2.2.7.2 of [1]. The CMTS MUST NOT include this parameter in its DOCSIS signaling for this service flow if a value of 0 is supplied, if the cable modem for which the Gate applies is not provisioned in DOCSIS 3.0 mode, or if the CMTS does not support the enforcement of this value.
 
 		";
+		default 0;
     }
     leaf required-attribute-mask {
 		type uint32;
@@ -391,6 +447,7 @@ Downstream Peak Traffic Rate is a 4-byte unsigned integer field, specifying the 
 Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0 service flow. The CMTS MUST ignore the bonded bit in the Required and Forbidden Attribute Mask objects if the cable modem associated with the service flow is operating in pre-3.0 DOCSIS mode. The Required Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by requiring certain attributes. This field is fully defined in section C.2.2.3.6 of [1]. The Forbidden Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by forbidding certain attributes. This field is fully defined in section C.2.2.3.7 of [1]. The CMTS is free to assign the service flow to any channel that satisfies the traffic profile if no channel is available that satisfies the Required Attribute Mask and Forbidden Attribute Mask for the service flow. The Attribute Aggregation Rule Mask provides guidance to the CMTS as to how it might use the attribute masks of individual channels to construct a dynamic bonding group for this service flow. This field is fully described in section 'Service Flow Attribute Aggregation Rule Mask' of [1]. As described in that section a default Attribute Aggregation Rule Mask of 0 SHOULD be used if specific Attribute Aggregation Rules are not required.
 
 		";
+		default 0;
     }
     leaf forbidden-attribute-mask {
 		type uint32;
@@ -398,6 +455,7 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
 Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0 service flow. The CMTS MUST ignore the bonded bit in the Required and Forbidden Attribute Mask objects if the cable modem associated with the service flow is operating in pre-3.0 DOCSIS mode. The Required Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by requiring certain attributes. This field is fully defined in section C.2.2.3.6 of [1]. The Forbidden Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by forbidding certain attributes. This field is fully defined in section C.2.2.3.7 of [1]. The CMTS is free to assign the service flow to any channel that satisfies the traffic profile if no channel is available that satisfies the Required Attribute Mask and Forbidden Attribute Mask for the service flow. The Attribute Aggregation Rule Mask provides guidance to the CMTS as to how it might use the attribute masks of individual channels to construct a dynamic bonding group for this service flow. This field is fully described in section 'Service Flow Attribute Aggregation Rule Mask' of [1]. As described in that section a default Attribute Aggregation Rule Mask of 0 SHOULD be used if specific Attribute Aggregation Rules are not required.
 
 		";
+		default 0;
     }
     leaf attribute-aggregation-rule-mask {
 		type uint32;
@@ -405,6 +463,7 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
 Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0 service flow. The CMTS MUST ignore the bonded bit in the Required and Forbidden Attribute Mask objects if the cable modem associated with the service flow is operating in pre-3.0 DOCSIS mode. The Required Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by requiring certain attributes. This field is fully defined in section C.2.2.3.6 of [1]. The Forbidden Attribute Mask limits the set of channels and bonding groups to which the CMTS assigns the service flow by forbidding certain attributes. This field is fully defined in section C.2.2.3.7 of [1]. The CMTS is free to assign the service flow to any channel that satisfies the traffic profile if no channel is available that satisfies the Required Attribute Mask and Forbidden Attribute Mask for the service flow. The Attribute Aggregation Rule Mask provides guidance to the CMTS as to how it might use the attribute masks of individual channels to construct a dynamic bonding group for this service flow. This field is fully described in section 'Service Flow Attribute Aggregation Rule Mask' of [1]. As described in that section a default Attribute Aggregation Rule Mask of 0 SHOULD be used if specific Attribute Aggregation Rules are not required.
 
 		";
+		default 0;
     }
     }
 
@@ -412,7 +471,7 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
     grouping traffic-profile-flowspec {
 	grouping authorized-envelope {
 		uses flowspec-envelope;
-                description "manadatory";
+                description "mandatory";
 	}
 	grouping reserved-envelope {
 		uses flowspec-envelope;
@@ -443,7 +502,7 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
     grouping traffic-profile-best-effort {
 	grouping authorized-envelope {
 		uses default-envelope;
-                description "manadatory";
+                description "mandatory";
 	}
 	grouping reserved-envelope {
 		uses default-envelope;
@@ -458,7 +517,7 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
     grouping traffic-profile-non-real-time-polling-service {
 	grouping authorized-envelope {
 		uses default-envelope;
-                description "manadatory";
+                description "mandatory";
 	}
 	grouping reserved-envelope {
 		uses default-envelope;
@@ -474,7 +533,7 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
     grouping traffic-profile-real-time-polling-service {
 	grouping authorized-envelope {
 		uses default-envelope;
-                description "manadatory";
+                description "mandatory";
 	}
 	grouping reserved-envelope {
 		uses default-envelope;
@@ -489,7 +548,7 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
     grouping traffic-profile-unsolicited-grant-service {
 	grouping authorized-envelope {
 		uses ugs-envelope;
-                description "manadatory";
+                description "mandatory";
 	}
 	grouping reserved-envelope {
 		uses ugs-envelope;
@@ -504,7 +563,7 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
     grouping traffic-profile-unsolicited-grant-service-with-activity-detection {
 	grouping authorized-envelope {
 		uses ugs-envelope;
-                description "manadatory";
+                description "mandatory";
 	}
 	grouping reserved-envelope {
 		uses ugs-envelope;
@@ -519,7 +578,7 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
     grouping traffic-profile-downstream-service {
 	grouping authorized-envelope {
 		uses us-envelope;
-                description "manadatory";
+                description "mandatory";
 	}
 	grouping reserved-envelope {
 		uses us-envelope;
@@ -539,7 +598,8 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
     }
 
 
-    grouping traffic-profile-grouping {
+    
+    group traffic-profile-grouping {
         leaf tp-type {
                 type traffic-profile-type;
                 default  best-effort;
@@ -559,7 +619,7 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
         }	
     }
 
-    grouping taffic-profile-default-singleton-grouping {
+    group taffic-profile-default-singleton-grouping {
         grouping flowspec { uses traffic-profile-upstream-drop; }
         grouping docsis-service-class-name { uses traffic-profile-upstream-drop; }
         grouping docsis-specific-parameterization { uses traffic-profile-docsis-specific-parameterization; }
@@ -567,8 +627,8 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
         grouping best-effort { uses traffic-profile-best-effort; }
         grouping unsolicited-grant-service { uses traffic-profile-unsolicited-grant-service; }
         grouping unsolicited-grant-service-with-activity-detection { uses traffic-profile-unsolicited-grant-service-with-activity-detection; }
-        grouping non-real-time-polling-service { uses traffic-profile-non-real-time-polling-service; }
-        grouping downstream-service { uses traffic-profile-downstream-service; }
+        //grouping non-real-time-polling-service { uses traffic-profile-non-real-time-polling-service; }
+        //grouping downstream-service { uses traffic-profile-downstream-service; }
     }
 }
 
