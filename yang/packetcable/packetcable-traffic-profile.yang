@@ -128,8 +128,10 @@ Slack Term [S]
 
 	leaf token-bucket-rate {
 		type float;
-		description "[r] (IEEE floating point number ";
-		default 10000;
+		description "[r] (IEEE floating point number 
+		
+		default 10000.0;
+		";
 	}
 	leaf token-bucket-size {
 		type float;
@@ -138,8 +140,11 @@ Slack Term [S]
 	}
 	leaf peak-data-rate {
 		type float;
-		description "[m] IEEE floating point number";
-		default 10000;
+		description "[m] IEEE floating point number
+
+		default 10000.0;
+
+		";
 	}
 	leaf minimum-policed-unit {
 		type uint32;
@@ -362,8 +367,8 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
 
 
     grouping us-envelope {
-    leaf traffic-priority {
-		type uint32;
+    leaf us-traffic-priority {
+		type uint8;
 		description "
 Traffic Priority is a 1-byte unsigned integer field specifying the relative priority assigned to the Service Flow in comparison with other flows. This field is fully defined in section C.2.2.5.1 of [1]. A default Traffic Priority of 0 SHOULD be used if a specific Traffic Priority value is not required.
 
@@ -469,15 +474,15 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
 
 
     grouping traffic-profile-flowspec {
-	grouping authorized-envelope {
+	container f-authorized-envelope {
 		uses flowspec-envelope;
                 description "mandatory";
 	}
-	grouping reserved-envelope {
+	container f-reserved-envelope {
 		uses flowspec-envelope;
                 description "optional";
 	}
-	grouping committed-envelope {
+	container f-committed-envelope {
 		uses flowspec-envelope;
                 description "optional";
 	}
@@ -500,30 +505,30 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
 
 
     grouping traffic-profile-best-effort {
-	grouping authorized-envelope {
+	container be-authorized-envelope {
 		uses default-envelope;
                 description "mandatory";
 	}
-	grouping reserved-envelope {
+	container bereserved-envelope {
 		uses default-envelope;
                 description "optional";
 	}
-	grouping committed-envelope {
+	container be-committed-envelope {
 		uses default-envelope;
                 description "optional";
 	}
     }
 
     grouping traffic-profile-non-real-time-polling-service {
-	grouping authorized-envelope {
+	container nrtp-authorized-envelope {
 		uses default-envelope;
                 description "mandatory";
 	}
-	grouping reserved-envelope {
+	container nrtp-reserved-envelope {
 		uses default-envelope;
                 description "optional";
 	}
-	grouping committed-envelope {
+	container nrtp-committed-envelope {
 		uses default-envelope;
                 description "optional";
 	}
@@ -531,75 +536,76 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
 
 
     grouping traffic-profile-real-time-polling-service {
-	grouping authorized-envelope {
+	container rtp-authorized-envelope {
 		uses default-envelope;
                 description "mandatory";
 	}
-	grouping reserved-envelope {
+	container rtp-reserved-envelope {
 		uses default-envelope;
                 description "optional";
 	}
-	grouping committed-envelope {
+	container rtp-committed-envelope {
 		uses default-envelope;
                 description "optional";
 	}
     }
 
     grouping traffic-profile-unsolicited-grant-service {
-	grouping authorized-envelope {
+	container ugs-authorized-envelope {
 		uses ugs-envelope;
                 description "mandatory";
 	}
-	grouping reserved-envelope {
+	container ugs-reserved-envelope {
 		uses ugs-envelope;
                 description "optional";
 	}
-	grouping committed-envelope {
+	container ugs-committed-envelope {
 		uses ugs-envelope;
                 description "optional";
 	}
     }
 
     grouping traffic-profile-unsolicited-grant-service-with-activity-detection {
-	grouping authorized-envelope {
+	container usga-authorized-envelope {
 		uses ugs-envelope;
                 description "mandatory";
 	}
-	grouping reserved-envelope {
+	container usga-reserved-envelope {
 		uses ugs-envelope;
                 description "optional";
 	}
-	grouping committed-envelope {
+	container usga-committed-envelope {
 		uses ugs-envelope;
                 description "optional";
 	}
     }
 
+
     grouping traffic-profile-downstream-service {
-	grouping authorized-envelope {
+	container ds-authorized-envelope {
 		uses us-envelope;
                 description "mandatory";
 	}
-	grouping reserved-envelope {
+	container ds-reserved-envelope {
 		uses us-envelope;
                 description "optional";
 	}
-	grouping committed-envelope {
+	container ds-committed-envelope {
 		uses us-envelope;
                 description "optional";
 	}
-
     }
 
 
     grouping traffic-profile-upstream-drop {
     }
+
     grouping traffic-profile-docsis-specific-parameterization {
     }
 
 
     
-    group traffic-profile-grouping {
+    grouping traffic-profile-grouping {
         leaf tp-type {
                 type traffic-profile-type;
                 default  best-effort;
@@ -619,16 +625,18 @@ Attribute Masks define a specific set of attributes associated with a DOCSIS 3.0
         }	
     }
 
-    group taffic-profile-default-singleton-grouping {
-        grouping flowspec { uses traffic-profile-upstream-drop; }
-        grouping docsis-service-class-name { uses traffic-profile-upstream-drop; }
+
+    grouping taffic-profile-default-singleton-grouping {
+        grouping flowspec { uses traffic-profile-flowspec; }
+        grouping docsis-service-class-name { uses traffic-profile-docsis-service-class-name; }
         grouping docsis-specific-parameterization { uses traffic-profile-docsis-specific-parameterization; }
         grouping upstream-drop { uses traffic-profile-upstream-drop; }
         grouping best-effort { uses traffic-profile-best-effort; }
         grouping unsolicited-grant-service { uses traffic-profile-unsolicited-grant-service; }
         grouping unsolicited-grant-service-with-activity-detection { uses traffic-profile-unsolicited-grant-service-with-activity-detection; }
-        //grouping non-real-time-polling-service { uses traffic-profile-non-real-time-polling-service; }
-        //grouping downstream-service { uses traffic-profile-downstream-service; }
+        grouping non-real-time-polling-service { uses traffic-profile-non-real-time-polling-service; }
+        grouping real-time-polling-service { uses traffic-profile-real-time-polling-service; }
+        grouping downstream-service { uses traffic-profile-downstream-service; }
     }
 }
 
