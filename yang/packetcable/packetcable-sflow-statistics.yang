@@ -1,0 +1,77 @@
+module opendaylight-flow-statistics {
+    namespace "urn:opendaylight:packetcable:sflow::statistics";
+    prefix sflowstat;
+
+    import yang-ext {prefix ext; revision-date "2013-07-09";}
+    import opendaylight-inventory {prefix inv;revision-date "2013-08-19";}
+    import opendaylight-statistics-types {prefix stat-types;revision-date "2013-09-25";}
+    import ietf-inet-types {prefix inet; revision-date "2010-09-24";}
+
+
+    revision "2013-08-19" {
+        description "Initial revision of flow statistics service";
+    }
+
+    grouping flow-statistics {
+        container flow-statistics {
+            //config "false";
+            uses stat-types:generic-statistics;
+        }
+    }
+
+    typedef flow-id {
+        description "flow id";
+        type inet:uri;
+    }
+
+    grouping flow-and-statistics-map-list {
+        description "List of flow and statistics map";
+        list flow-and-statistics-map-list {
+            key "flow-id";
+            leaf flow-id {
+                type flow-id;
+            }
+            uses flow-and-statistics-map;
+        }
+    }
+
+    grouping flow-and-statistics-map{
+        description "Mapping between flow and its statistics";
+        uses sflow-types:sflow;
+        uses stat-types:generic-statistics;
+    }
+
+    // RPC calls to fetch flow statistics
+    rpc get-all-sflows-statistics-from-cmts {
+        description "Fetch statistics of all the sflows present in cmts";
+        input {
+            uses inv:node-context-ref;
+        }
+        output {
+            uses flow-and-statistics-map-list;
+            uses tr:transaction-aware;
+        }
+
+    }
+
+    rpc get-sflow-statistics-from-flow-table {
+        description "Fetch statistics of the specific flow present in the specific flow table of the switch";
+        input {
+            uses inv:node-context-ref;
+            uses flow-types:flow;
+        }
+        output {
+            uses flow-and-statistics-map-list;
+            uses tr:transaction-aware;
+        }
+    }
+
+    notification sflows-statistics-update {
+        description "Flows statistics sent by sflow programmer";
+        uses cmts:node;
+        uses sflow-and-statistics-map-list;
+        uses tr:transaction-aware;
+    }
+    // no ag
+
+}
