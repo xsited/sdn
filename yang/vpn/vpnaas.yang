@@ -1,5 +1,9 @@
 module vpnaas
 {
+      namespace "http://cablelabs.com/yang/vpnaas/";
+        prefix vpnaas;
+
+
     import ietf-yang-types 	{ prefix yang; }
     import ietf-inet-types 	{ prefix inet; }
     import ietf-interfaces 	{ prefix if;   }
@@ -15,6 +19,9 @@ module vpnaas
         description "Initial revision of vpn";
     }        
 
+    typedef tenant-instance {
+        type instance-identifier;
+    }
     typedef router-instance {
         type instance-identifier;
     }
@@ -30,12 +37,48 @@ module vpnaas
     typedef service-instance {
         type instance-identifier;
     }
-    typedef router-instance {
-        type instance-identifier;
-    }
     typedef subnet-instance {
         type instance-identifier;
     }
+  typedef vlan-id {
+    type uint32 {
+      range "1..4095";
+    }
+  }
+  typedef mep-id {
+    type uint32 {
+      range "1..8191";
+    }
+  }
+
+   grouping mep-address {
+	leaf mac-address {
+ 	type yang:mac-address;
+	}
+	leaf ip-address {
+	type inet:ip-address;
+	}
+   }
+
+   grouping performance-statistics {
+               leaf bytes {
+                        type yang:counter64;
+                }
+                leaf packets {
+                        type yang:counter64;
+                }
+                leaf errors {
+                        type yang:counter32;
+                }
+                leaf dropped {
+                        type yang:counter32;
+                }
+                leaf latency {
+                        type yang:counter64;
+                }
+
+   }
+
 
     grouping router-interface {
         leaf router-id {
@@ -43,7 +86,8 @@ module vpnaas
         }
         leaf router {
             description
-            " devices definitions";
+            "XXX- fix me devices definitions";
+            type string;
             mandatory true;
         }
         leaf interface {
@@ -65,7 +109,7 @@ module vpnaas
         leaf subscriber-id {
             type subscriber-instance;
         }
-        grouping flow-grouping  {
+        grouping flow-list-grouping  {
             container flows {
                 list flows {
                     key "flow-id";
@@ -75,7 +119,7 @@ module vpnaas
                 }
             }
         }
-        grouping device-grouping  {
+        grouping device-list-grouping  {
             container devices {
                 list devices {
                     key "device-id";
@@ -85,7 +129,7 @@ module vpnaas
                 }
             }
         }
-        grouping circuit-grouping  {
+        grouping circuit-list-grouping  {
             container circuits {
                 list circuits {
                     key "circuit-id";
@@ -95,7 +139,7 @@ module vpnaas
                 }
             }
         }
-        grouping tenant-grouping  {
+        grouping tenant-list-grouping  {
             container tenants {
                 list tenants {
                     key "tenant-id";
@@ -153,21 +197,21 @@ module vpnaas
 
         leaf circuit-id	{
             type circuit-instance;
-            descsription
+            description
             "uuid-str	N/A	R	generated	N/A	UUID for VPNService Object";
             mandatory true;
         }
 
         leaf tenant-id	{
             type tenant-instance;
-            descsription
+            description
             "uuid-str	Yes	CR	None	valid tenant_id	UUID of the tenant for the vpn service";
             mandatory true;
         }
 
         leaf subscriber-id	{
             type subscriber-instance;
-            descsription
+            description
             "uuid-str	Yes	CR	None	valid tenant_id	UUID of the tenant for the vpn service";
             mandatory true;
         }
@@ -191,21 +235,21 @@ module vpnaas
 
         leaf vpn-status	{
             description
-            "string	N/A	R	N/A	N/A	Indicates whether ipsec vpnservice is currently operational. Possible values include";
+       "string	N/A	R	N/A	N/A	Indicates whether ipsec vpnservice is currently operational. Possible values include";
             type enumeration {
-                emum "active" {
+                enum "active" {
                     value 1;
                 }
-                emum "down" {
+                enum "down" {
                     value 2;
                 }
-                emum "up" {
+                enum "up" {
                     value 3;
                 }
-                emum "error" {
+                enum "error" {
                     value 4;
                 }
-                emum "suspended" {
+                enum "suspended" {
                     value 5;
                 }
             }
@@ -216,7 +260,7 @@ module vpnaas
             description
             "bool	N/A	CRU	TRUE	true/false	Administrative state of vpnservice. If false (down), port does not forward packets";
             type boolean;
-            default "True";
+            default true;
         }
 
         leaf subnet-id	{
@@ -245,12 +289,14 @@ module vpnaas
                  type circuit-instance;
             }
 
+/*
             leaf ecmp-choice {
                 type ecmp-choices;
                 description
                 "0 means use the specified interface
                 1 means use round robin";
             }
+*/
             list probe-interfaces {
                 key "interface";
                 leaf interface {
@@ -262,21 +308,18 @@ module vpnaas
              container source-address {
                  uses mep-address;
                  leaf mep-id {
-                     type MEP-id;
+                     type mep-id;
                  }
              }
              container destination-address {
                  uses mep-address;
                  leaf mep-id {
-                     type MEP-id;
+                     type mep-id;
                  }
              }
          }
          output {
-             uses performance-metrics {
-                 description
-                 "Statistics";
-             }
+             uses performance-statistics;
          }
      }
 
@@ -299,24 +342,20 @@ module vpnaas
         container source-address {
             uses mep-address;
             leaf mep-id {
-                type MEP-id;
+                type mep-id;
             }
         }
         container destination-address {
             uses mep-address;
             leaf mep-id {
-                type MEP-id;
+                type mep-id;
             }
         }
         }
     output {
-        uses performance-metrics {
-            description
-            "Statistics";
-        }
+        uses performance-statistics ;
     }
     }
-
 
 
     grouping ike-policy-grouping
@@ -351,51 +390,51 @@ module vpnaas
         description
         "string	no	CRU	sha1	N/A	Authentication Hash algorithms sha1";
         type enumeration {
-            emum "sha1" {
+            enum "sha1" {
                 value 1;
             }
-            default "sha1";
         }
+            default "sha1";
     }
 
     leaf encryption-algorithm {
         description
         "string	no	CRU	aes-128	N/A	Encryption Algorithms 3des, aes-128, aes-256, aes-192 etc.,";
         type enumeration {
-            emum "3des" {
+            enum "3des" {
                 value 1;
             }
-            emum "aes-128" {
+            enum "aes-128" {
                 value 2;
             }
-            emum "aes-256" {
+            enum "aes-256" {
                 value 3;
             }
-            emum "aes-192" {
+            enum "aes-192" {
                 value 4;
             }
-            default "aes-128";
         }
+            default "aes-128";
     }
 
     leaf phase1-negotiation-mode {
         description
         "string	no	CRU	Main Mode	N/A	IKE mode Main mode";
         type enumeration {
-            emum "ike" {
+            enum "ike" {
                 value 1;
             }
-            emum "main" {
+            enum "main" {
                 value 2;
             }
-            default "main";
         }
+            default "main";
     }
 
     leaf pfs {
         description
         "	string	no	CRU	Group5	N/A	Perfect Forward Secrecy  ( Group2, Group5, Group14)";
-        type string { length 16; }
+        type string;
         default "Group5";
     }
 
@@ -403,20 +442,22 @@ module vpnaas
         description
         "string	no	CRU	v1	N/A	v1 or v2 version";
         type enumeration {
-            emum "v1" {
+            enum "v1" {
                 value 1;
             }
-            emum "v2" {
+            enum "v2" {
                 value 2;
             }
-            default "v1";
         }
+        default "v1";
     }
 
-    conatiner lifetime {
+    grouping lifetime-grouping {
         leaf units {
             description
             "string	no	CRU	seconds	seconds	Lifetime of the  SA unit in seconds";
+	    type string;
+	    default "seconds";
         }
         leaf value {
             description
@@ -425,112 +466,6 @@ module vpnaas
             default 3600;
         }
     }
-    }
-
-    grouping ipsec-policy-grouping
-    {
-    leaf ipsec-policy-id	{
-        description
-        "uuid-str	N/A	R	generated	N/A	UUID for  the  IPsecPolicy";
-        type instance-identifier;
-    }
-    leaf tenant-id	{
-        description
-        "uuid-str	Yes	CR	None	valid tenant_id	UUID for owner of the vpn service";
-        type tenant-instance;
-    }
-    leaf ipsec-policy-name	{
-        description
-        "string	yes	CRU	None	N/A	friendly name for the IPsecPolicy";
-        type string { length 64; }
-    }
-    leaf ipsec-policy-description	{
-        description
-        "string	no	CRU	None	N/A	Description of  the policy";
-        type string ;
-    }
-
-    leaf transform-protocol	{
-        description
-        "string	no	CRU	ESP	N/A	Tranform  Protocol used such as ESP or AH or AH-ESP";
-        type enumeration {
-            emum "esp" {
-                value 1;
-            }
-            emum "ah" {
-                value 2;
-            }
-            emum "ah-esp" {
-                value 3;
-            }
-            default "esp";
-        }
-    }
-
-    leaf encapsulation_mode	{
-        description
-        "string	no	CRU	tunnel	N/A	Encapsulation mode either Tunnel mode or transport mode";
-        type enumeration {
-            emum "tunnel" {
-                value 1;
-            }
-            emum "transparent" {
-                value 2;
-            }
-            default "tunnel";
-        }
-        leaf auth-algorithm	{
-            description
-            "string	no	CRU	sha1	N/A	Authentication algorithm sha1";
-            type enumeration {
-                emum "sha1" {
-                    value 1;
-                }
-            default "sha1";
-            }
-        }
-
-        leaf encryption-algorithm	{
-            description
-            "string	no	CRU	aes-128	N/A	Encryption Algorithms 3des, aes-128, aes-256, aes-192";
-            type enumeration {
-                emum "3des" {
-                    value 1;
-                }
-                emum "aes-128" {
-                    value 2;
-                }
-                emum "aes-256" {
-                    value 3;
-                }
-                emum "aes-192" {
-                    value 4;
-                }
-                default "aes-128";
-            }
-        }
-
-        leaf pfs {
-            description
-            "string	no	CRU	group5	N/A	Perfect Forward Secrecy  ( group2, group5, group14)";
-            type string {length 16;}
-            default "Group5";
-        }
-        grouping lifetime-grouping {
-
-            leaf units	{
-                description
-                "string	no	CRU	seconds	seconds	Lifetime of the  SA unit in ‘seconds’";
-                string { lengthn 16; }
-            default "seconds";
-            }
-            leaf value	{
-                description
-                "integer	no	CRU	3600 for seconds	Integer	Lifetime value in  seconds (value >= 60)";
-                type uint32;
-            default 3600;
-            }
-        }
     }
 
 
@@ -585,8 +520,8 @@ module vpnaas
         {
             description
             "string	no	r	static	static	static";
-            type string { length 16; }
-        default "static";
+            type string;
+            default "static";
         }
 
         leaf mtu
@@ -604,14 +539,14 @@ module vpnaas
             description
             "string	no	r	psk	psk/certs	authentication mode, either psk or certificate";
             type enumeration {
-                emum "psk" {
+                enum "psk" {
                     value 1;
                 }
-                emum "certificate" {
+                enum "certificate" {
                     value 2;
                 }
-            default "psk";
             }
+            default "psk";
         }
         leaf psk
         {
@@ -625,14 +560,14 @@ module vpnaas
             description
             "string	no	CRU	bi-directional	bi-directional / response-only	Whether this VPN can only respond to connections or can initiate as well";
             type enumeration {
-                emum "bi-directional" {
+                enum "bi-directional" {
                     value 1;
                 }
-                emum "response-only" {
+                enum "response-only" {
                     value 2;
                 }
-                default "bi-directional";
             }
+            default "bi-directional";
         }
 
         leaf admin-state-up
@@ -649,19 +584,19 @@ module vpnaas
             description
             "string	N/A	R	N/A	N/A	Indicates whether vpn connection is currently operational. Possible values include:ACTIVE,DOWN,BUILD,ERROR";
             type enumeration {
-                emum "active" {
+                enum "active" {
                     value 1;
                 }
-                emum "down" {
+                enum "down" {
                     value 2;
                 }
-                emum "up" {
+                enum "up" {
                     value 3;
                 }
-                emum "build" {
+                enum "build" {
                     value 4;
                 }
-                emum "error" {
+                enum "error" {
                     value 5;
                 }
             }
@@ -694,6 +629,23 @@ module vpnaas
             {
                 description
                 "string	no	CRU	hold	hold / clear / disabled /restart /restart_by_peer	DPD actions controls the use of Dead Peer Detection Protocol. ( clear, hold, restart, disabled, restart-by-peer)";
+            type enumeration {
+                enum "hold" {
+                    value 1;
+                }
+                enum "clear" {
+                    value 2;
+                }
+                enum "disabled" {
+                    value 3;
+                }
+                enum "restart" {
+                    value 4;
+                }
+                enum "restart_by_peer" {
+                    value 5;
+                }
+		}
             }
 
             leaf interval
@@ -713,4 +665,3 @@ module vpnaas
         }
     }
 }
-
