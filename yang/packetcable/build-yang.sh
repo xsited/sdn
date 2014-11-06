@@ -14,9 +14,9 @@ for i in `ls *.yang` ; do
 	#echo "Formatting yang file ..."
 	#astyle -b -s4 $i
 	echo "Validating yang file ..."
-	pyang -p ietf -p odl $i
+	pyang -p ../ietf -p ../odl $i
 	echo "Converting yang to uml  ..."
-	pyang -p ietf -p odl $i -f uml -o $fbname.uml
+	pyang -p ../ietf -p ../odl $i -f uml -o $fbname.uml
 	echo "Creating uml diagram  ..."
 	java -jar plantuml.jar $fbname.uml
 done

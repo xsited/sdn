@@ -12,89 +12,135 @@ hide <<leafref>> stereotype
 hide <<leafref>> circle
 page 1x1 
 Title packetcable-match-types 
+package "ext:yang-ext" as ext_yang_ext 
+end package 
+package "fni:flow-node-inventory" as fni_flow_node_inventory 
+end package 
+package "inv:opendaylight-inventory" as inv_opendaylight_inventory 
+end package 
+package "sal-flow:sal-flow" as sal_flow_sal_flow 
+end package 
+package "sal-packet:packet-processing" as sal_packet_packet_processing 
+end package 
 package "inet:ietf-inet-types" as inet_ietf_inet_types 
 end package 
-note top of match_packetcable_match_types : <b>Namespace: </b> urn:opendaylight:model:match:types \n<b>Prefix: </b> match \n<b>Revision : </b> 2014-01-20 \n
-package "match:packetcable-match-types" as match_packetcable_match_types 
-inet_ietf_inet_types +-- match_packetcable_match_types
+package "yang:ietf-yang-types" as yang_ietf_yang_types 
+end package 
+package "flow:opendaylight-flow-types" as flow_opendaylight_flow_types 
+end package 
+package "odl-flow-stats:opendaylight-flow-statistics" as odl_flow_stats_opendaylight_flow_statistics 
+end package 
+note top of packet_cable_match_packetcable_match_types : <b>Namespace: </b> urn:opendaylight:packetcable:match:types \n<b>Prefix: </b> packet-cable-match \n<b>Revision : </b> 2014-09-09 \n
+package "packet-cable-match:packetcable-match-types" as packet_cable_match_packetcable_match_types 
+ext_yang_ext +-- packet_cable_match_packetcable_match_types
+fni_flow_node_inventory +-- packet_cable_match_packetcable_match_types
+inv_opendaylight_inventory +-- packet_cable_match_packetcable_match_types
+sal_flow_sal_flow +-- packet_cable_match_packetcable_match_types
+sal_packet_packet_processing +-- packet_cable_match_packetcable_match_types
+inet_ietf_inet_types +-- packet_cable_match_packetcable_match_types
+yang_ietf_yang_types +-- packet_cable_match_packetcable_match_types
+flow_opendaylight_flow_types +-- packet_cable_match_packetcable_match_types
+odl_flow_stats_opendaylight_flow_statistics +-- packet_cable_match_packetcable_match_types
 class "packetcable-match-types" as packetcable_match_types << (M, #33CCFF) module>> 
-class "ip-match-fields" as packetcable_match_types_I_ip_match_fields_grouping <<(G,Lime) grouping>> 
-packetcable_match_types_I_ip_match_fields_grouping : ip-protocol : uint8  
-packetcable_match_types_I_ip_match_fields_grouping : ip-dscp : inet:dscp  
-packetcable_match_types_I_ip_match_fields_grouping : ip-ecn : uint8  
-packetcable_match_types_I_ip_match_fields_grouping : ip-proto : inet:ip-version  
-class "ipv4-match-fields" as packetcable_match_types_I_ipv4_match_fields_grouping <<(G,Lime) grouping>> 
-packetcable_match_types_I_ipv4_match_fields_grouping : ipv4-source : inet:ipv4-prefix  
-packetcable_match_types_I_ipv4_match_fields_grouping : ipv4-destination : inet:ipv4-prefix  
-class "ipv6-match-fields" as packetcable_match_types_I_ipv6_match_fields_grouping <<(G,Lime) grouping>> 
-packetcable_match_types_I_ipv6_match_fields_grouping : ipv6-source : inet:ipv6-prefix  
-packetcable_match_types_I_ipv6_match_fields_grouping : ipv6-destination : inet:ipv6-prefix  
-packetcable_match_types_I_ipv6_match_fields_grouping : ipv6-nd-target : inet:ipv6-address  
-class "ipv6-label" as  packetcable_match_types_I_ipv6_match_fields_I_ipv6_label <<container>> 
-packetcable_match_types_I_ipv6_match_fields_grouping *-- "1" packetcable_match_types_I_ipv6_match_fields_I_ipv6_label 
-packetcable_match_types_I_ipv6_match_fields_I_ipv6_label : ipv6-flabel : inet:ipv6-flow-label  
-packetcable_match_types_I_ipv6_match_fields_I_ipv6_label : flabel-mask : binary  
-packetcable_match_types_I_ipv6_match_fields_grouping : ipv6-exthdr : uint16  
-class "udp-match-fields" as packetcable_match_types_I_udp_match_fields_grouping <<(G,Lime) grouping>> 
-packetcable_match_types_I_udp_match_fields_grouping : udp-source-port : inet:port-number  
-packetcable_match_types_I_udp_match_fields_grouping : udp-destination-port : inet:port-number  
-class "tcp-match-fields" as packetcable_match_types_I_tcp_match_fields_grouping <<(G,Lime) grouping>> 
-packetcable_match_types_I_tcp_match_fields_grouping : tcp-source-port : inet:port-number  
-packetcable_match_types_I_tcp_match_fields_grouping : tcp-destination-port : inet:port-number  
-class "udp-match-ranges" as packetcable_match_types_I_udp_match_ranges_grouping <<(G,Lime) grouping>> 
-packetcable_match_types_I_udp_match_ranges_grouping : udp-source-port-start : inet:port-number  
-packetcable_match_types_I_udp_match_ranges_grouping : udp-source-port-end : inet:port-number  
-packetcable_match_types_I_udp_match_ranges_grouping : udp-destination-port-start : inet:port-number  
-packetcable_match_types_I_udp_match_ranges_grouping : udp-destination-port-end : inet:port-number  
-class "tcp-match-ranges" as packetcable_match_types_I_tcp_match_ranges_grouping <<(G,Lime) grouping>> 
-packetcable_match_types_I_tcp_match_ranges_grouping : tcp-source-port-start : inet:port-number  
-packetcable_match_types_I_tcp_match_ranges_grouping : tcp-source-port-end : inet:port-number  
-packetcable_match_types_I_tcp_match_ranges_grouping : tcp-destination-port-begin : inet:port-number  
-packetcable_match_types_I_tcp_match_ranges_grouping : tcp-destination-port-end : inet:port-number  
-class "match" as packetcable_match_types_I_match_grouping <<(G,Lime) grouping>> 
-class "ip-match" as  packetcable_match_types_I_match_I_ip_match <<container>> 
-packetcable_match_types_I_match_grouping *-- "1" packetcable_match_types_I_match_I_ip_match 
-packetcable_match_types_I_match_I_ip_match : ip-match-fields {uses} 
-class "layer-3-match" as packetcable_match_types_I_match_I_layer_3_match <<choice>> 
-packetcable_match_types_I_match_grouping .. packetcable_match_types_I_match_I_layer_3_match : choice 
-class "ipv4-match" as packetcable_match_types_I_match_I_layer_3_match_I_ipv4_match_case <<case>>
-packetcable_match_types_I_match_I_layer_3_match .. packetcable_match_types_I_match_I_layer_3_match_I_ipv4_match_case  : choice layer-3-match
-packetcable_match_types_I_match_I_layer_3_match_I_ipv4_match_case : ipv4-match-fields {uses} 
-class "ipv6-match" as packetcable_match_types_I_match_I_layer_3_match_I_ipv6_match_case <<case>>
-packetcable_match_types_I_match_I_layer_3_match .. packetcable_match_types_I_match_I_layer_3_match_I_ipv6_match_case  : choice layer-3-match
-packetcable_match_types_I_match_I_layer_3_match_I_ipv6_match_case : ipv6-match-fields {uses} 
-class "layer-4-match" as packetcable_match_types_I_match_I_layer_4_match <<choice>> 
-packetcable_match_types_I_match_grouping .. packetcable_match_types_I_match_I_layer_4_match : choice 
-class "udp-match" as packetcable_match_types_I_match_I_layer_4_match_I_udp_match_case <<case>>
-packetcable_match_types_I_match_I_layer_4_match .. packetcable_match_types_I_match_I_layer_4_match_I_udp_match_case  : choice layer-4-match
-class "udp-field-range" as packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range <<choice>> 
-packetcable_match_types_I_match_I_layer_4_match_I_udp_match_case .. packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range : choice 
-class "udp-field" as packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range_I_udp_field_case <<case>>
-packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range .. packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range_I_udp_field_case  : choice udp-field-range
-packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range_I_udp_field_case : udp-match-fields {uses} 
-class "udp-range" as packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range_I_udp_range_case <<case>>
-packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range .. packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range_I_udp_range_case  : choice udp-field-range
-packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range_I_udp_range_case : udp-match-ranges {uses} 
-class "tcp-match" as packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_case <<case>>
-packetcable_match_types_I_match_I_layer_4_match .. packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_case  : choice layer-4-match
-class "tcp-field-range" as packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range <<choice>> 
-packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_case .. packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range : choice 
-class "tcp-field" as packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range_I_tcp_field_case <<case>>
-packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range .. packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range_I_tcp_field_case  : choice tcp-field-range
-packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range_I_tcp_field_case : tcp-match-fields {uses} 
-class "tcp-range" as packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range_I_tcp_range_case <<case>>
-packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range .. packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range_I_tcp_range_case  : choice tcp-field-range
-packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range_I_tcp_range_case : tcp-match-ranges {uses} 
+class "udp-match-ranges-attributes" as packetcable_match_types_I_udp_match_ranges_attributes_grouping <<(G,Lime) grouping>> 
+class "upd-match-ranges" as  packetcable_match_types_I_udp_match_ranges_attributes_I_upd_match_ranges <<container>> 
+packetcable_match_types_I_udp_match_ranges_attributes_grouping *-- "1" packetcable_match_types_I_udp_match_ranges_attributes_I_upd_match_ranges 
+packetcable_match_types_I_udp_match_ranges_attributes_I_upd_match_ranges : udp-source-port-start : inet:port-number  
+packetcable_match_types_I_udp_match_ranges_attributes_I_upd_match_ranges : udp-source-port-end : inet:port-number  
+packetcable_match_types_I_udp_match_ranges_attributes_I_upd_match_ranges : udp-destination-port-start : inet:port-number  
+packetcable_match_types_I_udp_match_ranges_attributes_I_upd_match_ranges : udp-destination-port-end : inet:port-number  
+class "/sal-flow:add-flow/sal-flow:input/sal-flow:match" as sal_flow_add_flow_sal_flow_input_sal_flow_match << (A,CadetBlue) augment>>
+packetcable_match_types *--  sal_flow_add_flow_sal_flow_input_sal_flow_match 
+sal_flow_add_flow_sal_flow_input_sal_flow_match : udp-match-ranges-attributes {uses} 
+class "/sal-flow:remove-flow/sal-flow:input/sal-flow:match" as sal_flow_remove_flow_sal_flow_input_sal_flow_match << (A,CadetBlue) augment>>
+packetcable_match_types *--  sal_flow_remove_flow_sal_flow_input_sal_flow_match 
+sal_flow_remove_flow_sal_flow_input_sal_flow_match : udp-match-ranges-attributes {uses} 
+class "/sal-flow:update-flow/sal-flow:input/sal-flow:original-flow/sal-flow:match" as sal_flow_update_flow_sal_flow_input_sal_flow_original_flow_sal_flow_match << (A,CadetBlue) augment>>
+packetcable_match_types *--  sal_flow_update_flow_sal_flow_input_sal_flow_original_flow_sal_flow_match 
+sal_flow_update_flow_sal_flow_input_sal_flow_original_flow_sal_flow_match : udp-match-ranges-attributes {uses} 
+class "/sal-flow:update-flow/sal-flow:input/sal-flow:updated-flow/sal-flow:match" as sal_flow_update_flow_sal_flow_input_sal_flow_updated_flow_sal_flow_match << (A,CadetBlue) augment>>
+packetcable_match_types *--  sal_flow_update_flow_sal_flow_input_sal_flow_updated_flow_sal_flow_match 
+sal_flow_update_flow_sal_flow_input_sal_flow_updated_flow_sal_flow_match : udp-match-ranges-attributes {uses} 
+class "/inv:nodes/inv:node/fni:table/fni:flow/fni:match" as inv_nodes_inv_node_fni_table_fni_flow_fni_match << (A,CadetBlue) augment>>
+packetcable_match_types *--  inv_nodes_inv_node_fni_table_fni_flow_fni_match 
+inv_nodes_inv_node_fni_table_fni_flow_fni_match : udp-match-ranges-attributes {uses} 
+class "/sal-flow:switch-flow-removed/sal-flow:match" as sal_flow_switch_flow_removed_sal_flow_match << (A,CadetBlue) augment>>
+packetcable_match_types *--  sal_flow_switch_flow_removed_sal_flow_match 
+sal_flow_switch_flow_removed_sal_flow_match : udp-match-ranges-attributes {uses} 
+class "/sal-packet:packet-received/sal-packet:match" as sal_packet_packet_received_sal_packet_match << (A,CadetBlue) augment>>
+packetcable_match_types *--  sal_packet_packet_received_sal_packet_match 
+sal_packet_packet_received_sal_packet_match : udp-match-ranges-attributes {uses} 
+class "/odl-flow-stats:flows-statistics-update/odl-flow-stats:flow-and-statistics-map-list/odl-flow-stats:match" as odl_flow_stats_flows_statistics_update_odl_flow_stats_flow_and_statistics_map_list_odl_flow_stats_match << (A,CadetBlue) augment>>
+packetcable_match_types *--  odl_flow_stats_flows_statistics_update_odl_flow_stats_flow_and_statistics_map_list_odl_flow_stats_match 
+odl_flow_stats_flows_statistics_update_odl_flow_stats_flow_and_statistics_map_list_odl_flow_stats_match : udp-match-ranges-attributes {uses} 
+class "tcp-match-ranges-attributes" as packetcable_match_types_I_tcp_match_ranges_attributes_grouping <<(G,Lime) grouping>> 
+class "tcp-match-ranges" as  packetcable_match_types_I_tcp_match_ranges_attributes_I_tcp_match_ranges <<container>> 
+packetcable_match_types_I_tcp_match_ranges_attributes_grouping *-- "1" packetcable_match_types_I_tcp_match_ranges_attributes_I_tcp_match_ranges 
+packetcable_match_types_I_tcp_match_ranges_attributes_I_tcp_match_ranges : tcp-source-port-start : inet:port-number  
+packetcable_match_types_I_tcp_match_ranges_attributes_I_tcp_match_ranges : tcp-source-port-end : inet:port-number  
+packetcable_match_types_I_tcp_match_ranges_attributes_I_tcp_match_ranges : tcp-destination-port-start : inet:port-number  
+packetcable_match_types_I_tcp_match_ranges_attributes_I_tcp_match_ranges : tcp-destination-port-end : inet:port-number  
+class "/sal-flow:add-flow/sal-flow:input/sal-flow:match" as sal_flow_add_flow_sal_flow_input_sal_flow_match << (A,CadetBlue) augment>>
+sal_flow_add_flow_sal_flow_input_sal_flow_match : tcp-match-ranges-attributes {uses} 
+class "/sal-flow:remove-flow/sal-flow:input/sal-flow:match" as sal_flow_remove_flow_sal_flow_input_sal_flow_match << (A,CadetBlue) augment>>
+sal_flow_remove_flow_sal_flow_input_sal_flow_match : tcp-match-ranges-attributes {uses} 
+class "/sal-flow:update-flow/sal-flow:input/sal-flow:original-flow/sal-flow:match" as sal_flow_update_flow_sal_flow_input_sal_flow_original_flow_sal_flow_match << (A,CadetBlue) augment>>
+sal_flow_update_flow_sal_flow_input_sal_flow_original_flow_sal_flow_match : tcp-match-ranges-attributes {uses} 
+class "/sal-flow:update-flow/sal-flow:input/sal-flow:updated-flow/sal-flow:match" as sal_flow_update_flow_sal_flow_input_sal_flow_updated_flow_sal_flow_match << (A,CadetBlue) augment>>
+sal_flow_update_flow_sal_flow_input_sal_flow_updated_flow_sal_flow_match : tcp-match-ranges-attributes {uses} 
+class "/inv:nodes/inv:node/fni:table/fni:flow/fni:match" as inv_nodes_inv_node_fni_table_fni_flow_fni_match << (A,CadetBlue) augment>>
+inv_nodes_inv_node_fni_table_fni_flow_fni_match : tcp-match-ranges-attributes {uses} 
+class "/sal-flow:switch-flow-removed/sal-flow:match" as sal_flow_switch_flow_removed_sal_flow_match << (A,CadetBlue) augment>>
+sal_flow_switch_flow_removed_sal_flow_match : tcp-match-ranges-attributes {uses} 
+class "/sal-packet:packet-received/sal-packet:match" as sal_packet_packet_received_sal_packet_match << (A,CadetBlue) augment>>
+sal_packet_packet_received_sal_packet_match : tcp-match-ranges-attributes {uses} 
+class "/odl-flow-stats:flows-statistics-update/odl-flow-stats:flow-and-statistics-map-list/odl-flow-stats:match" as odl_flow_stats_flows_statistics_update_odl_flow_stats_flow_and_statistics_map_list_odl_flow_stats_match << (A,CadetBlue) augment>>
+odl_flow_stats_flows_statistics_update_odl_flow_stats_flow_and_statistics_map_list_odl_flow_stats_match : tcp-match-ranges-attributes {uses} 
+class "subscriber-id" as packetcable_match_types_I_subscriber_id_grouping <<(G,Lime) grouping>> 
+packetcable_match_types_I_subscriber_id_grouping : subscriber-id : inet:ip-address  
+class "/sal-flow:add-flow/sal-flow:input/sal-flow:match" as sal_flow_add_flow_sal_flow_input_sal_flow_match << (A,CadetBlue) augment>>
+sal_flow_add_flow_sal_flow_input_sal_flow_match : subscriber-id {uses} 
+class "/sal-flow:remove-flow/sal-flow:input/sal-flow:match" as sal_flow_remove_flow_sal_flow_input_sal_flow_match << (A,CadetBlue) augment>>
+sal_flow_remove_flow_sal_flow_input_sal_flow_match : subscriber-id {uses} 
+class "/sal-flow:update-flow/sal-flow:input/sal-flow:original-flow/sal-flow:match" as sal_flow_update_flow_sal_flow_input_sal_flow_original_flow_sal_flow_match << (A,CadetBlue) augment>>
+sal_flow_update_flow_sal_flow_input_sal_flow_original_flow_sal_flow_match : subscriber-id {uses} 
+class "/sal-flow:update-flow/sal-flow:input/sal-flow:updated-flow/sal-flow:match" as sal_flow_update_flow_sal_flow_input_sal_flow_updated_flow_sal_flow_match << (A,CadetBlue) augment>>
+sal_flow_update_flow_sal_flow_input_sal_flow_updated_flow_sal_flow_match : subscriber-id {uses} 
+class "/inv:nodes/inv:node/fni:table/fni:flow/fni:match" as inv_nodes_inv_node_fni_table_fni_flow_fni_match << (A,CadetBlue) augment>>
+inv_nodes_inv_node_fni_table_fni_flow_fni_match : subscriber-id {uses} 
+class "/sal-flow:switch-flow-removed/sal-flow:match" as sal_flow_switch_flow_removed_sal_flow_match << (A,CadetBlue) augment>>
+sal_flow_switch_flow_removed_sal_flow_match : subscriber-id {uses} 
+class "/sal-packet:packet-received/sal-packet:match" as sal_packet_packet_received_sal_packet_match << (A,CadetBlue) augment>>
+sal_packet_packet_received_sal_packet_match : subscriber-id {uses} 
+class "/odl-flow-stats:flows-statistics-update/odl-flow-stats:flow-and-statistics-map-list/odl-flow-stats:match" as odl_flow_stats_flows_statistics_update_odl_flow_stats_flow_and_statistics_map_list_odl_flow_stats_match << (A,CadetBlue) augment>>
+odl_flow_stats_flows_statistics_update_odl_flow_stats_flow_and_statistics_map_list_odl_flow_stats_match : subscriber-id {uses} 
 end package
 
-packetcable_match_types_I_match_I_ip_match --> packetcable_match_types_I_ip_match_fields_grouping : uses 
-packetcable_match_types_I_match_I_layer_3_match_I_ipv4_match_case --> packetcable_match_types_I_ipv4_match_fields_grouping : uses 
-packetcable_match_types_I_match_I_layer_3_match_I_ipv6_match_case --> packetcable_match_types_I_ipv6_match_fields_grouping : uses 
-packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range_I_udp_field_case --> packetcable_match_types_I_udp_match_fields_grouping : uses 
-packetcable_match_types_I_match_I_layer_4_match_I_udp_match_I_udp_field_range_I_udp_range_case --> packetcable_match_types_I_udp_match_ranges_grouping : uses 
-packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range_I_tcp_field_case --> packetcable_match_types_I_tcp_match_fields_grouping : uses 
-packetcable_match_types_I_match_I_layer_4_match_I_tcp_match_I_tcp_field_range_I_tcp_range_case --> packetcable_match_types_I_tcp_match_ranges_grouping : uses 
+sal_flow_add_flow_sal_flow_input_sal_flow_match --> packetcable_match_types_I_udp_match_ranges_attributes_grouping : uses 
+sal_flow_remove_flow_sal_flow_input_sal_flow_match --> packetcable_match_types_I_udp_match_ranges_attributes_grouping : uses 
+sal_flow_update_flow_sal_flow_input_sal_flow_original_flow_sal_flow_match --> packetcable_match_types_I_udp_match_ranges_attributes_grouping : uses 
+sal_flow_update_flow_sal_flow_input_sal_flow_updated_flow_sal_flow_match --> packetcable_match_types_I_udp_match_ranges_attributes_grouping : uses 
+inv_nodes_inv_node_fni_table_fni_flow_fni_match --> packetcable_match_types_I_udp_match_ranges_attributes_grouping : uses 
+sal_flow_switch_flow_removed_sal_flow_match --> packetcable_match_types_I_udp_match_ranges_attributes_grouping : uses 
+sal_packet_packet_received_sal_packet_match --> packetcable_match_types_I_udp_match_ranges_attributes_grouping : uses 
+odl_flow_stats_flows_statistics_update_odl_flow_stats_flow_and_statistics_map_list_odl_flow_stats_match --> packetcable_match_types_I_udp_match_ranges_attributes_grouping : uses 
+sal_flow_add_flow_sal_flow_input_sal_flow_match --> packetcable_match_types_I_tcp_match_ranges_attributes_grouping : uses 
+sal_flow_remove_flow_sal_flow_input_sal_flow_match --> packetcable_match_types_I_tcp_match_ranges_attributes_grouping : uses 
+sal_flow_update_flow_sal_flow_input_sal_flow_original_flow_sal_flow_match --> packetcable_match_types_I_tcp_match_ranges_attributes_grouping : uses 
+sal_flow_update_flow_sal_flow_input_sal_flow_updated_flow_sal_flow_match --> packetcable_match_types_I_tcp_match_ranges_attributes_grouping : uses 
+inv_nodes_inv_node_fni_table_fni_flow_fni_match --> packetcable_match_types_I_tcp_match_ranges_attributes_grouping : uses 
+sal_flow_switch_flow_removed_sal_flow_match --> packetcable_match_types_I_tcp_match_ranges_attributes_grouping : uses 
+sal_packet_packet_received_sal_packet_match --> packetcable_match_types_I_tcp_match_ranges_attributes_grouping : uses 
+odl_flow_stats_flows_statistics_update_odl_flow_stats_flow_and_statistics_map_list_odl_flow_stats_match --> packetcable_match_types_I_tcp_match_ranges_attributes_grouping : uses 
+sal_flow_add_flow_sal_flow_input_sal_flow_match --> packetcable_match_types_I_subscriber_id_grouping : uses 
+sal_flow_remove_flow_sal_flow_input_sal_flow_match --> packetcable_match_types_I_subscriber_id_grouping : uses 
+sal_flow_update_flow_sal_flow_input_sal_flow_original_flow_sal_flow_match --> packetcable_match_types_I_subscriber_id_grouping : uses 
+sal_flow_update_flow_sal_flow_input_sal_flow_updated_flow_sal_flow_match --> packetcable_match_types_I_subscriber_id_grouping : uses 
+inv_nodes_inv_node_fni_table_fni_flow_fni_match --> packetcable_match_types_I_subscriber_id_grouping : uses 
+sal_flow_switch_flow_removed_sal_flow_match --> packetcable_match_types_I_subscriber_id_grouping : uses 
+sal_packet_packet_received_sal_packet_match --> packetcable_match_types_I_subscriber_id_grouping : uses 
+odl_flow_stats_flows_statistics_update_odl_flow_stats_flow_and_statistics_map_list_odl_flow_stats_match --> packetcable_match_types_I_subscriber_id_grouping : uses 
 center footer
- <size:20> UML Generated : 2014-07-09 08:38 </size>
+ <size:20> UML Generated : 2014-10-15 14:21 </size>
  endfooter 
 @enduml 

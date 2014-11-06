@@ -16,64 +16,29 @@ package "yang:ietf-yang-types" as yang_ietf_yang_types
 end package 
 package "inet:ietf-inet-types" as inet_ietf_inet_types 
 end package 
-note top of cmts_packetcable_cmts : <b>Namespace: </b> urn:opendaylight:node:cmts \n<b>Prefix: </b> cmts \n<b>Organization : </b>\nOpenDaylight Project \n<b>Contact : </b>\nTBD \n<b>Revision : </b> 2014-01-20 \n
+package "inv:opendaylight-inventory" as inv_opendaylight_inventory 
+end package 
+package "ext:yang-ext" as ext_yang_ext 
+end package 
+note top of cmts_packetcable_cmts : <b>Namespace: </b> urn:opendaylight:node:cmts \n<b>Prefix: </b> cmts \n<b>Organization : </b>\nOpenDaylight Project \n<b>Revision : </b> 2014-09-09 \n
 package "cmts:packetcable-cmts" as cmts_packetcable_cmts 
 yang_ietf_yang_types +-- cmts_packetcable_cmts
 inet_ietf_inet_types +-- cmts_packetcable_cmts
+inv_opendaylight_inventory +-- cmts_packetcable_cmts
+ext_yang_ext +-- cmts_packetcable_cmts
 class "packetcable-cmts" as packetcable_cmts << (M, #33CCFF) module>> 
-enum "pcmm-version" as packetcable_cmts_I_pcmm_version
-packetcable_cmts_I_pcmm_version : 1 
-packetcable_cmts_I_pcmm_version : 2 
-packetcable_cmts_I_pcmm_version : 3 
-packetcable_cmts_I_pcmm_version : ... 
-enum "up-down-state-type" as packetcable_cmts_I_up_down_state_type
-packetcable_cmts_I_up_down_state_type : up 
-packetcable_cmts_I_up_down_state_type : down 
-class "cable-modem-subscriber-grouping" as packetcable_cmts_I_cable_modem_subscriber_grouping_grouping <<(G,Lime) grouping>> 
-packetcable_cmts_I_cable_modem_subscriber_grouping_grouping : enabled : boolean   {mandatory}
-packetcable_cmts_I_cable_modem_subscriber_grouping_grouping : subscriber-id : inet:ip-address   {mandatory}
-packetcable_cmts_I_cable_modem_subscriber_grouping_grouping : mac-address : yang:mac-address  
-class "cmts-reference" as cmts_reference << (T, YellowGreen) typedef>>
-cmts_reference : instance-identifier
-class "cmts-instance" as packetcable_cmts_I_cmts_instance_grouping <<(G,Lime) grouping>> 
-packetcable_cmts_I_cmts_instance_grouping : id : inet:ip-address   {mandatory}
-packetcable_cmts_I_cmts_instance_grouping : enabled : boolean   {mandatory}
-class "managed-cable-modem-subscribers" as  packetcable_cmts_I_cmts_instance_I_managed_cable_modem_subscribers <<container>> 
-packetcable_cmts_I_cmts_instance_grouping *-- "1" packetcable_cmts_I_cmts_instance_I_managed_cable_modem_subscribers 
-class "managed-cable-modem-subscribers" as packetcable_cmts_I_cmts_instance_I_managed_cable_modem_subscribers_I_managed_cable_modem_subscribers << (L, #FF7700) list>> 
-packetcable_cmts_I_cmts_instance_I_managed_cable_modem_subscribers *-- "0..N" packetcable_cmts_I_cmts_instance_I_managed_cable_modem_subscribers_I_managed_cable_modem_subscribers 
-packetcable_cmts_I_cmts_instance_I_managed_cable_modem_subscribers_I_managed_cable_modem_subscribers : cable-modem-subscriber-grouping {uses} 
-class "configuration-points" as  packetcable_cmts_I_cmts_instance_I_configuration_points <<container>> 
-packetcable_cmts_I_cmts_instance_grouping *-- "1" packetcable_cmts_I_cmts_instance_I_configuration_points 
-class "configuration-points" as packetcable_cmts_I_cmts_instance_I_configuration_points_I_configuration_points << (L, #FF7700) list>> 
-packetcable_cmts_I_cmts_instance_I_configuration_points *-- "0..N" packetcable_cmts_I_cmts_instance_I_configuration_points_I_configuration_points 
-packetcable_cmts_I_cmts_instance_I_configuration_points_I_configuration_points : cmts-configuration-point-grouping {uses} 
-class "cmts-configuration-point-grouping" as packetcable_cmts_I_cmts_configuration_point_grouping_grouping <<(G,Lime) grouping>> 
-packetcable_cmts_I_cmts_configuration_point_grouping_grouping : +id : inet:uri  {unique} 
-packetcable_cmts_I_cmts_configuration_point_grouping_grouping : uri : inet:uri  
-packetcable_cmts_I_cmts_configuration_point_grouping_grouping : protocols-supported : enumeration : {pcmm,snmp,ssh,...}   = pcmm 
-packetcable_cmts_I_cmts_configuration_point_grouping_grouping : mac-address : yang:mac-address  
-class "pcmm-configuration" as  packetcable_cmts_I_cmts_configuration_point_grouping_I_pcmm_configuration <<container>> 
-packetcable_cmts_I_cmts_configuration_point_grouping_grouping *-- "1" packetcable_cmts_I_cmts_configuration_point_grouping_I_pcmm_configuration 
-packetcable_cmts_I_cmts_configuration_point_grouping_I_pcmm_configuration : ip-address : inet:ip-address   {mandatory}
-packetcable_cmts_I_cmts_configuration_point_grouping_I_pcmm_configuration : port : inet:port-number   = 3918 
-class "snmp-configuration" as  packetcable_cmts_I_cmts_configuration_point_grouping_I_snmp_configuration <<container>> 
-packetcable_cmts_I_cmts_configuration_point_grouping_grouping *-- "1" packetcable_cmts_I_cmts_configuration_point_grouping_I_snmp_configuration 
-packetcable_cmts_I_cmts_configuration_point_grouping_I_snmp_configuration : community-public : string  
-class "shell-configuration" as  packetcable_cmts_I_cmts_configuration_point_grouping_I_shell_configuration <<container>> 
-packetcable_cmts_I_cmts_configuration_point_grouping_grouping *-- "1" packetcable_cmts_I_cmts_configuration_point_grouping_I_shell_configuration 
-packetcable_cmts_I_cmts_configuration_point_grouping_I_shell_configuration : username : string  
-packetcable_cmts_I_cmts_configuration_point_grouping_I_shell_configuration : password : string  
-class "state" as  packetcable_cmts_I_cmts_configuration_point_grouping_I_state <<container>> 
-packetcable_cmts_I_cmts_configuration_point_grouping_grouping *-- "1" packetcable_cmts_I_cmts_configuration_point_grouping_I_state 
-packetcable_cmts_I_cmts_configuration_point_grouping_I_state : connection-state : up-down-state-type  
-packetcable_cmts_I_cmts_configuration_point_grouping_I_state : current-version : pcmm-version  
-packetcable_cmts_I_cmts_configuration_point_grouping_I_state : supported-versions []: pcmm-version 
+class "cmts-node-attributes" as packetcable_cmts_I_cmts_node_attributes_grouping <<(G,Lime) grouping>> 
+packetcable_cmts_I_cmts_node_attributes_grouping : address : inet:ip-address  
+packetcable_cmts_I_cmts_node_attributes_grouping : port : inet:port-number   = 3918 
+class "/inv:nodes/inv:node" as inv_nodes_inv_node << (A,CadetBlue) augment>>
+packetcable_cmts *--  inv_nodes_inv_node 
+class "cmts-node" as  opendaylight_inventory_I_nodes_I_node_I_cmts_node <<container>> 
+inv_nodes_inv_node *-- "1" opendaylight_inventory_I_nodes_I_node_I_cmts_node 
+opendaylight_inventory_I_nodes_I_node_I_cmts_node : cmts-node-attributes {uses} 
 end package
 
-packetcable_cmts_I_cmts_instance_I_managed_cable_modem_subscribers_I_managed_cable_modem_subscribers --> packetcable_cmts_I_cable_modem_subscriber_grouping_grouping : uses 
-packetcable_cmts_I_cmts_instance_I_configuration_points_I_configuration_points --> packetcable_cmts_I_cmts_configuration_point_grouping_grouping : uses 
+opendaylight_inventory_I_nodes_I_node_I_cmts_node --> packetcable_cmts_I_cmts_node_attributes_grouping : uses 
 center footer
- <size:20> UML Generated : 2014-07-09 08:38 </size>
+ <size:20> UML Generated : 2014-10-15 14:21 </size>
  endfooter 
 @enduml 
